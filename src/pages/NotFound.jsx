@@ -12,7 +12,7 @@ export const NotFound = () => {
   return (
     <>
       <h1>sorry, this page is NotFound</h1>
-      <p onClick={handleClick}>Back to main page.</p>
+      <p onClick={handleClick}>Back to main page</p>
     </>
   );
 };
