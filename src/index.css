@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+  background-color: #ffdbdb;
+}
+
+body {
+  font-family: "Hachi Maru Pop", Inter;
+}
+
+.hachi-maru-pop-regular {
+  font-family: "Hachi Maru Pop", Inter;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.kaisei-decol-regular {
+  font-family: "Kaisei Decol", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.kaisei-decol-medium {
+  font-family: "Kaisei Decol", serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.kaisei-decol-bold {
+  font-family: "Kaisei Decol", serif;
+  font-weight: 700;
+  font-style: normal;
+}
