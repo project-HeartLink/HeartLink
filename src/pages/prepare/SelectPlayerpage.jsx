@@ -33,30 +33,31 @@ export const SelectPlayer = () => {
           variant="body1"
           sx={{
             fontSize: "8vw",
-            mb: "10%",
           }}
         >
           あなたは
         </Typography>
         <Box
           sx={{
-            mt: "15%",
+            m: "15% auto 0 auto",
+            width: "80vw",
             height: "50vw",
           }}
         >
-          <ListItemButton onClick={handleOpen} sx={{ pl: 7 }}>
+          <ListItemButton onClick={handleOpen} sx={{ alignItems: "center" }}>
             <ListItemText
-              primary="Player"
+              primary="Playerを選択してね"
               primaryTypographyProps={{
                 fontSize: "5vw",
                 fontFamily: "Kaisei Decol, serif",
+                width: "60vw",
               }}
             />
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton sx={{ alignItems: "center" }}>
                 <ListItemText
                   primary={p1}
                   primaryTypographyProps={{
@@ -65,7 +66,7 @@ export const SelectPlayer = () => {
                   }}
                 />
               </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }}>
+              <ListItemButton sx={{ alignItems: "center" }}>
                 <ListItemText
                   primary={p2}
                   primaryTypographyProps={{

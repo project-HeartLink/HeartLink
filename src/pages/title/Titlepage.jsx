@@ -44,7 +44,7 @@ export const Title = () => {
                 width: "70%",
                 top: "50%",
                 left: "50%",
-                transform: "translate(-50%, -55%)",
+                transform: "translate(-50%, -60%)",
                 fontSize: "10vw",
               }}
             >
@@ -53,7 +53,7 @@ export const Title = () => {
           </Box>
         </Box>
         <Typography
-          variant="h1"
+          variant="body1"
           onClick={handleScreenChange}
           sx={{
             mt: "20%",

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import "./Connectpage.scss";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { Box, Button, Typography } from "@mui/material";
