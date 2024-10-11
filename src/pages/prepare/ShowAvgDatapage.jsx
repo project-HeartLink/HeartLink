@@ -48,12 +48,14 @@ export const ShowAvgData = () => {
               }}
             />
           </Box>
-          <Typography 
-          variant="body1"
-          sx={{
-            fontSize: "5vw",
-          }}
-          >どれくらい心拍が上がるかな？</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: "5vw",
+            }}
+          >
+            どれくらい心拍が上がるかな？
+          </Typography>
           <Button
             component={motion.button}
             whileHover={{ scale: 1.0 }}

@@ -85,64 +85,60 @@ export const Result = () => {
           </Box>
         </Box>
         <Box>
-        <Stack
-  direction="column"
-  justifyContent="center"
-  alignItems="center"
-  spacing={1}
-  sx={{
-    mt: "40%",
-  }}
->
-  <Typography
-    variant="body1"
-    sx={{
-      fontFamily: "Hachi Maru Pop, serif",
-      fontSize: "8vw", 
-      width: "60vw",
-      m: "0 auto", 
-    }}
-  >
-    プレイヤー
-  </Typography>
-  <Typography
-    variant="body1"
-    sx={{
-      fontFamily: "Hachi Maru Pop, serif",
-      fontSize: "8vw", 
-      width: "20vw"
-    }}
-  >
-    との
-  </Typography>
-  <Stack
-    direction="row"
-    alignItems="flex-end"
-    spacing={5}
-  >
-  <Typography
-    variant="body1" 
-    sx={{
-      fontFamily: "Hachi Maru Pop, serif",
-      fontSize: "10vw", 
-      color: "red",
-      width: "32vw"
-    }}
-  >
-    関係性
-  </Typography>
-  <Typography
-    variant="body1" 
-    sx={{
-      fontFamily: "Hachi Maru Pop, serif",
-      fontSize: "8vw", 
-      width: "20vw"
-    }}
-  >
-      は...
-  </Typography>
-  </Stack>
-</Stack>
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={1}
+            sx={{
+              mt: "40%",
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                fontFamily: "Hachi Maru Pop, serif",
+                fontSize: "8vw",
+                width: "60vw",
+                m: "0 auto",
+              }}
+            >
+              プレイヤー
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontFamily: "Hachi Maru Pop, serif",
+                fontSize: "8vw",
+                width: "20vw",
+              }}
+            >
+              との
+            </Typography>
+            <Stack direction="row" alignItems="flex-end" spacing={5}>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontFamily: "Hachi Maru Pop, serif",
+                  fontSize: "10vw",
+                  color: "red",
+                  width: "32vw",
+                }}
+              >
+                関係性
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontFamily: "Hachi Maru Pop, serif",
+                  fontSize: "8vw",
+                  width: "20vw",
+                }}
+              >
+                は...
+              </Typography>
+            </Stack>
+          </Stack>
 
           <Typography
             variant="body1"
