@@ -12,11 +12,16 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 
 export const SelectPlayer = () => {
   const [open, setOpen] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState("");
   const navigate = useNavigate();
 
   const handleOpen = () => {
     setOpen(!open);
   };
+
+  const handleSelectplayer = (player) => {
+    setSelectedPlayer(player)
+  }
 
   let p1 = "Player1";
   let p2 = "Player2";
@@ -49,7 +54,7 @@ export const SelectPlayer = () => {
               primary="Playerを選択してね"
               primaryTypographyProps={{
                 fontSize: "5vw",
-                fontFamily: "Kaisei Decol, serif",
+                fontFamily: "Hachi Maru Pop, serif",
                 width: "60vw",
               }}
             />
@@ -57,21 +62,31 @@ export const SelectPlayer = () => {
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton sx={{ alignItems: "center" }}>
+              <ListItemButton 
+              sx={{ 
+                alignItems: "center" 
+                }}
+              onClick={() => handleSelectplayer(p1)}
+              selected={selectedPlayer === p1}
+                >
                 <ListItemText
                   primary={p1}
                   primaryTypographyProps={{
                     fontSize: "6vw",
-                    fontFamily: "Kaisei Decol, serif",
+                    fontFamily: "Hachi Maru Pop, serif",
                   }}
                 />
               </ListItemButton>
-              <ListItemButton sx={{ alignItems: "center" }}>
+              <ListItemButton 
+              sx={{ alignItems: "center" }}
+              onClick={() => handleSelectplayer(p2)}
+              selected={selectedPlayer === p2}
+              >
                 <ListItemText
                   primary={p2}
                   primaryTypographyProps={{
                     fontSize: "6vw",
-                    fontFamily: "Kaisei Decol, serif",
+                    fontFamily: "Hachi Maru Pop, serif",
                   }}
                 />
               </ListItemButton>
