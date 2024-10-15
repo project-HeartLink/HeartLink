@@ -4,18 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import fukidashiBackImg from "../../assets/fukidashi.png";
 import "./Formpage.scss";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import {
   Box,
   Typography,
-  TextField,
   Button,
   Stack,
-  styled,
   FormControl,
   Input,
-  InputLabel,
-  FormHelperText,
 } from "@mui/material";
 
 export const Form = ({ name, setName, password, setPassword }) => {
@@ -33,9 +28,9 @@ export const Form = ({ name, setName, password, setPassword }) => {
 
   const handleSubmit = () => {
     if (name && password) {
-      Navigate("/connect"); // 次のページに遷移
+      Navigate(`/connect?roomId=${password}`);
     } else {
-      alert("名前と合言葉の両方を入力してください"); // どちらかが未入力の場合のアラート
+      alert("名前と合言葉の両方を入力してね"); // どちらかが未入力の場合のアラート
     }
   };
 

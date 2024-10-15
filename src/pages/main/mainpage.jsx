@@ -4,6 +4,13 @@ import { motion } from "framer-motion";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
+import talkThemeBox from "../../assets/talkThemeBox.png";
+import "./mainpage.scss";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
 
 export const Main = () => {
   const Navigate = useNavigate();
@@ -23,6 +30,7 @@ export const Main = () => {
           }}
         >
           <Typography
+           onClick={() => Navigate("/result")}
             variant="body1"
             sx={{
               fontSize: "8vw",
@@ -52,67 +60,124 @@ export const Main = () => {
             計測中
           </Typography>
           <Box
-  component={motion.div}
-  animate={{ scale: [0.8, 1, 0.8, 1, 0.8] }}
-  transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
-  sx={{
-    mt: "15%",
-    mb: "0%",
-    position: "relative", 
-    display: "flex",
-    justifyContent: "center", 
-    alignItems: "center", 
-  }}
->
-  <img
-    src={HeartImg}
-    style={{
-      width: "80%",
-      height: "auto",
-    }}
-  />
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%", 
-      left: "50%",
-      transform: "translate(-50%, -50%)", 
-      textAlign: "center",
-    }}
-  >
-    <Typography
-      variant="h1" 
-      sx={{
-        fontSize: "8vw",
-      }}
-    >
-      Player1
-    </Typography>
-    <Typography
-      variant="body1"
-      sx={{
-        mt:"4vw",
-        fontSize: "6vw",
-      }}
-    >
-      {heartBeatP1}
-    </Typography>
-  </Box>
-</Box>
-          <Box
             sx={{
-              margin: "0% auto",
-              border: "15px solid white",
-              borderRadius: "30px",
-              width: "90%",
-              height: "10%",
+              mt: "10%",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
+            <Swiper
+              navigation={true}
+             modules={[Navigation]}
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <img
+                  src={HeartImg}
+                  style={{
+                    width: "80%",
+                    height: "auto",
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography
+                    variant="h1"
+                    sx={{
+                      fontSize: "8vw",
+                    }}
+                  >
+                    Player1
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      mt: "4vw",
+                      fontSize: "6vw",
+                    }}
+                  >
+                    {heartBeatP1}
+                  </Typography>
+                </Box>
+              </SwiperSlide>
+              <SwiperSlide>
+                <img
+                  src={HeartImg}
+                  style={{
+                    width: "80%",
+                    height: "auto",
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography
+                    variant="h1"
+                    sx={{
+                      fontSize: "8vw",
+                    }}
+                  >
+                    Player2
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      mt: "4vw",
+                      fontSize: "6vw",
+                    }}
+                  >
+                    {heartBeatP2}
+                  </Typography>
+                </Box>
+              </SwiperSlide>
+            </Swiper>
+          </Box>
+          <Box
+            sx={{
+              m: "0 auto 0 5vw",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={talkThemeBox}
+              style={{
+                width: "100%",
+                height: "auto",
+              }}
+                />
+                <Box
+                sx={{
+                  position: "absolute",
+                  top: "67%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
+                }}>
             <Typography
               variant="body1"
               sx={{
-                mt: "10vw",
+                mt: "2vw",
+                mb: "2vw",
                 fontSize: "8vw",
+                width: "70vw",
               }}
             >
               {talkTheme}
@@ -128,24 +193,8 @@ export const Main = () => {
             >
               次のお題
             </Button>
+                </Box>
           </Box>
-          <Button
-            component={motion.button}
-            whileTap={{ scale: 0.8 }}
-            onClick={() => Navigate("/result")}
-            sx={{
-              fontSize: "8vw",
-              fontWeight: "bold",
-              color: "white",
-              backgroundColor: "#ffdbdb",
-              marginTop: "5%",
-              border: "10px solid white",
-              borderRadius: "15px",
-              padding: "2px 20px 2px 30px",
-            }}
-          >
-            タップ
-          </Button>
         </Box>
       </>
     );
