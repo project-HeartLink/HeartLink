@@ -15,12 +15,11 @@ import {
 
 export const Form = ({ name, setName, password, setPassword }) => {
   const Navigate = useNavigate();
-
   const handleNameChange = (e) => {
     console.log(name);
     setName(e.target.value);
   };
-
+// test
   const handlePassChange = (e) => {
     console.log(password);
     setPassword(e.target.value);
@@ -138,6 +137,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
               </Typography>
             </Box>
           </Box>
+
           <Button
             component={motion.button}
             whileHover={{ scale: 1.0 }}
