@@ -28,7 +28,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
 
   const handleSubmit = () => {
     if (name && password) {
-      Navigate(`/connect?name=${name}+?pass=${password}`); // 次のページに遷移
+      Navigate(`/connect?roomId=${password}`);
     } else {
       alert("名前と合言葉の両方を入力してね"); // どちらかが未入力の場合のアラート
     }
