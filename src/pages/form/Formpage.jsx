@@ -19,7 +19,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
     console.log(name);
     setName(e.target.value);
   };
-// test
+  // test
   const handlePassChange = (e) => {
     console.log(password);
     setPassword(e.target.value);

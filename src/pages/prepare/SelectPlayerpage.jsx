@@ -62,13 +62,13 @@ export const SelectPlayer = () => {
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton 
-              sx={{ 
+              <ListItemButton
+                sx={{
                 alignItems: "center" 
                 }}
-              onClick={() => handleSelectplayer(p1)}
-              selected={selectedPlayer === p1}
-                >
+                onClick={() => handleSelectplayer(p1)}
+                selected={selectedPlayer === p1}
+              >
                 <ListItemText
                   primary={p1}
                   primaryTypographyProps={{
@@ -77,10 +77,10 @@ export const SelectPlayer = () => {
                   }}
                 />
               </ListItemButton>
-              <ListItemButton 
-              sx={{ alignItems: "center" }}
-              onClick={() => handleSelectplayer(p2)}
-              selected={selectedPlayer === p2}
+              <ListItemButton
+                sx={{ alignItems: "center" }}
+                onClick={() => handleSelectplayer(p2)}
+                selected={selectedPlayer === p2}
               >
                 <ListItemText
                   primary={p2}
