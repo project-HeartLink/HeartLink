@@ -16,6 +16,7 @@ export const Main = () => {
   const Navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
 
+  //player
   let talkTheme = "第一印象を話す";
   let heartBeatP1 = 100;
   let heartBeatP2 = 90;
