@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,19 @@ export const Main = () => {
   let heartBeatP2 = 90;
 
   const FinishMeasuring = () => {
+
+    //5秒後にリザルト画面に飛ばす
+    useEffect(() => {
+      console.log("useEffect called");
+      const timer = setTimeout(() => {
+        Navigate("/result")
+      },5 * 1000)
+      return () => {
+          console.log("cleanUp")
+          clearTimeout(timer)
+      }
+    }, [isDone]);
+
     return (
       <>
         <Box
@@ -30,18 +43,40 @@ export const Main = () => {
           }}
         >
           <Typography
-           onClick={() => Navigate("/result")}
+            onClick={() => Navigate("/result")}
             variant="body1"
             sx={{
               fontSize: "8vw",
-              mt: "30%",
-              mb: "10%",
-              mx: "auto",
+              m: " 80vw auto 0 auto",
             }}
           >
             完了
           </Typography>
         </Box>
+        <motion.div
+          initial={{
+            y:-100,
+            scale: 0,
+            opacity: 1,
+          }}
+          animate={{
+            y:-100,
+            scale: [0,0,1.6],
+            opacity: 1,
+          }}
+          transition={{
+            duration: 1.5,
+            ease: "easeInOut",
+          }}
+        >
+        <img
+          src={HeartImg}
+          style={{
+            width: "40%",
+            height: "auto",
+          }}
+        />
+        </motion.div>
       </>
     );
   };
@@ -70,7 +105,7 @@ export const Main = () => {
           >
             <Swiper
               navigation={true}
-             modules={[Navigation]}
+              modules={[Navigation]}
               className="mySwiper"
             >
               <SwiperSlide>
@@ -162,38 +197,39 @@ export const Main = () => {
                 width: "100%",
                 height: "auto",
               }}
-                />
-                <Box
+            />
+            <Box
+              sx={{
+                position: "absolute",
+                top: "67%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                textAlign: "center",
+              }}
+            >
+              <Typography
+                variant="body1"
                 sx={{
-                  position: "absolute",
-                  top: "67%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  textAlign: "center",
-                }}>
-            <Typography
-              variant="body1"
-              sx={{
-                mt: "2vw",
-                mb: "2vw",
-                fontSize: "8vw",
-                width: "70vw",
-              }}
-            >
-              {talkTheme}
-            </Typography>
+                  mt: "2vw",
+                  mb: "2vw",
+                  fontSize: "8vw",
+                  width: "70vw",
+                }}
+              >
+                {talkTheme}
+              </Typography>
 
-            <Button
-              component={motion.button}
-              whileTap={{ scale: 0.8 }}
-              sx={{
-                fontSize: "5vw",
-                color: "black",
-              }}
-            >
-              次のお題
-            </Button>
-                </Box>
+              <Button
+                component={motion.button}
+                whileTap={{ scale: 0.8 }}
+                sx={{
+                  fontSize: "5vw",
+                  color: "black",
+                }}
+              >
+                次のお題
+              </Button>
+            </Box>
           </Box>
         </Box>
       </>
