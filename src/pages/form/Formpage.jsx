@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import fukidashiBackImg from "../../assets/fukidashi.png";
@@ -9,12 +10,19 @@ import {
   Typography,
   Button,
   Stack,
+  Modal,
   FormControl,
   Input,
+  duration,
 } from "@mui/material";
 
 export const Form = ({ name, setName, password, setPassword }) => {
   const Navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleNameChange = (e) => {
     console.log(name);
     setName(e.target.value);
@@ -29,7 +37,8 @@ export const Form = ({ name, setName, password, setPassword }) => {
     if (name && password) {
       Navigate(`/connect?roomId=${password}`);
     } else {
-      alert("名前と合言葉の両方を入力してね"); // どちらかが未入力の場合のアラート
+      handleOpen()
+      //alert("名前と合言葉の両方を入力してね"); // どちらかが未入力の場合のアラート
     }
   };
 
@@ -63,8 +72,9 @@ export const Form = ({ name, setName, password, setPassword }) => {
               <Input
                 placeholder="名前を入力"
                 name="Name"
-                autoComplete="on"
+                autoComplete="off"
                 fullWidth
+                disableUnderline
                 onChange={handleNameChange}
                 sx={{
                   padding: "10px",
@@ -90,6 +100,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
                 name="Password"
                 autoComplete="off"
                 fullWidth
+                disableUnderline
                 onChange={handlePassChange}
                 sx={{
                   padding: "10px",
@@ -156,6 +167,62 @@ export const Form = ({ name, setName, password, setPassword }) => {
           >
             タップ
           </Button>
+      <Modal
+        component={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration:0.5 }}
+
+
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: "75vw",
+            bgcolor: 'background.paper',
+            border: '5px solid #A2D2DF',
+            borderRadius: "30px",
+            p: "8vw",
+        }}>
+          <Typography
+            onClick={handleClose}
+            sx={{
+              position:"absolute",
+              top:"0vw",
+              right:"4vw",
+              fontSize:"9vw",
+              cursor: "pointer"
+            }}>
+            ×
+          </Typography>
+          <Typography
+          variant="p" 
+          sx={{
+            fontSize: "5vw",
+          }}>
+            名前と合言葉の両方を入力してね
+          </Typography>
+          <Typography
+          sx={{
+            mt: "4vw",
+            fontSize: "4vw",
+          }}>
+            名前と合言葉を入力すると
+          </Typography>
+          <Typography
+          sx={{
+            fontSize: "4vw",
+          }}>
+            次のページへ進めるよ♪
+          </Typography>
+        </Box>
+      </Modal>
         </Box>
       </Box>
     </>
