@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import fukidashiBackImg from "../../assets/fukidashi.png";
@@ -13,21 +13,26 @@ import {
   Modal,
   FormControl,
   Input,
-  duration,
 } from "@mui/material";
 
 export const Form = ({ name, setName, password, setPassword }) => {
   const Navigate = useNavigate();
 
+  //モーダルウインドウ
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    setName(""); 
+    setPassword("")
+  }, []);
 
   const handleNameChange = (e) => {
     console.log(name);
     setName(e.target.value);
   };
-  // test
+
   const handlePassChange = (e) => {
     console.log(password);
     setPassword(e.target.value);
@@ -37,8 +42,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
     if (name && password) {
       Navigate(`/connect?roomId=${password}`);
     } else {
-      handleOpen()
-      //alert("名前と合言葉の両方を入力してね"); // どちらかが未入力の場合のアラート
+      handleOpen() // どちらかが未入力の場合に出すウインドウ
     }
   };
 
