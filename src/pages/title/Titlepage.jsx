@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import fukidashiBackImg from "../../assets/fukidashi.png";
 import { motion } from "framer-motion";
 import "./Titlepage.scss";
+import TitleHeartImg from "../../assets/IMG_7040.png";
 import { Box, Typography } from "@mui/material";
 
 export const Title = () => {
@@ -24,7 +25,7 @@ export const Title = () => {
         >
           <Box
             sx={{
-              mt: "50%",
+              mt: "50vw",
               position: "relative",
             }}
           >
@@ -52,19 +53,19 @@ export const Title = () => {
             </Typography>
           </Box>
         </Box>
-        <Typography
-          variant="body1"
-          onClick={handleScreenChange}
-          sx={{
-            mt: "20%",
-            fontSize: "10vw",
-          }}
-        >
-          Heart
-          <br />
-          Link
-        </Typography>
-      </Box>
+          <Typography
+            variant="body1"
+            onClick={handleScreenChange}
+            sx={{
+              mt: "15vw",
+              fontSize: "2.5em",
+            }}
+          >
+            Heart
+            <br />
+            Link
+          </Typography>
+        </Box>
     </>
   );
 };

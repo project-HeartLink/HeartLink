@@ -22,17 +22,16 @@ export const Main = () => {
   let heartBeatP2 = 90;
 
   const FinishMeasuring = () => {
-
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
       console.log("useEffect called");
       const timer = setTimeout(() => {
-        Navigate("/result")
-      },5 * 1000)
+        Navigate("/result");
+      }, 5 * 1000);
       return () => {
-          console.log("cleanUp")
-          clearTimeout(timer)
-      }
+        console.log("cleanUp");
+        clearTimeout(timer);
+      };
     }, [isDone]);
 
     return (
@@ -56,13 +55,13 @@ export const Main = () => {
         </Box>
         <motion.div
           initial={{
-            y:-100,
+            y: -100,
             scale: 0,
             opacity: 1,
           }}
           animate={{
-            y:-100,
-            scale: [0,0,1.6],
+            y: -100,
+            scale: [0, 0, 1.6],
             opacity: 1,
           }}
           transition={{
@@ -70,13 +69,13 @@ export const Main = () => {
             ease: "easeInOut",
           }}
         >
-        <img
-          src={HeartImg}
-          style={{
-            width: "40%",
-            height: "auto",
-          }}
-        />
+          <img
+            src={HeartImg}
+            style={{
+              width: "40%",
+              height: "auto",
+            }}
+          />
         </motion.div>
       </>
     );

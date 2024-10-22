@@ -20,8 +20,8 @@ export const SelectPlayer = () => {
   };
 
   const handleSelectplayer = (player) => {
-    setSelectedPlayer(player)
-  }
+    setSelectedPlayer(player);
+  };
 
   let p1 = "Player1";
   let p2 = "Player2";
@@ -64,7 +64,7 @@ export const SelectPlayer = () => {
             <List component="div" disablePadding>
               <ListItemButton
                 sx={{
-                alignItems: "center" 
+                  alignItems: "center",
                 }}
                 onClick={() => handleSelectplayer(p1)}
                 selected={selectedPlayer === p1}
