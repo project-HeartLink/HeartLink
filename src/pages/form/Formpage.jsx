@@ -189,7 +189,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
                 transform: "translate(-50%, -50%)",
                 width: "75vw",
                 bgcolor: "background.paper",
-                border: "5px solid #A2D2DF",
+                border: "3px solid #FF4BB7",
                 borderRadius: "30px",
                 p: "8vw",
               }}
