@@ -16,46 +16,35 @@ export const SelectPlayer = () => {
   const [connectValue, setConnectValue] = useState("");
   const navigate = useNavigate();
   const startTime = performance.now(); //開始時間の取得
-  const playar = "1"
+  const status = "ok";
 
   const handleOpen = () => {
     setOpen(!open);
   };
 
   const handleSelectplayer = (player) => {
-    fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
-    .then((res) => res.json()) //json方式でデータを受け取る
-    .then((data) => {
-      console.log(data); // データ構造確認
-      
-
-      while (1) {
-        if (data.connect == playar) {
-          setConnectValue(data.connect); //playar番号がそのままならセット
-          console.log("success");
-          window.location.href = '/getAverage';
-          break;
-        } else {
-          const endTime = performance.now(); //終了時間
-          console.log(endTime - startTime); 
-          if (endTime - startTime > 20 * 1000) {  //20秒以上経ったら、強制的にplayarを変更
-            setConnectValue(playar);
-            window.location.href = '/getAverage';
-            break;
-          }
-        }
-      }
-    })
-
-    .catch((err) => console.error("Error fetching data:", err));
-
     setSelectedPlayer(player);
   };
 
   let p1 = "Player1";
   let p2 = "Player2";
 
-  
+  const handleSubmit = (playar) => {
+    fetch("https://hartlink-api.onrender.com/ok", { method: "GET" })
+      .then((res) => res.json()) //json方式でデータを受け取る
+      .then((data) => {
+        console.log("data:", data);
+
+        if (data.status === status) {
+          setConnectValue(selectedPlayer); //playar番号をセット
+          console.log("playar:", selectedPlayer);
+          window.location.href = "/getAverage";
+        }
+        
+      })
+
+      .catch((err) => console.error("Error fetching data:", err));
+  };
 
   return (
     <>
@@ -128,7 +117,7 @@ export const SelectPlayer = () => {
           component={motion.button}
           whileHover={{ scale: 1.0 }}
           whileTap={{ scale: 0.8 }}
-          onClick={() => navigate("/getAverage")}
+          onClick={handleSubmit}
           sx={{
             fontSize: "8vw",
             fontWeight: "bold",
