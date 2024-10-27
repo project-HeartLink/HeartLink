@@ -60,7 +60,7 @@ export const ShowAvgData = () => {
             component={motion.button}
             whileHover={{ scale: 1.0 }}
             whileTap={{ scale: 0.8 }}
-            onClick={() => Navigate("/main")}
+            onClick={() => Navigate("/selectTheme")}
             sx={{
               fontSize: "8vw",
               fontWeight: "bold",

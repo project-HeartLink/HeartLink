@@ -53,19 +53,19 @@ export const Title = () => {
             </Typography>
           </Box>
         </Box>
-          <Typography
-            variant="body1"
-            onClick={handleScreenChange}
-            sx={{
-              mt: "15vw",
-              fontSize: "2.5em",
-            }}
-          >
-            Heart
-            <br />
-            Link
-          </Typography>
-        </Box>
+        <Typography
+          variant="body1"
+          onClick={handleScreenChange}
+          sx={{
+            mt: "15vw",
+            fontSize: "2.5em",
+          }}
+        >
+          Heart
+          <br />
+          Link
+        </Typography>
+      </Box>
     </>
   );
 };
