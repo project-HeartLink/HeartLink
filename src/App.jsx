@@ -9,6 +9,7 @@ import { Connect } from "./pages/connect/Connectpage";
 import { SelectPlayer } from "./pages/prepare/SelectPlayerpage";
 import { GetAvgData } from "./pages/prepare/GetAvgDatapage";
 import { ShowAvgData } from "./pages/prepare/ShowAvgDatapage";
+import { SelectTheme } from "./pages/main/selectThemepage";
 import { Main } from "./pages/main/mainpage";
 import { Result } from "./pages/result/resultpage";
 import "./App.scss";
@@ -36,6 +37,7 @@ function App() {
         <Route path="/selectPlayer" element={<SelectPlayer />} />
         <Route path="/getAverage" element={<GetAvgData />} />
         <Route path="/showAverage" element={<ShowAvgData />} />
+        <Route path="/selectTheme" element={<SelectTheme />} />
         <Route path="/main" element={<Main />} />
         <Route path="/result" element={<Result />} />
         <Route path="*" element={<NotFound />} />
