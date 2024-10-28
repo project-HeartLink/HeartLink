@@ -9,21 +9,31 @@ import { Box, Button, Typography } from "@mui/material";
 export const Connect = () => {
   const Navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
-  const startTime = performance.now(); //開始時間の取得
-  const playar = "1";
-  const flag = 0;
+  const player = "2";
   const navigate = useNavigate();
 
+  const CatchError = (err) => {
+    console.log("エラー:",err);
+
+    fetch('https://hartlink-api.onrender.com/reset', { method: "GET" })
+      .then(response => response.json())
+      .then(data => {
+        console.log("data",data)
+        navigate(-2);
+      })
+  };
+
   useEffect(() => {
-    const handleSubmit = (e) => {
-      fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
+    const handleSubmit = () => {
+      fetch("https://hartlink-api.onrender.com/connec", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           console.log(data); // データ構造確認
 
-          if (data.connect == playar) {
+          if (data.connect == player) {
             console.log("success");
-            window.location.href = "/getAverage";
+            console.log("playerHeartBeat",data)
+            navigate("/getAverage")
           } else {
             setTimeout(() => {
               //20秒以上経ったら、アラート出るようにした
@@ -35,7 +45,7 @@ export const Connect = () => {
           }
         })
 
-        .catch((err) => console.error("Error fetching data:", err));
+        .catch((err) => CatchError(err));
     };
     const timeout = setTimeout(handleSubmit, 5 * 1000);
 
