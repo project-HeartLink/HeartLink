@@ -13,6 +13,7 @@ export const Connect = () => {
 
   const CatchError = (err) => {
     console.log("エラー:", err);
+    console.log("aaaaaaaaa")
 
     fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
       .then((response) => response.json())
