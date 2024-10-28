@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Connectpage.scss";
@@ -9,6 +9,50 @@ import { Box, Button, Typography } from "@mui/material";
 export const Connect = () => {
   const navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
+  const player = "0";
+  const navigate = useNavigate();
+
+  const CatchError = (err) => {
+    console.log("エラー:",err);
+
+    fetch('https://hartlink-api.onrender.com/reset', { method: "GET" })
+      .then(response => response.json())
+      .then(data => {
+        console.log("data",data)
+        navigate(-2);
+      })
+  };
+
+  useEffect(() => {
+    const handleSubmit = () => {
+      fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
+        .then((res) => res.json()) //json方式でデータを受け取る
+        .then((data) => {
+
+          if (data.connect == player) {
+            console.log("success");
+            console.log("playerHeartBeat",data)
+            navigate("/SelectPlayer")
+          } else {
+            setTimeout(() => {
+              //20秒以上経ったら、アラート出るようにした
+
+              if (!alert("2台目の接続を確認できません")) {
+                navigate(-1);
+              }
+            }, 20 * 1000);
+          }
+        })
+
+        .catch((err) => CatchError(err));
+    };
+    const timeout = setTimeout(handleSubmit, 5 * 1000);
+
+    //clearIntervalを入れることで、２回される処理を回避
+    return () => {
+      clearInterval(timeout);
+    };
+  }); // 初回時のみ実行する
 
   return (
     <>

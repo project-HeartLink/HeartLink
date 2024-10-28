@@ -11,10 +11,12 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 export const SelectPlayer = () => {
-  const [open, setOpen] = useState(false); //playerのリストを表示する
-  const [showText, setShowText] = useState(true); //Playerを選択してない場合に出すテキスト
-  const [selectedPlayer, setSelectedPlayer] = useState(""); //選択したplayerを保持する
+  const [open, setOpen] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState("");
+  const [connectValue, setConnectValue] = useState("");
   const navigate = useNavigate();
+  const startTime = performance.now(); //開始時間の取得
+  const status = "ok";
 
   const handleOpen = () => {
     setOpen(!open);
@@ -36,6 +38,23 @@ export const SelectPlayer = () => {
 
   let p1 = "Player1";
   let p2 = "Player2";
+
+  const handleSubmit = () => {
+    fetch("https://hartlink-api.onrender.com/ok", { method: "GET" })
+      .then((res) => res.json()) //json方式でデータを受け取る
+      .then((data) => {
+        console.log("data:", data);
+
+        if (data.status === status) {
+          setConnectValue(selectedPlayer); //playar番号をセット
+          console.log("playar:", selectedPlayer);
+          navigate("/getAverage",{state:{selectedPlayer}});
+        }
+        
+      })
+
+      .catch((err) => console.error("Error fetching data:", err));
+  };
 
   return (
     <>
@@ -108,7 +127,7 @@ export const SelectPlayer = () => {
           component={motion.button}
           whileHover={{ scale: 1.0 }}
           whileTap={{ scale: 0.8 }}
-          onClick={() => handleNextpage()}
+          onClick={handleSubmit}
           sx={{
             fontSize: "8vw",
             fontWeight: "bold",
