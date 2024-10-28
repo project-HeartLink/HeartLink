@@ -7,20 +7,19 @@ import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { Box, Button, Typography } from "@mui/material";
 
 export const Connect = () => {
-  const navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
   const player = "0";
   const navigate = useNavigate();
 
   const CatchError = (err) => {
-    console.log("エラー:",err);
+    console.log("エラー:", err);
 
-    fetch('https://hartlink-api.onrender.com/reset', { method: "GET" })
-      .then(response => response.json())
-      .then(data => {
-        console.log("data",data)
+    fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data", data);
         navigate(-2);
-      })
+      });
   };
 
   useEffect(() => {
@@ -28,11 +27,10 @@ export const Connect = () => {
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
-
           if (data.connect == player) {
             console.log("success");
-            console.log("playerHeartBeat",data)
-            navigate("/SelectPlayer")
+            console.log("playerHeartBeat", data);
+            navigate("/SelectPlayer");
           } else {
             setTimeout(() => {
               //20秒以上経ったら、アラート出るようにした
