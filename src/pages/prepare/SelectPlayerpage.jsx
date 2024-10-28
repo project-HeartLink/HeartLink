@@ -27,10 +27,8 @@ export const SelectPlayer = () => {
 
   const handleNextpage = () => {
     if (selectedPlayer) {
-      console.log(`${selectedPlayer}を選択しています`);
-      //Navigate("/getAverage");
+      Navigate("/getAverage");
     } else {
-      console.log("Playerが選択されていません");
       setShowText(false);
       console.log(`${showText}`);
     }
