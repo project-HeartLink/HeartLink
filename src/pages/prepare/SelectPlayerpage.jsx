@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Box, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -11,9 +11,10 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
 export const SelectPlayer = () => {
-  const [open, setOpen] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState("");
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(false); //playerのリストを表示する
+  const [showText, setShowText] = useState(true); //Playerを選択してない場合に出すテキスト
+  const [selectedPlayer, setSelectedPlayer] = useState(""); //選択したplayerを保持する
+  const Navigate = useNavigate();
 
   const handleOpen = () => {
     setOpen(!open);
@@ -21,6 +22,18 @@ export const SelectPlayer = () => {
 
   const handleSelectplayer = (player) => {
     setSelectedPlayer(player);
+    setShowText(true);
+  };
+
+  const handleNextpage = () => {
+    if (selectedPlayer) {
+      console.log(`${selectedPlayer}を選択しています`);
+      //Navigate("/getAverage");
+    } else {
+      console.log("Playerが選択されていません");
+      setShowText(false);
+      console.log(`${showText}`);
+    }
   };
 
   let p1 = "Player1";
@@ -97,7 +110,7 @@ export const SelectPlayer = () => {
           component={motion.button}
           whileHover={{ scale: 1.0 }}
           whileTap={{ scale: 0.8 }}
-          onClick={() => navigate("/getAverage")}
+          onClick={() => handleNextpage()}
           sx={{
             fontSize: "8vw",
             fontWeight: "bold",
@@ -111,6 +124,13 @@ export const SelectPlayer = () => {
         >
           準備完了
         </Button>
+        {showText ? (
+          <></>
+        ) : (
+          <Typography variant="body1" sx={{ fontSize: "1rem", mt: "2vh" }}>
+            Playerを選択したら次に進めるよ♡
+          </Typography>
+        )}
       </Box>
     </>
   );

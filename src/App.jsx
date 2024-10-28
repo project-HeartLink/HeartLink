@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { NotFound } from "./pages/NotFound";
-import { Form } from "./pages/form/formpage";
+import { Form } from "./pages/form/Formpage";
 import { Title } from "./pages/title/Titlepage";
 import { Connect } from "./pages/connect/Connectpage";
 import { SelectPlayer } from "./pages/prepare/SelectPlayerpage";
