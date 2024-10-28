@@ -29,7 +29,7 @@ export const SelectPlayer = () => {
   let p1 = "Player1";
   let p2 = "Player2";
 
-  const handleSubmit = (playar) => {
+  const handleSubmit = () => {
     fetch("https://hartlink-api.onrender.com/ok", { method: "GET" })
       .then((res) => res.json()) //json方式でデータを受け取る
       .then((data) => {
@@ -38,7 +38,7 @@ export const SelectPlayer = () => {
         if (data.status === status) {
           setConnectValue(selectedPlayer); //playar番号をセット
           console.log("playar:", selectedPlayer);
-          window.location.href = "/getAverage";
+          navigate("/getAverage",{state:{selectedPlayer}});
         }
         
       })

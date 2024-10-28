@@ -9,7 +9,7 @@ import { Box, Button, Typography } from "@mui/material";
 export const Connect = () => {
   const Navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
-  const player = "2";
+  const player = "0";
   const navigate = useNavigate();
 
   const CatchError = (err) => {
@@ -25,15 +25,14 @@ export const Connect = () => {
 
   useEffect(() => {
     const handleSubmit = () => {
-      fetch("https://hartlink-api.onrender.com/connec", { method: "GET" })
+      fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
-          console.log(data); // データ構造確認
 
           if (data.connect == player) {
             console.log("success");
             console.log("playerHeartBeat",data)
-            navigate("/getAverage")
+            navigate("/SelectPlayer")
           } else {
             setTimeout(() => {
               //20秒以上経ったら、アラート出るようにした
