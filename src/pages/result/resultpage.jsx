@@ -6,7 +6,7 @@ import CoupleImg from "../../assets/coupleResult.svg";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
 export const Result = () => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   let player1 = "ami";
   let player2 = "yuto";
@@ -180,7 +180,7 @@ export const Result = () => {
             component={motion.button}
             whileHover={{ scale: 1.0 }}
             whileTap={{ scale: 0.8 }}
-            onClick={() => Navigate("/")}
+            onClick={() => navigate("/")}
             sx={{
               fontSize: "8vw",
               fontWeight: "bold",

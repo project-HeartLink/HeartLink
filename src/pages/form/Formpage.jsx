@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 export const Form = ({ name, setName, password, setPassword }) => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   //モーダルウインドウ
   const [open, setOpen] = useState(false);
@@ -40,7 +40,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
 
   const handleSubmit = () => {
     if (name && password) {
-      Navigate(`/connect?roomId=${password}`);
+      navigate(`/connect?roomId=${password}`);
     } else {
       handleOpen(); // どちらかが未入力の場合に出すウインドウ
     }

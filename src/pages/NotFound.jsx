@@ -2,11 +2,11 @@
 import { useNavigate } from "react-router-dom";
 
 export const NotFound = () => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleClick = () => {
     console.log("タイトル画面に戻ります");
-    Navigate("/");
+    navigate("/");
   };
 
   return (

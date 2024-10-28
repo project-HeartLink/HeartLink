@@ -6,7 +6,7 @@ import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { Box, Button, Typography } from "@mui/material";
 
 export const ShowAvgData = () => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -60,7 +60,7 @@ export const ShowAvgData = () => {
             component={motion.button}
             whileHover={{ scale: 1.0 }}
             whileTap={{ scale: 0.8 }}
-            onClick={() => Navigate("/selectTheme")}
+            onClick={() => navigate("/selectTheme")}
             sx={{
               fontSize: "8vw",
               fontWeight: "bold",

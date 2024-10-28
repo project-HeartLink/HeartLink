@@ -6,7 +6,7 @@ import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 
 export const SelectTheme = () => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [SelectedTheme, setSelectedTheme] = useState(null);
   const handleOpen = (theme) => {
@@ -159,7 +159,7 @@ export const SelectTheme = () => {
               whileTap={{
                 scale: 0.8,
               }}
-              onClick={() => Navigate("/main")}
+              onClick={() => navigate("/main")}
               variant="p"
               sx={{
                 fontSize: "1.5rem",

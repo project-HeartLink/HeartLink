@@ -13,7 +13,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 
 export const Main = () => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
 
   //player
@@ -26,7 +26,7 @@ export const Main = () => {
     useEffect(() => {
       console.log("useEffect called");
       const timer = setTimeout(() => {
-        Navigate("/result");
+        navigate("/result");
       }, 5 * 1000);
       return () => {
         console.log("cleanUp");
@@ -43,7 +43,7 @@ export const Main = () => {
           }}
         >
           <Typography
-            onClick={() => Navigate("/result")}
+            onClick={() => navigate("/result")}
             variant="body1"
             sx={{
               fontSize: "8vw",

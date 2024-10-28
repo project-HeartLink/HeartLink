@@ -7,7 +7,7 @@ import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { Box, Button, Typography } from "@mui/material";
 
 export const Connect = () => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
 
   return (
@@ -54,7 +54,7 @@ export const Connect = () => {
             component={motion.button}
             whileHover={{ scale: 1.0 }}
             whileTap={{ scale: 0.8 }}
-            onClick={() => Navigate("/SelectPlayer")}
+            onClick={() => navigate("/SelectPlayer")}
             sx={{
               fontSize: "8vw",
               fontWeight: "bold",

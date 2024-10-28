@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import fukidashiBackImg from "../../assets/fukidashi.png";
 import { motion } from "framer-motion";
 import "./Titlepage.scss";
-import TitleHeartImg from "../../assets/IMG_7040.png";
 import { Box, Typography } from "@mui/material";
 
 export const Title = () => {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleScreenChange = () => {
-    Navigate("/start");
+    navigate("/start");
   };
 
   return (

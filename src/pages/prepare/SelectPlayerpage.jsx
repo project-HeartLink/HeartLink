@@ -14,7 +14,7 @@ export const SelectPlayer = () => {
   const [open, setOpen] = useState(false); //playerのリストを表示する
   const [showText, setShowText] = useState(true); //Playerを選択してない場合に出すテキスト
   const [selectedPlayer, setSelectedPlayer] = useState(""); //選択したplayerを保持する
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleOpen = () => {
     setOpen(!open);
@@ -27,7 +27,7 @@ export const SelectPlayer = () => {
 
   const handleNextpage = () => {
     if (selectedPlayer) {
-      Navigate("/getAverage");
+      navigate("/getAverage");
     } else {
       setShowText(false);
       console.log(`${showText}`);
