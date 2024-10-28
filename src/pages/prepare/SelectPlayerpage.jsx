@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Box, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -14,6 +14,7 @@ export const SelectPlayer = () => {
   const [open, setOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState("");
   const [connectValue, setConnectValue] = useState("");
+  const [showText, setShowText] = useState("");
   const navigate = useNavigate();
   const startTime = performance.now(); //開始時間の取得
   const status = "ok";
@@ -27,33 +28,27 @@ export const SelectPlayer = () => {
     setShowText(true);
   };
 
-  const handleNextpage = () => {
-    if (selectedPlayer) {
-      navigate("/getAverage");
-    } else {
-      setShowText(false);
-      console.log(`${showText}`);
-    }
-  };
-
   let p1 = "Player1";
   let p2 = "Player2";
 
   const handleSubmit = () => {
-    fetch("https://hartlink-api.onrender.com/ok", { method: "GET" })
-      .then((res) => res.json()) //json方式でデータを受け取る
-      .then((data) => {
-        console.log("data:", data);
+    if (selectedPlayer) {
+      fetch("https://hartlink-api.onrender.com/ok", { method: "GET" })
+        .then((res) => res.json()) //json方式でデータを受け取る
+        .then((data) => {
+          console.log("data:", data);
 
-        if (data.status === status) {
-          setConnectValue(selectedPlayer); //playar番号をセット
-          console.log("playar:", selectedPlayer);
-          navigate("/getAverage",{state:{selectedPlayer}});
-        }
-        
-      })
+          if (data.status === status) {
+            setConnectValue(selectedPlayer); //playar番号をセット
+            console.log("playar:", selectedPlayer);
+            navigate("/getAverage", { state: { selectedPlayer } });
+          }
+        })
 
-      .catch((err) => console.error("Error fetching data:", err));
+        .catch((err) => console.error("Error fetching data:", err));
+    } else {
+      setShowText(false);
+    }
   };
 
   return (
