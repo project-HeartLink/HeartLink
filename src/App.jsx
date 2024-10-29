@@ -34,7 +34,7 @@ function App() {
           }
         />
         <Route path="/connect" element={<Connect />} />
-        <Route path="/selectPlayer" element={<SelectPlayer />} />
+        <Route path="/selectPlayer" element={<SelectPlayer name={name} />} />
         <Route path="/getAverage" element={<GetAvgData />} />
         <Route path="/showAverage" element={<ShowAvgData />} />
         <Route path="/selectTheme" element={<SelectTheme />} />
