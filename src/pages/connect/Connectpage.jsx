@@ -8,7 +8,6 @@ import { Box, Button, Typography } from "@mui/material";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
-  const player = "0";
   const navigate = useNavigate();
 
   const CatchError = (err) => {
@@ -27,18 +26,19 @@ export const Connect = () => {
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
-          if (data.connect == player) {
+          if (data.connect == 1) {
             console.log("success");
             console.log("playerHeartBeat", data);
             navigate("/SelectPlayer");
           } else {
-            setTimeout(() => {
+            setInterval(() => {
               //20秒以上経ったら、アラート出るようにした
-
+              console.log("connect",data.connect)
               if (!alert("2台目の接続を確認できません")) {
-                navigate(-1);
+                window.location.reload();
+                clearInterval(setInterval)
               }
-            }, 20 * 1000);
+            }, 5 * 1000);
           }
         })
 
