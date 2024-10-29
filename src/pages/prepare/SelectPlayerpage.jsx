@@ -21,6 +21,7 @@ export const SelectPlayer = ({ name }) => {
 
   const handleOpen = () => {
     console.log("open");
+    console.log("open");
     setOpen(!open);
   };
 
