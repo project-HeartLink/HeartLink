@@ -20,6 +20,7 @@ export const SelectPlayer = ({ name }) => {
   const status = "ok";
 
   const handleOpen = () => {
+    console.log("open");
     setOpen(!open);
   };
 
