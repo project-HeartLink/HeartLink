@@ -32,17 +32,15 @@ export const Connect = () => {
             console.log("success");
             console.log("playerHeartBeat", data);
             navigate("/SelectPlayer");
-          } 
-          else if (data.connect == "1"){
+          } else if (data.connect == "1") {
             console.log("connect1");
-          }
-          else if (data.connect == "0") {
+          } else if (data.connect == "0") {
             timeoutId = setTimeout(() => {
               //20秒以上経ったら、アラート出るようにした
               console.log("connect", data.connect);
               if (!alert("2台目の接続を確認できません")) {
-                window.location.reload();
                 clearInterval(setInterval);
+                CatchError();
               }
             }, 10 * 1000);
           }
