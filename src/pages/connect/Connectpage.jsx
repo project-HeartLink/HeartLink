@@ -26,12 +26,13 @@ export const Connect = () => {
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
-          if (data.connect == 1) {
+          if (data.connect == 2) {
             console.log("success");
             console.log("playerHeartBeat", data);
             navigate("/SelectPlayer");
-          } else {
-            setInterval(() => {
+          }
+          else if(data.connect == 0){
+            setTimeout(() => {
               //20秒以上経ったら、アラート出るようにした
               console.log("connect",data.connect)
               if (!alert("2台目の接続を確認できません")) {
@@ -44,7 +45,10 @@ export const Connect = () => {
 
         .catch((err) => CatchError(err));
     };
-    const timeout = setTimeout(handleSubmit, 5 * 1000);
+
+
+
+    const timeout = setInterval(handleSubmit, 20 * 1000);
 
     //clearIntervalを入れることで、２回される処理を回避
     return () => {
