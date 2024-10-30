@@ -17,12 +17,14 @@ export const Connect = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("data", data);
-        navigate(-2);
+        navigate("/");
       });
   };
 
   useEffect(() => {
+    let timeoutId;
     const handleSubmit = () => {
+      console.log("動いたよ");
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
@@ -30,29 +32,31 @@ export const Connect = () => {
             console.log("success");
             console.log("playerHeartBeat", data);
             navigate("/SelectPlayer");
+          } 
+          else if (data.connect == "1"){
+            console.log("connect1");
           }
-          else if(data.connect == "0"){
-            setTimeout(() => {
+          else if (data.connect == "0") {
+            timeoutId = setTimeout(() => {
               //20秒以上経ったら、アラート出るようにした
-              console.log("connect",data.connect)
+              console.log("connect", data.connect);
               if (!alert("2台目の接続を確認できません")) {
                 window.location.reload();
-                clearInterval(setInterval)
+                clearInterval(setInterval);
               }
-            }, 5 * 1000);
+            }, 10 * 1000);
           }
         })
 
         .catch((err) => CatchError(err));
     };
 
-
-
-    const interval = setInterval(handleSubmit, 5 * 1000);
+    const intervalId = setInterval(handleSubmit, 5 * 1000);
 
     //clearIntervalを入れることで、２回される処理を回避
     return () => {
-      clearInterval(interval);
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
     };
   }); // 初回時のみ実行する
 
