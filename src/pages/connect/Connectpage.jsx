@@ -17,6 +17,8 @@ export const Connect = () => {
     fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
       .then((response) => response.json())
       .then((data) => {
+        console.log("data", data);
+
         navigate("/");
       });
   };
@@ -29,6 +31,7 @@ export const Connect = () => {
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           if (data.connect == "2") {
+
             navigate("/SelectPlayer");
           } else if (data.connect == "1") {
             console.log("connect:",data.connect)
@@ -42,6 +45,20 @@ export const Connect = () => {
                 }
               }, 10 * 1000);
             }
+            console.log("success");
+            console.log("playerHeartBeat", data);
+            navigate("/SelectPlayer");
+          } else if (data.connect == "1") {
+            console.log("connect1");
+          } else if (data.connect == "0") {
+            timeoutId = setTimeout(() => {
+              //20秒以上経ったら、アラート出るようにした
+              console.log("connect", data.connect);
+              if (!alert("2台目の接続を確認できません")) {
+                clearInterval(setInterval);
+                CatchError();
+              }
+            }, 10 * 1000);
           }
         })
 

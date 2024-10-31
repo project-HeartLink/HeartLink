@@ -10,7 +10,7 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
-export const SelectPlayer = () => {
+export const SelectPlayer = ({ name }) => {
   const [open, setOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState("");
   const [connectValue, setConnectValue] = useState("");
@@ -20,7 +20,36 @@ export const SelectPlayer = () => {
   const status = "ok";
 
   const handleOpen = () => {
+    console.log("open");
+    console.log("open");
     setOpen(!open);
+  };
+
+  const sendPlayerInfo = () => {
+    const data = { player: selectedPlayer, name: name }; // dataを正しい形式で設定
+
+    console.log("ただいま、メールを送信してます", data);
+    const url = "https://hartlink-api.onrender.com/sendname";
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("ネットワーク応答が正常ではありません");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   const handleSelectplayer = (player) => {
@@ -41,7 +70,10 @@ export const SelectPlayer = () => {
           if (data.status === status) {
             setConnectValue(selectedPlayer); //playar番号をセット
             console.log("playar:", selectedPlayer);
-            navigate("/getAverage", { state: { selectedPlayer } });
+            sendPlayerInfo();
+            navigate(`/getAverage`, {
+              state: { selectedPlayer },
+            });
           }
         })
 
@@ -91,8 +123,8 @@ export const SelectPlayer = () => {
                 sx={{
                   alignItems: "center",
                 }}
-                onClick={() => handleSelectplayer(p1)}
-                selected={selectedPlayer === p1}
+                onClick={() => handleSelectplayer(1)}
+                selected={selectedPlayer === 1}
               >
                 <ListItemText
                   primary={p1}
@@ -104,8 +136,8 @@ export const SelectPlayer = () => {
               </ListItemButton>
               <ListItemButton
                 sx={{ alignItems: "center" }}
-                onClick={() => handleSelectplayer(p2)}
-                selected={selectedPlayer === p2}
+                onClick={() => handleSelectplayer(2)}
+                selected={selectedPlayer === 2}
               >
                 <ListItemText
                   primary={p2}
