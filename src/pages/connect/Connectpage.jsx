@@ -8,7 +8,6 @@ import { Box, Button, Typography } from "@mui/material";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
-  const player = "0";
   const navigate = useNavigate();
 
   const CatchError = (err) => {
@@ -18,37 +17,44 @@ export const Connect = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("data", data);
-        navigate(-2);
+        navigate("/");
       });
   };
 
   useEffect(() => {
+    let timeoutId;
     const handleSubmit = () => {
+      console.log("動いたよ");
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
-          if (data.connect == player) {
+          if (data.connect == "2") {
             console.log("success");
             console.log("playerHeartBeat", data);
             navigate("/SelectPlayer");
-          } else {
-            setTimeout(() => {
+          } else if (data.connect == "1") {
+            console.log("connect1");
+          } else if (data.connect == "0") {
+            timeoutId = setTimeout(() => {
               //20秒以上経ったら、アラート出るようにした
-
+              console.log("connect", data.connect);
               if (!alert("2台目の接続を確認できません")) {
-                navigate(-1);
+                clearInterval(setInterval);
+                CatchError();
               }
-            }, 20 * 1000);
+            }, 10 * 1000);
           }
         })
 
         .catch((err) => CatchError(err));
     };
-    const timeout = setTimeout(handleSubmit, 5 * 1000);
+
+    const intervalId = setInterval(handleSubmit, 5 * 1000);
 
     //clearIntervalを入れることで、２回される処理を回避
     return () => {
-      clearInterval(timeout);
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
     };
   }); // 初回時のみ実行する
 
