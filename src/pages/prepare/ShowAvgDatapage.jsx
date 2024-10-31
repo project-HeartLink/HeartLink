@@ -8,7 +8,7 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 
 export const ShowAvgData = ({ player }) => {
   const navigate = useNavigate();
-  const SaveHeartBeat = ["12","40","90"];
+  const SaveHeartBeat = ["12","40","90","92","12","80"];
   let averageHeartbeat = 0;
 
   const [message, setMessage] = React.useState();
@@ -41,13 +41,16 @@ export const ShowAvgData = ({ player }) => {
 
       console.log("event.data:", event.data);
       console.log("id1:", data.id1);
-      console.log("heartRate1", data.heartRate1);
+      console.log("heartRate2", data.heartRate2);
       console.log("state", player);
 
       if (player == "Player1") {
         SaveHeartBeat.push(data.heartRate1);
-
-        SaveHeartBeat.map((heartbeat) => {
+      }
+      else if (player == "Player2"){
+        SaveHeartBeat.push(data.heartRate2)
+      }
+      SaveHeartBeat.map((heartbeat) => {
           const heartbeatInt = parseInt(heartbeat, 10);
           console.log("heartbeatInt", heartbeatInt);
           sum += heartbeatInt;
@@ -56,7 +59,10 @@ export const ShowAvgData = ({ player }) => {
         console.log("sum:", sum);
         averageHeartbeat = sum / index;
         console.log("averageHeartbeat", averageHeartbeat);
-      }
+      
+
+      
+      
       console.log("🚀 ~ onMessage ~ SaveHeartBeat:", SaveHeartBeat);
     };
 
