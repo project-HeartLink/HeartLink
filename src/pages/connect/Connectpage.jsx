@@ -31,6 +31,7 @@ export const Connect = () => {
           if (data.connect == "2") {
             navigate("/SelectPlayer");
           } else if (data.connect == "1") {
+            console.log("connect:",data.connect)
           } else if (data.connect == "0") {
             if (!flag) {
               flag = true;  //２回目の処理を実行させないようにした
