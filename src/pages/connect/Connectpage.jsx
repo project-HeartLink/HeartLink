@@ -8,8 +8,8 @@ import { Box, Button, Typography } from "@mui/material";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
-  const player = "0";
   const navigate = useNavigate();
+  let flag = false;
 
   const CatchError = (err) => {
     console.log("エラー:", err);
@@ -17,38 +17,42 @@ export const Connect = () => {
     fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
       .then((response) => response.json())
       .then((data) => {
-        console.log("data", data);
-        navigate(-2);
+        navigate("/");
       });
   };
 
   useEffect(() => {
+    let timeoutId;
     const handleSubmit = () => {
+      console.log("動いたよ");
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
-          if (data.connect == player) {
-            console.log("success");
-            console.log("playerHeartBeat", data);
+          if (data.connect == "2") {
             navigate("/SelectPlayer");
-          } else {
-            setTimeout(() => {
-              //20秒以上経ったら、アラート出るようにした
-
-              if (!alert("2台目の接続を確認できません")) {
-                navigate(-1);
-              }
-            }, 20 * 1000);
+          } else if (data.connect == "1") {
+          } else if (data.connect == "0") {
+            if (!flag) {
+              flag = true;  //２回目の処理を実行させないようにした
+              timeoutId = setTimeout(() => {
+                //20秒以上経ったら、アラート出るようにした
+                if (!alert("2台目の接続を確認できません")) {
+                  CatchError();
+                }
+              }, 10 * 1000);
+            }
           }
         })
 
         .catch((err) => CatchError(err));
     };
-    const timeout = setTimeout(handleSubmit, 5 * 1000);
+
+    const intervalId = setInterval(handleSubmit, 5 * 1000);
 
     //clearIntervalを入れることで、２回される処理を回避
     return () => {
-      clearInterval(timeout);
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
     };
   }); // 初回時のみ実行する
 
