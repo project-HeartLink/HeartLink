@@ -9,6 +9,7 @@ import { Box, Button, Typography } from "@mui/material";
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
+  let flag = false;
 
   const CatchError = (err) => {
     console.log("エラー:", err);
@@ -17,6 +18,7 @@ export const Connect = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("data", data);
+
         navigate("/");
       });
   };
@@ -29,6 +31,20 @@ export const Connect = () => {
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           if (data.connect == "2") {
+
+            navigate("/SelectPlayer");
+          } else if (data.connect == "1") {
+            console.log("connect:",data.connect)
+          } else if (data.connect == "0") {
+            if (!flag) {
+              flag = true;  //２回目の処理を実行させないようにした
+              timeoutId = setTimeout(() => {
+                //20秒以上経ったら、アラート出るようにした
+                if (!alert("2台目の接続を確認できません")) {
+                  CatchError();
+                }
+              }, 10 * 1000);
+            }
             console.log("success");
             console.log("playerHeartBeat", data);
             navigate("/SelectPlayer");
