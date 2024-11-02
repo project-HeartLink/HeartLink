@@ -1,9 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import HeartImg from "../../assets/kkrn_icon_heart_3.png";
+import redHeartImg from "../../assets/heart_red.png";
 import talkThemeBox from "../../assets/talkThemeBox.png";
 import "./mainpage.scss";
 
@@ -70,7 +70,7 @@ export const Main = () => {
           }}
         >
           <img
-            src={HeartImg}
+            src={redHeartImg}
             style={{
               width: "40%",
               height: "auto",
@@ -110,7 +110,7 @@ export const Main = () => {
             >
               <SwiperSlide>
                 <img
-                  src={HeartImg}
+                  src={redHeartImg}
                   style={{
                     width: "80%",
                     height: "auto",
@@ -128,7 +128,8 @@ export const Main = () => {
                   <Typography
                     variant="h1"
                     sx={{
-                      fontSize: "8vw",
+                      fontSize: "7vw",
+                      fontFamily: "LXGW WenKai Mono TC",
                     }}
                   >
                     Player1
@@ -136,8 +137,9 @@ export const Main = () => {
                   <Typography
                     variant="body1"
                     sx={{
-                      mt: "4vw",
-                      fontSize: "6vw",
+                      mt: "0vh",
+                      fontSize: "3rem",
+                      fontFamily: "LXGW WenKai Mono TC",
                     }}
                   >
                     {heartBeatP1}
@@ -146,7 +148,7 @@ export const Main = () => {
               </SwiperSlide>
               <SwiperSlide>
                 <img
-                  src={HeartImg}
+                  src={redHeartImg}
                   style={{
                     width: "80%",
                     height: "auto",
@@ -164,7 +166,8 @@ export const Main = () => {
                   <Typography
                     variant="h1"
                     sx={{
-                      fontSize: "8vw",
+                      fontSize: "7vw",
+                      fontFamily: "LXGW WenKai Mono TC",
                     }}
                   >
                     Player2
@@ -172,8 +175,9 @@ export const Main = () => {
                   <Typography
                     variant="body1"
                     sx={{
-                      mt: "4vw",
-                      fontSize: "6vw",
+                      mt: "0vh",
+                      fontSize: "3rem",
+                      fontFamily: "LXGW WenKai Mono TC",
                     }}
                   >
                     {heartBeatP2}
@@ -210,25 +214,28 @@ export const Main = () => {
               <Typography
                 variant="body1"
                 sx={{
-                  mt: "2vw",
-                  mb: "2vw",
-                  fontSize: "8vw",
+                  pt: "2vw",
+                  fontSize: "7vw",
                   width: "70vw",
                 }}
               >
                 {talkTheme}
               </Typography>
 
-              <Button
-                component={motion.button}
+              <Typography
+                variant="body1"
+                component={motion.div}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.8 }}
+                transition={{}}
                 sx={{
+                  display: "inline-block",
                   fontSize: "5vw",
-                  color: "black",
+                  pt: "2vh",
                 }}
               >
-                次のお題
-              </Button>
+                完了
+              </Typography>
             </Box>
           </Box>
         </Box>
