@@ -45,15 +45,17 @@ export const ShowAvgData = ({ player }) => {
         setSaveHeartBeat((prev) => [...prev, data.heartRate2,10]);
       }
 
-      console.log("type",typeof(SaveHeartBeat))
-      const sum = SaveHeartBeat.reduce((acc, cur) => parseInt(acc,10) + parseInt(cur,10)); //objectからint型に変えて、合計を求めた
 
-      console.log("sum:", sum);
-      const avgHeartBeat = sum / SaveHeartBeat.length;
-      console.log("avgHeartBeat", avgHeartBeat);
+      function sum(){
+        let s = SaveHeartBeat.reduce((acc, cur) => parseInt(acc,10) + parseInt(cur,10)); //objectからint型に変えて、合計を求めた
+        const avgHeartBeat = s / SaveHeartBeat.length;
+        return avgHeartBeat;
+      } 
+      console.log("sum",sum())
 
-      console.log("🚀 ~ onMessage ~ SaveHeartBeat:", SaveHeartBeat);
     };
+
+    
 
     websocket.addEventListener("message", onMessage);
 
