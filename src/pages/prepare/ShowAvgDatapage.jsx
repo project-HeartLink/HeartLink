@@ -8,13 +8,12 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 
 export const ShowAvgData = ({ player }) => {
   const navigate = useNavigate();
-  const SaveHeartBeat = ["12","40","90","92","12","80"];
-  let averageHeartbeat = 0;
+  const SaveHeartBeat = ["12", "40", "90", "92", "12", "80"];
+  let avgHeartBeat = 0;
 
   const [message, setMessage] = React.useState();
   const socketRef = React.useRef();
-  const [heartBeat, setHeartBeat] = useState([]);
-  const location = useLocation(); //location.stateでhistory.pushの引数で渡したstateを取り出すことができる
+
   let sum = 0;
   let index = 0;
 
@@ -45,24 +44,18 @@ export const ShowAvgData = ({ player }) => {
       console.log("state", player);
 
       if (player == "Player1") {
-        SaveHeartBeat.push(data.heartRate1);
+        SaveHeartBeat((prev) => [...prev, data.heartRate1]);
+      } else if (player == "Player2") {
+        SaveHeartBeat((prev) => [...prev, data.heartRate2]);
       }
-      else if (player == "Player2"){
-        SaveHeartBeat.push(data.heartRate2)
-      }
-      SaveHeartBeat.map((heartbeat) => {
-          const heartbeatInt = parseInt(heartbeat, 10);
-          console.log("heartbeatInt", heartbeatInt);
-          sum += heartbeatInt;
-          index++;
-        });
-        console.log("sum:", sum);
-        averageHeartbeat = sum / index;
-        console.log("averageHeartbeat", averageHeartbeat);
-      
 
-      
-      
+      console.log("type",typeof(SaveHeartBeat))
+      const sum = SaveHeartBeat.reduce((acc, cur) => parseInt(acc,10) + parseInt(cur)); //int型に変えて、合計を求めた
+
+      console.log("sum:", sum);
+      avgHeartBeat = sum / SaveHeartBeat.length;
+      console.log("avgHeartBeat", avgHeartBeat);
+
       console.log("🚀 ~ onMessage ~ SaveHeartBeat:", SaveHeartBeat);
     };
 
