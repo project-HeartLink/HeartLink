@@ -9,7 +9,6 @@ import { Box, Button, Typography } from "@mui/material";
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
-  let flag = false;
 
   const CatchError = (err) => {
     console.log("エラー:", err);
@@ -31,18 +30,21 @@ export const Connect = () => {
           if (data.connect == "2") {
             navigate("/SelectPlayer");
           } else if (data.connect == "1") {
-          } else if (data.connect == "0") {
-            if (!flag) {
-              flag = true;  //２回目の処理を実行させないようにした
-              timeoutId = setTimeout(() => {
-                //20秒以上経ったら、アラート出るようにした
-                if (!alert("2台目の接続を確認できません")) {
-                  CatchError();
-                }
-              }, 10 * 1000);
-            }
+            console.log("connect:", data.connect);
           }
-        })
+
+            // flag = true;  //２回目の処理を実行させないようにした
+            timeoutId = setTimeout(() => {
+              //20秒以上経ったら、アラート出るようにした
+
+              if(data.connect != "2"){
+              if (!alert("2台目の接続を確認できません")) {
+                CatchError();
+              }
+            }
+            }, 10 * 1000);
+          }
+        )
 
         .catch((err) => CatchError(err));
     };
