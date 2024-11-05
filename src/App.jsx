@@ -17,6 +17,7 @@ import "./App.scss";
 function App() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [player, setPlayer] = useState("");
 
   return (
     <AnimatePresence>
@@ -34,9 +35,12 @@ function App() {
           }
         />
         <Route path="/connect" element={<Connect />} />
-        <Route path="/selectPlayer" element={<SelectPlayer />} />
+        <Route
+          path="/selectPlayer"
+          element={<SelectPlayer player={player} setPlayer={setPlayer} />}
+        />
         <Route path="/getAverage" element={<GetAvgData />} />
-        <Route path="/showAverage" element={<ShowAvgData />} />
+        <Route path="/showAverage" element={<ShowAvgData player={player} />} />
         <Route path="/selectTheme" element={<SelectTheme />} />
         <Route path="/main" element={<Main />} />
         <Route path="/result" element={<Result />} />
