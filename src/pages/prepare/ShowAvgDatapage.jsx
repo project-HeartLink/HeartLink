@@ -8,7 +8,14 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 
 export const ShowAvgData = ({ player }) => {
   const navigate = useNavigate();
-  const [SaveHeartBeat,setSaveHeartBeat] = useState(["12", "40", "90", "92", "12", "80"]);//reduceを使うためにusestateに変更
+  const [SaveHeartBeat, setSaveHeartBeat] = useState([
+    "12",
+    "40",
+    "90",
+    "92",
+    "12",
+    "80",
+  ]); //reduceを使うためにusestateに変更
 
   const [message, setMessage] = React.useState();
   const socketRef = React.useRef();
@@ -40,22 +47,19 @@ export const ShowAvgData = ({ player }) => {
       console.log("state", player);
 
       if (player == "Player1") {
-        setSaveHeartBeat((prev) => [...prev, data.heartRate1,10]);  
+        setSaveHeartBeat((prev) => [...prev, data.heartRate1, 10]);
       } else if (player == "Player2") {
-        setSaveHeartBeat((prev) => [...prev, data.heartRate2,10]);
+        setSaveHeartBeat((prev) => [...prev, data.heartRate2, 10]);
       }
 
-
-      function sum(){
-        let s = SaveHeartBeat.reduce((acc, cur) => parseInt(acc,10) + parseInt(cur,10)); //objectからint型に変えて、合計を求めた
-        const avgHeartBeat = s / SaveHeartBeat.length;
-        return avgHeartBeat;
-      } 
-      console.log("sum",sum())
-
+      function avg(SaveHeartBeat) {
+        const sum = SaveHeartBeat.reduce(
+          (acc, cur) => parseInt(acc, 10) + parseInt(cur, 10)
+        ); //objectからint型に変えて、合計を求めた
+        return sum / SaveHeartBeat.length;
+      }
+      console.log("sum", avg(SaveHeartBeat));
     };
-
-    
 
     websocket.addEventListener("message", onMessage);
 
