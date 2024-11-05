@@ -30,20 +30,13 @@ export const SelectTheme = () => {
         exit={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <Box flexDirection="row" textAlign="center" justifyContent="center">
           <Typography
             variant="h1"
             sx={{
               fontSize: "2rem",
-              mt: "30%",
-              mb: "10%",
+              mt: "15vh",
+              mb: "5vh",
             }}
           >
             お題
@@ -53,7 +46,7 @@ export const SelectTheme = () => {
             sx={{
               fontSize: "1rem",
               mt: "5vh",
-              mb: "10vh",
+              mb: "5vh",
             }}
           >
             お題を一つ選択してね♡
@@ -62,7 +55,7 @@ export const SelectTheme = () => {
             direction="column"
             spacing={0}
             sx={{
-              width: "100vw",
+              width: "98vw",
             }}
           >
             {themes.map((theme, index) => (
@@ -70,11 +63,13 @@ export const SelectTheme = () => {
                 key={index}
                 display="flex"
                 flexDirection="row"
+                justifyContent="center"
                 onClick={() => handleOpen(theme)}
                 sx={{
                   borderTop: "5px solid #FFFFFF",
-                  py: "5vh",
-                  pl: "20vw",
+                  borderBottom: index == 2 ? "5px solid #FFFFFF" : "none",
+                  py: "4vh",
+                  px: "1vw",
                   cursor: "pointer",
                 }}
               >
@@ -82,17 +77,18 @@ export const SelectTheme = () => {
                   src={HeartImg}
                   style={{
                     objectFit: "contain",
-                    width: "8vw",
+                    width: "2rem",
                   }}
                   alt={`Theme ${index + 1}`}
                 />
                 <Typography
                   variant="body1"
                   sx={{
-                    fontSize: "1.3rem",
+                    fontSize: "1.5rem",
                     textAlign: "start",
-                    pl: "5px",
-                    width: "60vw",
+                    pl: "0.5rem",
+                    pb: "5px",
+                    width: "30rem",
                   }}
                 >
                   {theme}
@@ -120,16 +116,19 @@ export const SelectTheme = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "75vw",
+            maxWidth: "400px",
+            maxHeight: "200px",
             bgcolor: "background.paper",
             border: "3px solid #FF4BB7",
             borderRadius: "30px",
-            p: "8vw",
+            px: "5vw",
+            py: "5vh",
           }}
         >
           <Typography
             variant="p"
             sx={{
-              fontSize: "4vw",
+              fontSize: "1.2rem",
             }}
           >
             選択したのは
@@ -137,7 +136,7 @@ export const SelectTheme = () => {
           <Typography
             sx={{
               mt: "2vw",
-              fontSize: "5vw",
+              fontSize: "1.5rem",
             }}
           >
             『{SelectedTheme}』
@@ -147,7 +146,6 @@ export const SelectTheme = () => {
             spacing={4}
             sx={{
               mt: "1rem",
-              alignItems: "cneter",
               justifyContent: "center",
             }}
           >
