@@ -52,11 +52,11 @@ export const ShowAvgData = ({ player }) => {
         setSaveHeartBeat((prev) => [...prev, data.heartRate2, 10]);
       }
 
-      function avg(SaveHeartBeat) {
-        const sum = SaveHeartBeat.reduce(
+      function avg(heartBeat) {
+        const sum = heartBeat.reduce(
           (acc, cur) => parseInt(acc, 10) + parseInt(cur, 10)
         ); //objectからint型に変えて、合計を求めた
-        return sum / SaveHeartBeat.length;
+        return sum / heartBeat.length;
       }
       console.log("sum", avg(SaveHeartBeat));
     };
