@@ -1,25 +1,85 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 
-export const SelectTheme = () => {
+export const SelectTheme = ({ player }) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [SelectedTheme, setSelectedTheme] = useState(null);
+  const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
+  const [SelectedId, setSelectedId] = useState(); //選択したid
+
   const handleOpen = (theme) => {
     setOpen(true);
-    setSelectedTheme(theme);
+    setSelectedTopic(theme.topic);
+    setSelectedId(theme.id);
   };
   const handleClose = () => setOpen(false);
 
   let themes = [
-    "理想のデートは何？",
-    "第一印象を話す",
-    "人を好きになる瞬間は？",
+    { id: 0, topic: "相手に対して今感じていることを素直に話す" },
+    { id: 1, topic: "相手の外見や性格で素敵だと思う部分を話す" },
+    { id: 2, topic: "相手を恋人と考えてしてほしいことや願望を話す" },
+    { id: 3, topic: "相手と付き合うことを想像したらどう思うか話す" },
+    { id: 4, topic: "相手に一番ときめいた瞬間を話す" },
+    { id: 5, topic: "相手を抱きしめたいと思う瞬間を話す" },
+    { id: 6, topic: "相手に一番、求めるもているもの" },
+    { id: 7, topic: "一番寂しかった恋愛経験を話す" },
+    { id: 8, topic: "相手を好きな人としてどんな風に告白したいか話す" },
+    { id: 9, topic: "相手にどのようにプロポーズをするか" },
+    { id: 10, topic: "相手に対して今感じていることを素直に話す" },
   ];
+
+  const eventSelect = []; //player1
+  const oddSelect = []; //player2
+
+  themes.map((theme) => {
+    if (theme.id % 2 == 0) {
+      eventSelect.push(theme);
+    }
+
+    if (theme.id % 2 != 0) {
+      oddSelect.push(theme);
+    }
+  });
+
+  const selectPlayer = player == "Player1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
+
+  const playerSelect = player == "Player1" ? 1 : 2; //player1の時は1,player2の時は2が帰ってくる
+
+  const ClickYes = (id) => {
+    console.log("theme", themes);
+    console.log("theme", typeof themes);
+    navigate("/main", { state: themes });
+
+    const data = { player: playerSelect, id: id };
+
+    console.log("ただいま、メールを送信してます", data);
+    console.log("id", id);
+    const url = "https://hartlink-api.onrender.com/topicId";
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("ネットワーク応答が正常ではありません");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   return (
     <>
@@ -58,7 +118,7 @@ export const SelectTheme = () => {
               width: "98vw",
             }}
           >
-            {themes.map((theme, index) => (
+            {selectPlayer.map((theme, index) => (
               <Box
                 key={index}
                 display="flex"
@@ -67,7 +127,10 @@ export const SelectTheme = () => {
                 onClick={() => handleOpen(theme)}
                 sx={{
                   borderTop: "5px solid #FFFFFF",
-                  borderBottom: index == 2 ? "5px solid #FFFFFF" : "none",
+                  borderBottom:
+                    index == selectPlayer.length - 1
+                      ? "5px solid #FFFFFF"
+                      : "none",
                   py: "4vh",
                   px: "1vw",
                   cursor: "pointer",
@@ -88,10 +151,10 @@ export const SelectTheme = () => {
                     textAlign: "start",
                     pl: "0.5rem",
                     pb: "5px",
-                    width: "30rem",
+                    width: "35rem",
                   }}
                 >
-                  {theme}
+                  {theme.topic}
                 </Typography>
               </Box>
             ))}
@@ -136,10 +199,10 @@ export const SelectTheme = () => {
           <Typography
             sx={{
               mt: "2vw",
-              fontSize: "1.5rem",
+              fontSize: { xs: "1.5rem", lg: "2rem", xl: "2rem" },
             }}
           >
-            『{SelectedTheme}』
+            『{SelectedTopic}』
           </Typography>
           <Stack
             direction="row"
@@ -157,7 +220,7 @@ export const SelectTheme = () => {
               whileTap={{
                 scale: 0.8,
               }}
-              onClick={() => navigate("/main")}
+              onClick={() => ClickYes(SelectedId)}
               variant="p"
               sx={{
                 fontSize: "1.5rem",
