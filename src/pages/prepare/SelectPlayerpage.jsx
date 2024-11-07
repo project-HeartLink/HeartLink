@@ -10,9 +10,9 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
-export const SelectPlayer = ({ name }) => {
+export const SelectPlayer = ({ player, setPlayer }) => {
   const [open, setOpen] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState("");
+
   const [connectValue, setConnectValue] = useState("");
   const [showText, setShowText] = useState("");
   const navigate = useNavigate();
@@ -20,40 +20,11 @@ export const SelectPlayer = ({ name }) => {
   const status = "ok";
 
   const handleOpen = () => {
-    console.log("open");
-    console.log("open");
     setOpen(!open);
   };
 
-  const sendPlayerInfo = () => {
-    const data = { player: selectedPlayer, name: name }; // dataを正しい形式で設定
-
-    console.log("ただいま、メールを送信してます", data);
-    const url = "https://hartlink-api.onrender.com/sendname";
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("ネットワーク応答が正常ではありません");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
-
   const handleSelectplayer = (player) => {
-    setSelectedPlayer(player);
+    setPlayer(player);
     setShowText(true);
   };
 
@@ -61,19 +32,16 @@ export const SelectPlayer = ({ name }) => {
   let p2 = "Player2";
 
   const handleSubmit = () => {
-    if (selectedPlayer) {
+    if (player) {
       fetch("https://hartlink-api.onrender.com/ok", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           console.log("data:", data);
 
           if (data.status === status) {
-            setConnectValue(selectedPlayer); //playar番号をセット
-            console.log("playar:", selectedPlayer);
-            sendPlayerInfo();
-            navigate(`/getAverage`, {
-              state: { selectedPlayer },
-            });
+            setConnectValue(player); //playar番号をセット
+            console.log("playar:", player);
+            navigate("/getAverage");
           }
         })
 
@@ -123,8 +91,8 @@ export const SelectPlayer = ({ name }) => {
                 sx={{
                   alignItems: "center",
                 }}
-                onClick={() => handleSelectplayer(1)}
-                selected={selectedPlayer === 1}
+                onClick={() => handleSelectplayer(p1)}
+                selected={player === p1}
               >
                 <ListItemText
                   primary={p1}
@@ -136,8 +104,8 @@ export const SelectPlayer = ({ name }) => {
               </ListItemButton>
               <ListItemButton
                 sx={{ alignItems: "center" }}
-                onClick={() => handleSelectplayer(2)}
-                selected={selectedPlayer === 2}
+                onClick={() => handleSelectplayer(p2)}
+                selected={player === p2}
               >
                 <ListItemText
                   primary={p2}
