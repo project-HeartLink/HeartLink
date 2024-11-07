@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Box, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,13 +11,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+import destr from "destr";
 
 export const Main = () => {
   const location = useLocation();
   const themes = location.state; //locateで値を受け取る
   const [topicIndex, setTopicIndex] = useState(0);
-  const socketRef = React.useRef();
-  const [message, setMessage] = React.useState();
+  const socketRef = useRef();
+  const [message, setMessage] = useState();
   const [arrThemes, setarrThemes] = useState([]);
 
   console.log("themes", themes);
@@ -41,7 +42,11 @@ export const Main = () => {
       setMessage(event.data);
 
       // JSON文字列をJavaScriptオブジェクトに変換
-      const data = JSON.parse(event.data);
+      //const data = JSON.parse(event.data);
+      const data = destr(event.data);
+
+      // undefined
+      // destr()
 
       console.log("event.data:", event.data);
       console.log("id1:", data.id1);
@@ -59,7 +64,6 @@ export const Main = () => {
           }
         });
       }
- 
     };
 
     websocket.addEventListener("message", onMessage);
@@ -71,7 +75,6 @@ export const Main = () => {
     };
   }, []);
   //useEffectの発火が何にも依存しない,初回にしか起動しない。
-
 
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
