@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import fukidashiBackImg from "../../assets/fukidashi.png";
 import "./Formpage.scss";
+import ningen from "../../assets/coupleResult.svg";
 import {
   Box,
   Typography,
@@ -15,7 +16,7 @@ import {
   Input,
 } from "@mui/material";
 
-export const Form = ({ name, setName, password, setPassword }) => {
+export const Form = ({ name, setName }) => {
   const navigate = useNavigate();
 
   //モーダルウインドウ
@@ -25,7 +26,6 @@ export const Form = ({ name, setName, password, setPassword }) => {
 
   useEffect(() => {
     setName("");
-    setPassword("");
   }, []);
 
   const handleNameChange = (e) => {
@@ -33,14 +33,9 @@ export const Form = ({ name, setName, password, setPassword }) => {
     setName(e.target.value);
   };
 
-  const handlePassChange = (e) => {
-    console.log(password);
-    setPassword(e.target.value);
-  };
-
   const handleSubmit = () => {
-    if (name && password) {
-      navigate(`/connect?roomId=${password}`);
+    if (name) {
+      navigate(`/connect`);
     } else {
       handleOpen(); // どちらかが未入力の場合に出すウインドウ
     }
@@ -66,7 +61,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
           <Typography
             variant="body1"
             sx={{
-              fontSize: "2.5rem",
+              fontSize: "2rem",
             }}
           >
             名前
@@ -84,36 +79,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
               disableUnderline
               onChange={handleNameChange}
               sx={{
-                padding: "1rem",
-                borderRadius: "15px",
-                border: "3px solid white",
-                backgroundColor: "white",
-              }}
-            />
-          </FormControl>
-
-          {/* 合言葉入力 */}
-          <Typography
-            variant="body1"
-            sx={{
-              fontSize: "2.5rem",
-            }}
-          >
-            合言葉
-          </Typography>
-          <FormControl
-            required
-            color="primary"
-            sx={{ width: "60%", maxWidth: "400px" }}
-          >
-            <Input
-              placeholder="合言葉を入力"
-              name="Password"
-              autoComplete="off"
-              fullWidth
-              disableUnderline
-              onChange={handlePassChange}
-              sx={{
+                mt: "2vh",
                 padding: "1rem",
                 borderRadius: "15px",
                 border: "3px solid white",
@@ -131,14 +97,14 @@ export const Form = ({ name, setName, password, setPassword }) => {
         >
           <Box
             sx={{
-              mt: 5,
+              mt: "7vh",
               position: "relative",
             }}
           >
             <img
               src={fukidashiBackImg}
               style={{
-                width: "80%",
+                width: "75%",
                 height: "auto",
                 maxWidth: "350px",
               }}
@@ -149,7 +115,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
                 margin: 0,
                 whiteSpace: "pre-line",
                 position: "absolute",
-                width: "70%",
+                width: "100%",
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -55%)",
@@ -173,7 +139,7 @@ export const Form = ({ name, setName, password, setPassword }) => {
             fontWeight: "bold",
             color: "white",
             backgroundColor: "#ffdbdb",
-            marginTop: "5vh",
+            marginTop: "2vh",
             border: "10px solid white",
             borderRadius: "15px",
             padding: "2px 30px 2px 30px",
@@ -181,6 +147,20 @@ export const Form = ({ name, setName, password, setPassword }) => {
         >
           タップ
         </Button>
+        <img
+          src={ningen}
+          style={{
+            zIndex: "-1",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            margin: "0 auto",
+            objectFit: "cover",
+            height: "20vh",
+            width: "auto",
+          }}
+        />
         <Modal
           component={motion.div}
           initial={{ opacity: 0 }}
@@ -203,7 +183,8 @@ export const Form = ({ name, setName, password, setPassword }) => {
               bgcolor: "background.paper",
               border: "3px solid #FF4BB7",
               borderRadius: "30px",
-              p: "8vw",
+              px: "5vw",
+              py: "5vh",
             }}
           >
             <Typography
@@ -221,18 +202,18 @@ export const Form = ({ name, setName, password, setPassword }) => {
             <Typography
               variant="p"
               sx={{
-                fontSize: "1.2rem",
+                fontSize: "1.5rem",
               }}
             >
-              名前と合言葉の両方を入力してね
+              名前を入力してね
             </Typography>
             <Typography
               sx={{
-                mt: "2vh",
+                mt: "1vh",
                 fontSize: "1.1rem",
               }}
             >
-              名前と合言葉を入力すると
+              名前を入力すると
             </Typography>
             <Typography
               sx={{
