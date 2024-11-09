@@ -32,18 +32,14 @@ export const SelectTheme = ({ player }) => {
     { id: 10, topic: "相手に対して今感じていることを素直に話す" },
   ];
 
-  const eventSelect = []; //player1
-  const oddSelect = []; //player2
+  const [eventSelect, setEventSelect] = useState([]); //player1
+  const [oddSelect, setOddSelect] = useState([]); //player2
 
-  themes.map((theme) => {
-    if (theme.id % 2 == 0) {
-      eventSelect.push(theme);
-    }
+  useEffect(() => {
+    setEventSelect(themes.filter((theme) => theme.id % 2 == 0));
 
-    if (theme.id % 2 != 0) {
-      oddSelect.push(theme);
-    }
-  });
+    setOddSelect(themes.filter((theme) => theme.id % 2 != 0));
+  }, []);
 
   const selectPlayer = player == "Player1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
 

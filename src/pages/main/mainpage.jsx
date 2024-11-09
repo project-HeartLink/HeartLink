@@ -31,11 +31,11 @@ export const Main = () => {
     );
     socketRef.current = websocket;
 
-    websocket.addEventListener("open", () => {
+    websocket.onopen = () => {
       //そのページを開いた瞬間に心拍取得するようにした
       // WebSocket接続が確立されたらメッセージを送信
       socketRef.current?.send("0.0");
-    });
+    };
 
     // #2.メッセージ受信時のイベントハンドラを設定
     const onMessage = (event) => {
@@ -53,17 +53,21 @@ export const Main = () => {
       console.log("heartRate2", data.heartRate2);
       console.log("topicId", data.topicId);
 
-      for (let i = 0; i < data.topicId.length; i++) {
-        console.log("topicIdMap", data.topicId[i][0]);
-
-        themes.map((theme) => {
-          if (data.topicId[i][0] == theme.id) {
-            console.log("theme.id", theme.topic);
-            arrThemes.push(theme.topic);
-            console.log("arrThemes", arrThemes);
-          }
-        });
+      function wsTheme (id) {
+        for (let i = 0; i < id.length; i++) {
+          console.log("topicIdMap", id[i][0]);
+  
+          themes.map((theme) => {
+            if (id[i][0] == theme.id) {
+              console.log("theme.id", theme.topic);
+              arrThemes.push(theme.topic);
+              console.log("arrThemes", arrThemes);
+            }
+          });
+        }
       }
+      wsTheme(data.topicId)
+      
     };
 
     websocket.addEventListener("message", onMessage);
@@ -302,8 +306,7 @@ export const Main = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.8 }}
                 transition={{}}
-                onClick={FinishTheme}
-                // onClick={() => ClickYes(SelectedTopic)}
+                onClick={() => FinishTheme()}
                 sx={{
                   display: "inline-block",
                   fontSize: "5vw",
