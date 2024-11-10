@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
+import {themesArr} from "./themesArr";
+
 
 export const SelectTheme = ({ player }) => {
+  const themes = themesArr;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
@@ -17,20 +20,6 @@ export const SelectTheme = ({ player }) => {
     setSelectedId(theme.id);
   };
   const handleClose = () => setOpen(false);
-
-  let themes = [
-    { id: 0, topic: "相手に対して今感じていることを素直に話す" },
-    { id: 1, topic: "相手の外見や性格で素敵だと思う部分を話す" },
-    { id: 2, topic: "相手を恋人と考えてしてほしいことや願望を話す" },
-    { id: 3, topic: "相手と付き合うことを想像したらどう思うか話す" },
-    { id: 4, topic: "相手に一番ときめいた瞬間を話す" },
-    { id: 5, topic: "相手を抱きしめたいと思う瞬間を話す" },
-    { id: 6, topic: "相手に一番、求めるもているもの" },
-    { id: 7, topic: "一番寂しかった恋愛経験を話す" },
-    { id: 8, topic: "相手を好きな人としてどんな風に告白したいか話す" },
-    { id: 9, topic: "相手にどのようにプロポーズをするか" },
-    { id: 10, topic: "相手に対して今感じていることを素直に話す" },
-  ];
 
   const [eventSelect, setEventSelect] = useState([]); //player1
   const [oddSelect, setOddSelect] = useState([]); //player2
@@ -116,7 +105,7 @@ export const SelectTheme = ({ player }) => {
           >
             {selectPlayer.map((theme, index) => (
               <Box
-                key={index}
+                key={theme.id}
                 display="flex"
                 flexDirection="row"
                 justifyContent="center"

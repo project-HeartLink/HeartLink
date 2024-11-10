@@ -12,10 +12,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import destr from "destr";
+import { themesArr } from "./themesArr";
 
 export const Main = () => {
-  const location = useLocation();
-  const themes = location.state; //locateで値を受け取る
+  const themes = themesArr; //locateで値を受け取る
   const [topicIndex, setTopicIndex] = useState(0);
   const socketRef = useRef();
   const [message, setMessage] = useState();
