@@ -30,13 +30,12 @@ export const Connect = () => {
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
-          if (data.connect == "2") {x-anada1<<<<<<<
+          if (data.connect == "2") {
             console.log("connect:", data.connect);
             navigate("/SelectPlayer");
           } else if (data.connect == "1") {
             console.log("connect:", data.connect);
           } else if (data.connect == "0") {
-<<<<x-hanada
             console.log("playerHeartBeat", data);
           }
           timeoutId = setTimeout(() => {
