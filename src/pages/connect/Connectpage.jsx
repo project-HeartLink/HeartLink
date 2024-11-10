@@ -31,34 +31,23 @@ export const Connect = () => {
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           if (data.connect == "2") {
+            console.log("connect:", data.connect);
             navigate("/SelectPlayer");
           } else if (data.connect == "1") {
             console.log("connect:", data.connect);
           } else if (data.connect == "0") {
-            if (!flag) {
-              flag = true; //２回目の処理を実行させないようにした
-              timeoutId = setTimeout(() => {
-                //20秒以上経ったら、アラート出るようにした
-                if (!alert("2台目の接続を確認できません")) {
-                  CatchError();
-                }
-              }, 10 * 1000);
-            }
-            console.log("success");
             console.log("playerHeartBeat", data);
-            navigate("/SelectPlayer");
-          } else if (data.connect == "1") {
-            console.log("connect1");
-          } else if (data.connect == "0") {
-            timeoutId = setTimeout(() => {
-              //20秒以上経ったら、アラート出るようにした
+          }
+          timeoutId = setTimeout(() => {
+            //20秒以上経ったら、アラート出るようにした
+            if (data.connect != "2") {
               console.log("connect", data.connect);
               if (!alert("2台目の接続を確認できません")) {
                 clearInterval(setInterval);
                 CatchError();
               }
-            }, 10 * 1000);
-          }
+            }
+          }, 60 * 1000); //本番は60秒くらいあればいいと思うため変更
         })
 
         .catch((err) => CatchError(err));
