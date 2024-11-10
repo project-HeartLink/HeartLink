@@ -1,25 +1,70 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
+import {themesArr} from "./themesArr";
 
-export const SelectTheme = () => {
+
+export const SelectTheme = ({ player }) => {
+  const themes = themesArr;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [SelectedTheme, setSelectedTheme] = useState(null);
+  const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
+  const [SelectedId, setSelectedId] = useState(); //選択したid
+
   const handleOpen = (theme) => {
     setOpen(true);
-    setSelectedTheme(theme);
+    setSelectedTopic(theme.topic);
+    setSelectedId(theme.id);
   };
   const handleClose = () => setOpen(false);
 
-  let themes = [
-    "理想のデートは何？",
-    "第一印象を話す",
-    "人を好きになる瞬間は？",
-  ];
+  const [eventSelect, setEventSelect] = useState([]); //player1
+  const [oddSelect, setOddSelect] = useState([]); //player2
+
+  useEffect(() => {
+    setEventSelect(themes.filter((theme) => theme.id % 2 == 0));
+
+    setOddSelect(themes.filter((theme) => theme.id % 2 != 0));
+  }, []);
+
+  const selectPlayer = player == "Player1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
+
+  const playerSelect = player == "Player1" ? 1 : 2; //player1の時は1,player2の時は2が帰ってくる
+
+  const ClickYes = (id) => {
+    console.log("theme", themes);
+    console.log("theme", typeof themes);
+    navigate("/main", { state: themes });
+
+    const data = { player: playerSelect, id: id };
+
+    console.log("ただいま、メールを送信してます", data);
+    console.log("id", id);
+    const url = "https://hartlink-api.onrender.com/topicId";
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("ネットワーク応答が正常ではありません");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   return (
     <>
@@ -58,16 +103,19 @@ export const SelectTheme = () => {
               width: "98vw",
             }}
           >
-            {themes.map((theme, index) => (
+            {selectPlayer.map((theme, index) => (
               <Box
-                key={index}
+                key={theme.id}
                 display="flex"
                 flexDirection="row"
                 justifyContent="center"
                 onClick={() => handleOpen(theme)}
                 sx={{
                   borderTop: "5px solid #FFFFFF",
-                  borderBottom: index == 2 ? "5px solid #FFFFFF" : "none",
+                  borderBottom:
+                    index == selectPlayer.length - 1
+                      ? "5px solid #FFFFFF"
+                      : "none",
                   py: "4vh",
                   px: "1vw",
                   cursor: "pointer",
@@ -88,10 +136,10 @@ export const SelectTheme = () => {
                     textAlign: "start",
                     pl: "0.5rem",
                     pb: "5px",
-                    width: "30rem",
+                    width: "35rem",
                   }}
                 >
-                  {theme}
+                  {theme.topic}
                 </Typography>
               </Box>
             ))}
@@ -136,10 +184,10 @@ export const SelectTheme = () => {
           <Typography
             sx={{
               mt: "2vw",
-              fontSize: "1.5rem",
+              fontSize: { xs: "1.5rem", lg: "2rem", xl: "2rem" },
             }}
           >
-            『{SelectedTheme}』
+            『{SelectedTopic}』
           </Typography>
           <Stack
             direction="row"
@@ -157,7 +205,7 @@ export const SelectTheme = () => {
               whileTap={{
                 scale: 0.8,
               }}
-              onClick={() => navigate("/main")}
+              onClick={() => ClickYes(SelectedId)}
               variant="p"
               sx={{
                 fontSize: "1.5rem",

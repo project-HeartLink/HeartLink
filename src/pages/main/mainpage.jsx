@@ -1,23 +1,99 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Box, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import redHeartImg from "../../assets/heart_red.png";
 import talkThemeBox from "../../assets/talkThemeBox.png";
 import "./mainpage.scss";
-
+import ReconnectingWebSocket from "reconnecting-websocket";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+import destr from "destr";
+import { themesArr } from "./themesArr";
 
 export const Main = () => {
+  const themes = themesArr; //locateで値を受け取る
+  const [topicIndex, setTopicIndex] = useState(0);
+  const socketRef = useRef();
+  const [message, setMessage] = useState();
+  const [arrThemes, setarrThemes] = useState([]);
+
+  console.log("themes", themes);
+
+  // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
+  useEffect(() => {
+    // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
+    const websocket = new ReconnectingWebSocket(
+      "wss://hartlink-api.onrender.com/ws"
+    );
+    socketRef.current = websocket;
+
+    websocket.onopen = () => {
+      //そのページを開いた瞬間に心拍取得するようにした
+      // WebSocket接続が確立されたらメッセージを送信
+      socketRef.current?.send("0.0");
+    };
+
+    // #2.メッセージ受信時のイベントハンドラを設定
+    const onMessage = (event) => {
+      setMessage(event.data);
+
+      // JSON文字列をJavaScriptオブジェクトに変換
+      //const data = JSON.parse(event.data);
+      const data = destr(event.data);
+
+      // undefined
+      // destr()
+
+      console.log("event.data:", event.data);
+      console.log("id1:", data.id1);
+      console.log("heartRate2", data.heartRate2);
+      console.log("topicId", data.topicId);
+
+      function wsTheme (id) {
+        for (let i = 0; i < id.length; i++) {
+          console.log("topicIdMap", id[i][0]);
+  
+          themes.map((theme) => {
+            if (id[i][0] == theme.id) {
+              console.log("theme.id", theme.topic);
+              arrThemes.push(theme.topic);
+              console.log("arrThemes", arrThemes);
+            }
+          });
+        }
+      }
+      wsTheme(data.topicId)
+      
+    };
+
+    websocket.addEventListener("message", onMessage);
+
+    // #3.useEffectのクリーンアップの中で、WebSocketのクローズ処理を実行
+    return () => {
+      websocket.close();
+      websocket.removeEventListener("message", onMessage);
+    };
+  }, []);
+  //useEffectの発火が何にも依存しない,初回にしか起動しない。
+
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
 
+  const FinishTheme = () => {
+    setTopicIndex((index) => {
+      if (index === arrThemes.length - 1) {
+        setIsDone(true);
+        return index;
+      } else {
+        return index + 1;
+      }
+    }); //indexが配列の現在地点を指してる
+  };
   //player
-  let talkTheme = "第一印象を話す";
   let heartBeatP1 = 100;
   let heartBeatP2 = 90;
 
@@ -211,6 +287,7 @@ export const Main = () => {
                 textAlign: "center",
               }}
             >
+              {/* {arrThemes.map((topic) => ( */}
               <Typography
                 variant="body1"
                 sx={{
@@ -219,8 +296,9 @@ export const Main = () => {
                   width: "70vw",
                 }}
               >
-                {talkTheme}
+                {arrThemes[topicIndex]}
               </Typography>
+              {/* ))} */}
 
               <Typography
                 variant="body1"
@@ -228,6 +306,7 @@ export const Main = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.8 }}
                 transition={{}}
+                onClick={() => FinishTheme()}
                 sx={{
                   display: "inline-block",
                   fontSize: "5vw",
