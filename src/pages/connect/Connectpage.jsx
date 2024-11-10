@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Connectpage.scss";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
@@ -16,6 +16,8 @@ export const Connect = () => {
     fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
       .then((response) => response.json())
       .then((data) => {
+        console.log("data", data);
+
         navigate("/");
       });
   };
@@ -28,23 +30,24 @@ export const Connect = () => {
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           if (data.connect == "2") {
+            console.log("connect:", data.connect);
             navigate("/SelectPlayer");
           } else if (data.connect == "1") {
             console.log("connect:", data.connect);
+          } else if (data.connect == "0") {
+            console.log("playerHeartBeat", data);
           }
-
-            // flag = true;  //２回目の処理を実行させないようにした
-            timeoutId = setTimeout(() => {
-              //20秒以上経ったら、アラート出るようにした
-
-              if(data.connect != "2"){
+          timeoutId = setTimeout(() => {
+            //20秒以上経ったら、アラート出るようにした
+            if (data.connect != "2") {
+              console.log("connect", data.connect);
               if (!alert("2台目の接続を確認できません")) {
+                clearInterval(setInterval);
                 CatchError();
               }
             }
-            }, 10 * 1000);
-          }
-        )
+          }, 60 * 1000); //本番は60秒くらいあればいいと思うため変更
+        })
 
         .catch((err) => CatchError(err));
     };
@@ -78,9 +81,10 @@ export const Connect = () => {
           <Typography
             variant="h1"
             sx={{
-              fontSize: "8vw",
-              mt: "30%",
-              mb: "10%",
+              fontSize: "2rem",
+              width: "10rem",
+              mt: "15vh",
+              mb: "10vh",
             }}
           >
             {isReady ? "接続完了" : "接続待ち..."}
@@ -89,33 +93,19 @@ export const Connect = () => {
             component={motion.div}
             animate={{ scale: [0.8, 1, 0.8, 1, 0.8] }}
             transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+            sx={{
+              height: "40vh",
+            }}
           >
             <img
               src={HeartImg}
               style={{
-                width: "70%",
+                width: "60%",
+                maxWidth: "600px",
                 height: "auto",
               }}
             />
           </Box>
-          <Button
-            component={motion.button}
-            whileHover={{ scale: 1.0 }}
-            whileTap={{ scale: 0.8 }}
-            onClick={() => navigate("/SelectPlayer")}
-            sx={{
-              fontSize: "8vw",
-              fontWeight: "bold",
-              color: "white",
-              backgroundColor: "#ffdbdb",
-              marginTop: "10%",
-              border: "10px solid white",
-              borderRadius: "15px",
-              padding: "2px 30px 2px 30px",
-            }}
-          >
-            スタート
-          </Button>
         </Box>
       </Box>
     </>

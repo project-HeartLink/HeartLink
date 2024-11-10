@@ -1,25 +1,70 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
+import {themesArr} from "./themesArr";
 
-export const SelectTheme = () => {
+
+export const SelectTheme = ({ player }) => {
+  const themes = themesArr;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [SelectedTheme, setSelectedTheme] = useState(null);
+  const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
+  const [SelectedId, setSelectedId] = useState(); //選択したid
+
   const handleOpen = (theme) => {
     setOpen(true);
-    setSelectedTheme(theme);
+    setSelectedTopic(theme.topic);
+    setSelectedId(theme.id);
   };
   const handleClose = () => setOpen(false);
 
-  let themes = [
-    "理想のデートは何？",
-    "第一印象を話す",
-    "人を好きになる瞬間は？",
-  ];
+  const [eventSelect, setEventSelect] = useState([]); //player1
+  const [oddSelect, setOddSelect] = useState([]); //player2
+
+  useEffect(() => {
+    setEventSelect(themes.filter((theme) => theme.id % 2 == 0));
+
+    setOddSelect(themes.filter((theme) => theme.id % 2 != 0));
+  }, []);
+
+  const selectPlayer = player == "Player1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
+
+  const playerSelect = player == "Player1" ? 1 : 2; //player1の時は1,player2の時は2が帰ってくる
+
+  const ClickYes = (id) => {
+    console.log("theme", themes);
+    console.log("theme", typeof themes);
+    navigate("/main", { state: themes });
+
+    const data = { player: playerSelect, id: id };
+
+    console.log("ただいま、メールを送信してます", data);
+    console.log("id", id);
+    const url = "https://hartlink-api.onrender.com/topicId";
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("ネットワーク応答が正常ではありません");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   return (
     <>
@@ -30,20 +75,13 @@ export const SelectTheme = () => {
         exit={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <Box flexDirection="row" textAlign="center" justifyContent="center">
           <Typography
             variant="h1"
             sx={{
               fontSize: "2rem",
-              mt: "30%",
-              mb: "10%",
+              mt: "15vh",
+              mb: "5vh",
             }}
           >
             お題
@@ -53,7 +91,7 @@ export const SelectTheme = () => {
             sx={{
               fontSize: "1rem",
               mt: "5vh",
-              mb: "10vh",
+              mb: "5vh",
             }}
           >
             お題を一つ選択してね♡
@@ -62,19 +100,24 @@ export const SelectTheme = () => {
             direction="column"
             spacing={0}
             sx={{
-              width: "100vw",
+              width: "98vw",
             }}
           >
-            {themes.map((theme, index) => (
+            {selectPlayer.map((theme, index) => (
               <Box
-                key={index}
+                key={theme.id}
                 display="flex"
                 flexDirection="row"
+                justifyContent="center"
                 onClick={() => handleOpen(theme)}
                 sx={{
                   borderTop: "5px solid #FFFFFF",
-                  py: "5vh",
-                  pl: "20vw",
+                  borderBottom:
+                    index == selectPlayer.length - 1
+                      ? "5px solid #FFFFFF"
+                      : "none",
+                  py: "4vh",
+                  px: "1vw",
                   cursor: "pointer",
                 }}
               >
@@ -82,20 +125,21 @@ export const SelectTheme = () => {
                   src={HeartImg}
                   style={{
                     objectFit: "contain",
-                    width: "8vw",
+                    width: "2rem",
                   }}
                   alt={`Theme ${index + 1}`}
                 />
                 <Typography
                   variant="body1"
                   sx={{
-                    fontSize: "1.3rem",
+                    fontSize: "1.5rem",
                     textAlign: "start",
-                    pl: "5px",
-                    width: "60vw",
+                    pl: "0.5rem",
+                    pb: "5px",
+                    width: "35rem",
                   }}
                 >
-                  {theme}
+                  {theme.topic}
                 </Typography>
               </Box>
             ))}
@@ -120,16 +164,19 @@ export const SelectTheme = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: "75vw",
+            maxWidth: "400px",
+            maxHeight: "200px",
             bgcolor: "background.paper",
             border: "3px solid #FF4BB7",
             borderRadius: "30px",
-            p: "8vw",
+            px: "5vw",
+            py: "5vh",
           }}
         >
           <Typography
             variant="p"
             sx={{
-              fontSize: "4vw",
+              fontSize: "1.2rem",
             }}
           >
             選択したのは
@@ -137,17 +184,16 @@ export const SelectTheme = () => {
           <Typography
             sx={{
               mt: "2vw",
-              fontSize: "5vw",
+              fontSize: { xs: "1.5rem", lg: "2rem", xl: "2rem" },
             }}
           >
-            『{SelectedTheme}』
+            『{SelectedTopic}』
           </Typography>
           <Stack
             direction="row"
             spacing={4}
             sx={{
               mt: "1rem",
-              alignItems: "cneter",
               justifyContent: "center",
             }}
           >
@@ -159,7 +205,7 @@ export const SelectTheme = () => {
               whileTap={{
                 scale: 0.8,
               }}
-              onClick={() => navigate("/main")}
+              onClick={() => ClickYes(SelectedId)}
               variant="p"
               sx={{
                 fontSize: "1.5rem",

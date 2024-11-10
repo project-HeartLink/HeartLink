@@ -11,6 +11,9 @@ const theme = createTheme({
     body1: {
       fontFamily: "'Hachi Maru Pop', cursive", // body1にHachi Maru Popを適用
     },
+    body2: {
+      fontFamily: "Noto Sans JP",
+    },
     h1: {
       fontFamily: "Kaisei Decol, curive",
       fontWeight: "bold",
@@ -25,5 +28,5 @@ createRoot(document.getElementById("root")).render(
         <App />
       </ThemeProvider>
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 );

@@ -56,31 +56,31 @@ export const SelectPlayer = ({ player, setPlayer }) => {
       <Box
         className="background"
         sx={{
-          mt: "30%",
+          mt: "15vh",
         }}
       >
         <Typography
           variant="body1"
           sx={{
-            fontSize: "8vw",
+            fontSize: "2rem",
           }}
         >
           あなたは
         </Typography>
         <Box
           sx={{
-            m: "15% auto 0 auto",
+            m: "10vh auto 0 auto",
             width: "80vw",
-            height: "50vw",
+            maxWidth: "500px",
+            height: "30vh",
           }}
         >
           <ListItemButton onClick={handleOpen} sx={{ alignItems: "center" }}>
             <ListItemText
               primary="Playerを選択してね"
               primaryTypographyProps={{
-                fontSize: "5vw",
+                fontSize: "1.5rem",
                 fontFamily: "Hachi Maru Pop, serif",
-                width: "60vw",
               }}
             />
             {open ? <ExpandLess /> : <ExpandMore />}
@@ -97,7 +97,7 @@ export const SelectPlayer = ({ player, setPlayer }) => {
                 <ListItemText
                   primary={p1}
                   primaryTypographyProps={{
-                    fontSize: "6vw",
+                    fontSize: "1.5rem",
                     fontFamily: "Hachi Maru Pop, serif",
                   }}
                 />
@@ -110,7 +110,7 @@ export const SelectPlayer = ({ player, setPlayer }) => {
                 <ListItemText
                   primary={p2}
                   primaryTypographyProps={{
-                    fontSize: "6vw",
+                    fontSize: "1.5rem",
                     fontFamily: "Hachi Maru Pop, serif",
                   }}
                 />
@@ -124,11 +124,11 @@ export const SelectPlayer = ({ player, setPlayer }) => {
           whileTap={{ scale: 0.8 }}
           onClick={handleSubmit}
           sx={{
-            fontSize: "8vw",
+            fontSize: "2rem",
             fontWeight: "bold",
             color: "white",
             backgroundColor: "#ffdbdb",
-            marginTop: "10%",
+            marginTop: "2vh",
             border: "10px solid white",
             borderRadius: "15px",
             padding: "2px 30px 2px 30px",
