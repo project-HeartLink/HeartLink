@@ -5,10 +5,13 @@ import { motion } from "framer-motion";
 import "./Connectpage.scss";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { Box, Typography } from "@mui/material";
+import HeartWave from "./heart-wave/HeartWave";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
+  const [dataConnect, setDataConnect] = useState("0");
   const navigate = useNavigate();
+  const flag = false;
 
   const CatchError = (err) => {
     console.log("エラー:", err);
@@ -17,7 +20,6 @@ export const Connect = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("data", data);
-
         navigate("/");
       });
   };
@@ -30,23 +32,30 @@ export const Connect = () => {
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           if (data.connect == "2") {
+            setDataConnect(data.connect);
             console.log("connect:", data.connect);
-            navigate("/SelectPlayer");
+            setIsReady(true);
+            setTimeout(() => navigate("/SelectPlayer"), 3 * 1000);
           } else if (data.connect == "1") {
+            setDataConnect(data.connect);
             console.log("connect:", data.connect);
           } else if (data.connect == "0") {
+            setDataConnect(data.connect);
             console.log("playerHeartBeat", data);
           }
           timeoutId = setTimeout(() => {
             //20秒以上経ったら、アラート出るようにした
             if (data.connect != "2") {
               console.log("connect", data.connect);
-              if (!alert("2台目の接続を確認できません")) {
-                clearInterval(setInterval);
-                CatchError();
+              if (!flag) {
+                if (!alert("2台目の接続を確認できません")) {
+                  clearInterval(setInterval);
+                  CatchError();
+                  flag = true;
+                }
               }
             }
-          }, 60 * 1000); //本番は60秒くらいあればいいと思うため変更
+          }, 10 * 1000); //本番は60秒くらいあればいいと思うため変更
         })
 
         .catch((err) => CatchError(err));
@@ -91,20 +100,13 @@ export const Connect = () => {
           </Typography>
           <Box
             component={motion.div}
-            animate={{ scale: [0.8, 1, 0.8, 1, 0.8] }}
-            transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+            //animate={{ scale: [0.8, 1, 0.8, 1, 0.8] }}
+            //transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
             sx={{
               height: "40vh",
             }}
           >
-            <img
-              src={HeartImg}
-              style={{
-                width: "60%",
-                maxWidth: "600px",
-                height: "auto",
-              }}
-            />
+            <HeartWave fillLevel={parseInt(dataConnect)} />
           </Box>
         </Box>
       </Box>

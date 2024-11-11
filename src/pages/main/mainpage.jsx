@@ -53,10 +53,10 @@ export const Main = () => {
       console.log("heartRate2", data.heartRate2);
       console.log("topicId", data.topicId);
 
-      function wsTheme (id) {
+      function wsTheme(id) {
         for (let i = 0; i < id.length; i++) {
           console.log("topicIdMap", id[i][0]);
-  
+
           themes.map((theme) => {
             if (id[i][0] == theme.id) {
               console.log("theme.id", theme.topic);
@@ -66,8 +66,7 @@ export const Main = () => {
           });
         }
       }
-      wsTheme(data.topicId)
-      
+      wsTheme(data.topicId);
     };
 
     websocket.addEventListener("message", onMessage);
@@ -223,13 +222,7 @@ export const Main = () => {
                 </Box>
               </SwiperSlide>
               <SwiperSlide>
-                <img
-                  src={redHeartImg}
-                  style={{
-                    width: "80%",
-                    height: "auto",
-                  }}
-                />
+                <Typography>❤️</Typography>
                 <Box
                   sx={{
                     position: "absolute",
@@ -331,18 +324,6 @@ export const Main = () => {
         exit={{ opacity: 1 }} //ページを離れる時の動き
         transition={{ duration: 1 }}
       >
-        <Typography
-          variant="body1"
-          onClick={() => setIsDone(!isDone)}
-          style={{
-            position: "absolute",
-            top: 20,
-            left: 20,
-            backgroundColor: "red",
-            width: "3vw",
-            height: "3vw",
-          }}
-        ></Typography>
         {isDone ? <FinishMeasuring /> : <Measuring />}
       </Box>
     </>
