@@ -9,7 +9,6 @@ import { Box, Typography } from "@mui/material";
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
-  let flag = false;
 
   const CatchError = (err) => {
     console.log("エラー:", err);

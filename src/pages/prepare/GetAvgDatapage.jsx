@@ -98,15 +98,6 @@ export const GetAvgData = () => {
           </Box>
           <Typography variant="body1">{subText}</Typography>
         </Box>
-        <button
-          type="button"
-          onClick={() => {
-            // #4.WebSocketでメッセージを送信する場合は、イベントハンドラ内でsendメソッドを実行
-            socketRef.current?.send("0.0");
-          }}
-        >
-          送信
-        </button>
       </Box>
     </>
   );
