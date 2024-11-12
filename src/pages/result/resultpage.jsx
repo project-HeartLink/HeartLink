@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import HeartImg from "../../assets/kkrn_icon_heart_3.png";
+import HeartImg from "../../assets/RedHeart.png";
 import CoupleImg from "../../assets/coupleResult.svg";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
@@ -105,8 +105,8 @@ export const Result = ({player}) => {
               <img
                 src={HeartImg}
                 style={{
-                  width: "80%",
-                  height: "auto",
+                  width: "200px",
+                  height: "200px",
                 }}
               />
               <Typography
