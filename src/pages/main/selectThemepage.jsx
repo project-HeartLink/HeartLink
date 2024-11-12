@@ -12,6 +12,8 @@ export const SelectTheme = ({ player }) => {
   const [open, setOpen] = useState(false);
   const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
   const [SelectedId, setSelectedId] = useState(); //選択したid
+  const [indexplayer, setIndexplayer] = useState(player === "Player1" ? 0 : 1);
+  
 
   const handleOpen = (theme) => {
     setOpen(true);
@@ -36,9 +38,28 @@ export const SelectTheme = ({ player }) => {
   const ClickYes = (id) => {
     console.log("theme", themes);
     console.log("theme", typeof themes);
-    navigate("/main", { state: themes });
 
-    const data = { player: playerSelect, id: id };
+    if(player == "Player1"){
+      if(indexplayer == 2){
+        navigate("/main", { state: themes });
+        
+      }
+      else{
+        handleClose();
+      }
+    }
+    if(player == "Player2"){
+      if(indexplayer == 3){
+        navigate("/main", { state: themes });
+        
+      }
+      else{
+        handleClose();
+      }
+    }
+    
+
+    const data = { player: playerSelect, id: id,index: indexplayer };
 
     console.log("ただいま、メールを送信してます", data);
     console.log("id", id);
@@ -59,6 +80,9 @@ export const SelectTheme = ({ player }) => {
       })
       .then((data) => {
         console.log("Success:", data);
+        setIndexplayer((indexplayer) => indexplayer+2);
+        console.log("index",indexplayer);
+        
       })
       .catch((error) => {
         console.error("Error:", error);
