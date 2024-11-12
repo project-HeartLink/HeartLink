@@ -16,7 +16,7 @@ export const SelectPlayer = ({ player, setPlayer }) => {
   const [connectValue, setConnectValue] = useState("");
   const [showText, setShowText] = useState("");
   const navigate = useNavigate();
-  const startTime = performance.now(); //開始時間の取得
+  //const startTime = performance.now(); //開始時間の取得
   const status = "ok";
 
   const handleOpen = () => {
@@ -41,7 +41,7 @@ export const SelectPlayer = ({ player, setPlayer }) => {
           if (data.status === status) {
             setConnectValue(player); //playar番号をセット
             console.log("playar:", player);
-            navigate("/getAverage");
+            navigate("/selectTheme");
           }
         })
 
