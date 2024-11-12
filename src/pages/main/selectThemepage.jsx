@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
-import {themesArr} from "./themesArr";
-
+import { themesArr } from "./themesArr";
 
 export const SelectTheme = ({ player }) => {
   const themes = themesArr;
@@ -100,7 +99,7 @@ export const SelectTheme = ({ player }) => {
             direction="column"
             spacing={0}
             sx={{
-              width: "98vw",
+              width: "95vw",
             }}
           >
             {selectPlayer.map((theme, index) => (
@@ -116,7 +115,7 @@ export const SelectTheme = ({ player }) => {
                     index == selectPlayer.length - 1
                       ? "5px solid #FFFFFF"
                       : "none",
-                  py: "4vh",
+                  py: "2.5vh",
                   px: "1vw",
                   cursor: "pointer",
                 }}
@@ -125,7 +124,7 @@ export const SelectTheme = ({ player }) => {
                   src={HeartImg}
                   style={{
                     objectFit: "contain",
-                    width: "2rem",
+                    width: "2.5rem",
                   }}
                   alt={`Theme ${index + 1}`}
                 />
@@ -135,7 +134,6 @@ export const SelectTheme = ({ player }) => {
                     fontSize: "1.5rem",
                     textAlign: "start",
                     pl: "0.5rem",
-                    pb: "5px",
                     width: "35rem",
                   }}
                 >

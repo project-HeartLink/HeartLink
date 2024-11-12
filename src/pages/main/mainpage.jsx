@@ -13,7 +13,10 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import destr from "destr";
 import { themesArr } from "./themesArr";
+
+import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
+
 
 export const Main = () => {
   const themes = themesArr; //locateで値を受け取る
@@ -109,46 +112,40 @@ export const Main = () => {
     return (
       <>
         <Box
-          className="background"
           sx={{
-            display: "flex",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
-          <Typography
-            onClick={() => navigate("/result")}
-            variant="body1"
+          <HeartAnimation />
+          <Box
             sx={{
-              fontSize: "8vw",
-              m: " 80vw auto 0 auto",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: "-1",
+              width: "100vw",
             }}
           >
-            完了
-          </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: "2rem",
+              }}
+            >
+              おわり！
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: "1.1rem",
+              }}
+            >
+              あなたたちの相性は...
+            </Typography>
+          </Box>
         </Box>
-        <motion.div
-          initial={{
-            y: -100,
-            scale: 0,
-            opacity: 1,
-          }}
-          animate={{
-            y: -100,
-            scale: [0, 0, 1.6],
-            opacity: 1,
-          }}
-          transition={{
-            duration: 1.5,
-            ease: "easeInOut",
-          }}
-        >
-          <img
-            src={redHeartImg}
-            style={{
-              width: "40%",
-              height: "auto",
-            }}
-          />
-        </motion.div>
       </>
     );
   };
@@ -169,6 +166,7 @@ export const Main = () => {
           <Box
             sx={{
               mt: "10%",
+              overflow: "hidden",
               position: "relative",
               display: "flex",
               justifyContent: "center",
@@ -253,6 +251,8 @@ export const Main = () => {
           </Box>
           <Box
             sx={{
+              minWidth: 0,
+              overflow: "hidden",
               m: "0 auto 0 5vw",
               position: "relative",
               display: "flex",
@@ -319,6 +319,10 @@ export const Main = () => {
         animate={{ opacity: 1 }} //表示される時
         exit={{ opacity: 1 }} //ページを離れる時の動き
         transition={{ duration: 1 }}
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+        }}
       >
         {isDone ? <FinishMeasuring /> : <Measuring />}
       </Box>
