@@ -13,7 +13,10 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import destr from "destr";
 import { themesArr } from "./themesArr";
+
 import HeartAnimation from "./HeartAnimation";
+import HeartBeat from "./heart-beat/HeartBeat";
+
 
 export const Main = () => {
   const themes = themesArr; //locateで値を受け取る
@@ -43,11 +46,7 @@ export const Main = () => {
       setMessage(event.data);
 
       // JSON文字列をJavaScriptオブジェクトに変換
-      //const data = JSON.parse(event.data);
       const data = destr(event.data);
-
-      // undefined
-      // destr()
 
       console.log("event.data:", event.data);
       console.log("id1:", data.id1);
@@ -180,13 +179,8 @@ export const Main = () => {
               className="mySwiper"
             >
               <SwiperSlide>
-                <img
-                  src={redHeartImg}
-                  style={{
-                    width: "80%",
-                    height: "auto",
-                  }}
-                />
+                <HeartBeat speed={1} />
+
                 <Box
                   sx={{
                     position: "absolute",
@@ -201,6 +195,7 @@ export const Main = () => {
                     sx={{
                       fontSize: "7vw",
                       fontFamily: "LXGW WenKai Mono TC",
+                      color: "white",
                     }}
                   >
                     Player1
@@ -211,6 +206,7 @@ export const Main = () => {
                       mt: "0vh",
                       fontSize: "3rem",
                       fontFamily: "LXGW WenKai Mono TC",
+                      color: "white",
                     }}
                   >
                     {heartBeatP1}
@@ -218,13 +214,7 @@ export const Main = () => {
                 </Box>
               </SwiperSlide>
               <SwiperSlide>
-                <img
-                  src={redHeartImg}
-                  style={{
-                    width: "80%",
-                    height: "auto",
-                  }}
-                />
+                <HeartBeat speed={1} />
                 <Box
                   sx={{
                     position: "absolute",
@@ -239,6 +229,7 @@ export const Main = () => {
                     sx={{
                       fontSize: "7vw",
                       fontFamily: "LXGW WenKai Mono TC",
+                      color: "white",
                     }}
                   >
                     Player2
@@ -249,6 +240,7 @@ export const Main = () => {
                       mt: "0vh",
                       fontSize: "3rem",
                       fontFamily: "LXGW WenKai Mono TC",
+                      color: "white",
                     }}
                   >
                     {heartBeatP2}
@@ -332,18 +324,6 @@ export const Main = () => {
           overflow: "hidden",
         }}
       >
-        <Typography
-          variant="body1"
-          onClick={() => setIsDone(!isDone)}
-          style={{
-            position: "absolute",
-            top: 20,
-            left: 20,
-            backgroundColor: "red",
-            width: "3vw",
-            height: "3vw",
-          }}
-        ></Typography>
         {isDone ? <FinishMeasuring /> : <Measuring />}
       </Box>
     </>

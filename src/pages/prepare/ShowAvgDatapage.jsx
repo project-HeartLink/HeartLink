@@ -24,7 +24,7 @@ export const ShowAvgData = ({ player }) => {
   useEffect(() => {
     // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
     const websocket = new ReconnectingWebSocket(
-      "wss://hartlink-api.onrender.com/ws/12345"
+      "wss://hartlink-api.onrender.com/ws"
     );
     socketRef.current = websocket;
 
