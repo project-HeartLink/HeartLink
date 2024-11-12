@@ -11,7 +11,6 @@ export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
   const [dataConnect, setDataConnect] = useState("0");
   const navigate = useNavigate();
-  const flag = false;
 
   const CatchError = (err) => {
     console.log("エラー:", err);
@@ -51,7 +50,6 @@ export const Connect = () => {
                 if (!alert("2台目の接続を確認できません")) {
                   clearInterval(setInterval);
                   CatchError();
-                  flag = true;
                 }
               }
             }
