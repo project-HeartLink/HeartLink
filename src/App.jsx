@@ -7,8 +7,8 @@ import { Form } from "./pages/form/Formpage";
 import { Title } from "./pages/title/Titlepage";
 import { Connect } from "./pages/connect/Connectpage";
 import { SelectPlayer } from "./pages/prepare/SelectPlayerpage";
-import { GetAvgData } from "./pages/prepare/GetAvgDatapage";
-import { ShowAvgData } from "./pages/prepare/ShowAvgDatapage";
+//import { GetAvgData } from "./pages/prepare/GetAvgDatapage";
+//import { ShowAvgData } from "./pages/prepare/ShowAvgDatapage";
 import { SelectTheme } from "./pages/main/selectThemepage";
 import { Main } from "./pages/main/mainpage";
 import { Result } from "./pages/result/resultpage";
@@ -35,12 +35,15 @@ function App() {
           }
         />
         <Route path="/connect" element={<Connect />} />
-        <Route path="/selectPlayer" element={<SelectPlayer player={player} setPlayer={setPlayer}/>} />
-        <Route path="/getAverage" element={<GetAvgData />} />
-        <Route path="/showAverage" element={<ShowAvgData player={player} />} />
-        <Route path="/selectTheme" element={<SelectTheme player={player}/>} />
+        <Route
+          path="/selectPlayer"
+          element={<SelectPlayer player={player} setPlayer={setPlayer} />}
+        />
+        {/* <Route path="/getAverage" element={<GetAvgData />} />
+        <Route path="/showAverage" element={<ShowAvgData player={player} />} /> */}
+        <Route path="/selectTheme" element={<SelectTheme player={player} />} />
         <Route path="/main" element={<Main />} />
-        <Route path="/result" element={<Result player={player}/>} />
+        <Route path="/result" element={<Result player={player} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
