@@ -17,7 +17,6 @@ import { themesArr } from "./themesArr";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
 
-
 export const Main = () => {
   const themes = themesArr; //locateで値を受け取る
   const [topicIndex, setTopicIndex] = useState(0);
@@ -270,7 +269,7 @@ export const Main = () => {
             <Box
               sx={{
                 position: "absolute",
-                top: "67%",
+                top: "60%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 textAlign: "center",
@@ -280,7 +279,6 @@ export const Main = () => {
               <Typography
                 variant="body1"
                 sx={{
-                  pt: "2vw",
                   fontSize: "7vw",
                   width: "70vw",
                 }}
@@ -288,24 +286,22 @@ export const Main = () => {
                 {arrThemes[topicIndex]}
               </Typography>
               {/* ))} */}
-
-              <Typography
-                variant="body1"
-                component={motion.div}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.8 }}
-                transition={{}}
-                onClick={() => FinishTheme()}
-                sx={{
-                  display: "inline-block",
-                  fontSize: "5vw",
-                  pt: "2vh",
-                }}
-              >
-                完了
-              </Typography>
             </Box>
           </Box>
+          <Typography
+            variant="body1"
+            component={motion.div}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.8 }}
+            transition={{}}
+            onClick={() => FinishTheme()}
+            sx={{
+              fontSize: "5vw",
+              pt: "2vh",
+            }}
+          >
+            完了
+          </Typography>
         </Box>
       </>
     );
