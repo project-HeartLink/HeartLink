@@ -46,14 +46,11 @@ export const Connect = () => {
             //20秒以上経ったら、アラート出るようにした
             if (data.connect != "2") {
               console.log("connect", data.connect);
-              if (!flag) {
-                if (!alert("2台目の接続を確認できません")) {
-                  clearInterval(setInterval);
-                  CatchError();
-                }
+              if (!alert("2台目の接続を確認できません")) {
+                CatchError();
               }
             }
-          }, 10 * 1000); //本番は60秒くらいあればいいと思うため変更
+          }, 60 * 1000); //本番は60秒くらいあればいいと思うため変更
         })
 
         .catch((err) => CatchError(err));

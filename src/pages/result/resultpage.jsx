@@ -20,6 +20,17 @@ export const Result = ({ player }) => {
   let dokidokiMeter = 100;
   const socketRef = useRef();
   console.log("player", player);
+  const resetSubmit = () => {
+    if (player) {
+      fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
+        .then((res) => res.json()) //json方式でデータを受け取る
+        .then((data) => {
+          console.log("data:", data);
+          navigate("/");
+        })
+        .catch((err) => console.error("Error fetching data:", err));
+    }
+  };
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
   useEffect(() => {
@@ -232,7 +243,7 @@ export const Result = ({ player }) => {
             component={motion.button}
             whileHover={{ scale: 1.0 }}
             whileTap={{ scale: 0.8 }}
-            onClick={() => navigate("/")}
+            onClick={() => resetSubmit()}
             sx={{
               fontSize: "8vw",
               fontWeight: "bold",
