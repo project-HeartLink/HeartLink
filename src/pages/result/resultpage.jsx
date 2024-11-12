@@ -47,13 +47,13 @@ export const Result = ({ player }) => {
       // destr()
 
       console.log("event.data:", event.data);
-      console.log("id1:", typeof data.id1);
+      console.log("player1:", typeof data.player1);
       console.log("heartRate2", data.heartRate2);
       console.log("topicId", data.topicId);
 
       setPlayer1(data.id1);
       setPlayer2(data.id2);
-      setShowId(player === "player1" ? data.id1 : data.id2);
+      setShowId(player === "player1" ? data.player1 : data.player2);
     };
 
     websocket.addEventListener("message", onMessage);
