@@ -1,0 +1,63 @@
+@import "compass-mixins/lib/compass";
+
+body{
+}
+.loading{
+	font-weight:bold;
+	font-size:150pt;	//文字のサイズを変える
+	height:140px;
+	line-height:90px;
+	//-webkit-text-stroke: 2px black; // 黒い縁取りを追加
+}
+@keyframes wave-animation{
+	0%{background-position:0 bottom};
+	100%{background-position:200px bottom};
+}
+@keyframes loading-animation0{
+	0%{background-size:200px 0px;};
+	100%{background-size:200px 0px;};
+}
+@keyframes loading-animation1{
+	0%{background-size:200px 0px;};
+	100%{background-size:200px 130px;};
+}
+@keyframes loading-animation2{
+	0%{background-size:200px 130px;};
+	50%{background-size:200px 130px;};
+	100%{background-size:200px 130px;};
+}
+@keyframes loading-animation3{
+	0%{background-size:200px 130px;};
+	50%{background-size:200px 300px;};
+	100%{background-size:200px 300px;};
+}
+.water-animation {
+    width: 100%;
+    background-image: url('./Wave.png');
+    @include background-clip(text);
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0px 0px rgba(0, 0, 0, 1);
+    background-repeat: repeat-x;
+    opacity: 1;
+}
+.step-0 {
+	animation: wave-animation 2s infinite linear, loading-animation0 3s forwards;
+}
+.step-1 {
+	animation: wave-animation 2s infinite linear, loading-animation1 1s forwards;
+}
+
+.step-2 {
+	animation: wave-animation 2s infinite linear, loading-animation3 2s forwards;
+}
+
+.wave {
+	padding-top:120px ;	//赤い波の位置を変える
+	padding-bottom: 10px;
+    background-image: url('./Wave.png');
+    @include background-clip(text);
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0px 0px rgba(0, 0, 0, 0.05);
+    background-repeat: repeat-x;
+    opacity: 1;
+}

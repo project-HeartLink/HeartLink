@@ -875,6 +875,11 @@ colorjs.io@^0.5.0:
   resolved "https://registry.npmjs.org/colorjs.io/-/colorjs.io-0.5.2.tgz"
   integrity sha512-twmVoizEW7ylZSN32OgKdXRmo1qg+wT5/6C3xu5b9QsWzSFAhHLn2xd8ro0diCsKfCj1RdaTP/nrcW+vAoQPIw==
 
+compass-mixins@^0.12.12:
+  version "0.12.12"
+  resolved "https://registry.npmjs.org/compass-mixins/-/compass-mixins-0.12.12.tgz"
+  integrity sha512-wlTxz4lsIv/3o+rdyBOTZpQFFJeWPCRlYClaEXcaFe6QrAJ5qibTAgH53LyjfGQL6mmebTfjVHM0hLsxjGj+fw==
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"

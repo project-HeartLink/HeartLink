@@ -1,17 +1,73 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import HeartImg from "../../assets/kkrn_icon_heart_3.png";
+import HeartImg from "../../assets/RedHeart.png";
 import CoupleImg from "../../assets/coupleResult.svg";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import ReconnectingWebSocket from "reconnecting-websocket";
+import destr from "destr";
 
-export const Result = () => {
+export const Result = ({player}) => {
   const navigate = useNavigate();
 
-  let player1 = "ami";
-  let player2 = "yuto";
+  const [message, setMessage] = useState();
+  const [player1,setPlayer1] = useState("");
+  const [player2,setPlayer2] = useState("");
+  const [showId,setShowId] = useState("");
+
   let type = "恋人";
   let dokidokiMeter = 100;
+  const socketRef = useRef();
+  console.log("player",player);
+  
+
+
+  // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
+  useEffect(() => {
+    // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
+    const websocket = new ReconnectingWebSocket(
+      "wss://hartlink-api.onrender.com/ws"
+    );
+    socketRef.current = websocket;
+
+    websocket.onopen = () => {
+      //そのページを開いた瞬間に心拍取得するようにした
+      // WebSocket接続が確立されたらメッセージを送信
+      socketRef.current?.send("0.0");
+    };
+
+    // #2.メッセージ受信時のイベントハンドラを設定
+    const onMessage = (event) => {
+      setMessage(event.data);
+
+      // JSON文字列をJavaScriptオブジェクトに変換
+      //const data = JSON.parse(event.data);
+      const data = destr(event.data);
+
+      // undefined
+      // destr()
+
+      console.log("event.data:", event.data);
+      console.log("id1:", typeof(data.id1));
+      console.log("heartRate2", data.heartRate2);
+      console.log("topicId", data.topicId);
+
+      setPlayer1(data.id1)
+      setPlayer2(data.id2)
+      setShowId(player === "player1" ? data.id1 : data.id2)
+
+    };
+
+    websocket.addEventListener("message", onMessage);
+
+    // #3.useEffectのクリーンアップの中で、WebSocketのクローズ処理を実行
+    return () => {
+      websocket.close();
+      websocket.removeEventListener("message", onMessage);
+    };
+  }, []);
+  //useEffectの発火が何にも依存しない,初回にしか起動しない。
 
   return (
     <>
@@ -49,8 +105,8 @@ export const Result = () => {
               <img
                 src={HeartImg}
                 style={{
-                  width: "80%",
-                  height: "auto",
+                  width: "200px",
+                  height: "200px",
                 }}
               />
               <Typography
@@ -103,7 +159,7 @@ export const Result = () => {
                 m: "0 auto",
               }}
             >
-              プレイヤー
+              {showId}
             </Typography>
             <Typography
               variant="body1"
