@@ -17,7 +17,6 @@ import { themesArr } from "./themesArr";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
 
-
 export const Main = () => {
   const themes = themesArr; //locateで値を受け取る
   const [topicIndex, setTopicIndex] = useState(0);
@@ -191,22 +190,18 @@ export const Main = () => {
                   }}
                 >
                   <Typography
-                    variant="h1"
+                    variant="h2"
                     sx={{
                       fontSize: "7vw",
-                      fontFamily: "LXGW WenKai Mono TC",
-                      color: "white",
                     }}
                   >
                     Player1
                   </Typography>
                   <Typography
-                    variant="body1"
+                    variant="h2"
                     sx={{
                       mt: "0vh",
                       fontSize: "3rem",
-                      fontFamily: "LXGW WenKai Mono TC",
-                      color: "white",
                     }}
                   >
                     {heartBeatP1}
@@ -225,22 +220,18 @@ export const Main = () => {
                   }}
                 >
                   <Typography
-                    variant="h1"
+                    variant="h2"
                     sx={{
                       fontSize: "7vw",
-                      fontFamily: "LXGW WenKai Mono TC",
-                      color: "white",
                     }}
                   >
                     Player2
                   </Typography>
                   <Typography
-                    variant="body1"
+                    variant="h2"
                     sx={{
                       mt: "0vh",
                       fontSize: "3rem",
-                      fontFamily: "LXGW WenKai Mono TC",
-                      color: "white",
                     }}
                   >
                     {heartBeatP2}

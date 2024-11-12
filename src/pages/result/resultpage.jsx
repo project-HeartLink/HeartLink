@@ -8,20 +8,18 @@ import { useEffect, useRef, useState } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import destr from "destr";
 
-export const Result = ({player}) => {
+export const Result = ({ player }) => {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState();
-  const [player1,setPlayer1] = useState("");
-  const [player2,setPlayer2] = useState("");
-  const [showId,setShowId] = useState("");
+  const [player1, setPlayer1] = useState("");
+  const [player2, setPlayer2] = useState("");
+  const [showId, setShowId] = useState("");
 
   let type = "恋人";
   let dokidokiMeter = 100;
   const socketRef = useRef();
-  console.log("player",player);
-  
-
+  console.log("player", player);
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
   useEffect(() => {
@@ -49,14 +47,13 @@ export const Result = ({player}) => {
       // destr()
 
       console.log("event.data:", event.data);
-      console.log("id1:", typeof(data.id1));
+      console.log("id1:", typeof data.id1);
       console.log("heartRate2", data.heartRate2);
       console.log("topicId", data.topicId);
 
-      setPlayer1(data.id1)
-      setPlayer2(data.id2)
-      setShowId(player === "player1" ? data.id1 : data.id2)
-
+      setPlayer1(data.id1);
+      setPlayer2(data.id2);
+      setShowId(player === "player1" ? data.id1 : data.id2);
     };
 
     websocket.addEventListener("message", onMessage);
@@ -110,7 +107,7 @@ export const Result = ({player}) => {
                 }}
               />
               <Typography
-                variant="body1"
+                variant="h2"
                 sx={{
                   margin: 0,
                   whiteSpace: "pre-line",
@@ -120,7 +117,6 @@ export const Result = ({player}) => {
                   left: "50%",
                   transform: "translate(-50%, -55%)",
                   fontSize: "8vw",
-                  fontFamily: "Hachi Maru Pop, serif",
                 }}
               >
                 {dokidokiMeter}

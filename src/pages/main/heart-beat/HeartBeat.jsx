@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types"; // 追加
 import "./HeartBeat.scss";
