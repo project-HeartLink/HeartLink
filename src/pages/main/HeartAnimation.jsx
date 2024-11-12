@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { motion } from "framer-motion";
-import heartImg from "../../assets/heart_red.png";
+import heartImg from "../../assets/RedHeart.png";
 
 const HeartAnimation = () => {
   const hearts = [
