@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Box, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import redHeartImg from "../../assets/heart_red.png";
 import talkThemeBox from "../../assets/talkThemeBox.png";
 import "./mainpage.scss";
 import ReconnectingWebSocket from "reconnecting-websocket";
@@ -20,9 +19,15 @@ import HeartBeat from "./heart-beat/HeartBeat";
 export const Main = () => {
   const themes = themesArr; //locateで値を受け取る
   const [topicIndex, setTopicIndex] = useState(0);
+  const [topicId, setTopicId] = useState([]);
   const socketRef = useRef();
   const [message, setMessage] = useState();
-  const [arrThemes, setarrThemes] = useState([]);
+  const [player1Name, setPlayr1Name] = useState();
+  const [player2Name, setPlayr2Name] = useState();
+  const [heartBeatP1, setHeartBeatP1] = useState();
+  const [heartBeatP2, setHeartBeatP2] = useState();
+  const [arrThemes, setarrThemes] = useState();
+  const [index, setIndex] = useState(1);  //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
 
   console.log("themes", themes);
 
@@ -48,24 +53,27 @@ export const Main = () => {
       const data = destr(event.data);
 
       console.log("event.data:", event.data);
-      console.log("id1:", data.id1);
       console.log("heartRate2", data.heartRate2);
       console.log("topicId", data.topicId);
 
-      function wsTheme(id) {
-        for (let i = 0; i < id.length; i++) {
-          console.log("topicIdMap", id[i][0]);
+      console.log("🚀 ~ onMessage ~ player1Name:", typeof data.player1);
+      setPlayr1Name(data.player1);
+      setPlayr2Name(data.player2);
 
-          themes.map((theme) => {
-            if (id[i][0] == theme.id) {
-              console.log("theme.id", theme.topic);
-              arrThemes.push(theme.topic);
-              console.log("arrThemes", arrThemes);
-            }
-          });
-        }
-      }
-      wsTheme(data.topicId);
+      setHeartBeatP1(data.heartRate1);
+      console.log("🚀 ~ onMessage ~ heartBeatP1:", heartBeatP1);
+      setHeartBeatP2(data.heartRate2);
+      console.log("🚀 ~ onMessage ~ heartBeatP2:", heartBeatP2);
+
+      console.log("🚀 ~ onMessage ~ player2Name:", player2Name);
+
+      console.log("data.topicId", data.topicId);
+
+      data.topicId = [[1], [3], [5]];      ///////////////////////////////////////////今はnullだから仮に入れた
+
+      const topicIds = data.topicId.map((topicid) => topicid[0]); //[[1], [3], [5]]だったのを[1,3,5]に直した
+      setTopicId(topicIds); //setTopicIdに入れることでws以外の処理で使えるようにした
+      setarrThemes(themes[data.topicId[0][0]].topic); //mainpageに遷移した直後にお題を写るように
     };
 
     websocket.addEventListener("message", onMessage);
@@ -76,31 +84,41 @@ export const Main = () => {
       websocket.removeEventListener("message", onMessage);
     };
   }, []);
+
   //useEffectの発火が何にも依存しない,初回にしか起動しない。
 
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
 
   const FinishTheme = () => {
-    setTopicIndex((index) => {
-      if (index === arrThemes.length - 1) {
-        setIsDone(true);
-        return index;
-      } else {
-        return index + 1;
-      }
-    }); //indexが配列の現在地点を指してる
+    if (index >= topicId.length ) {
+      setIsDone(true);
+      setIndex(index);
+    } else {
+      topicId.map((id) => {
+        console.log("themes[index].id", themes[id]);
+        if (topicId[index] === themes[id].id) {
+          console.log("setarrThemes(themes.topicId)", themes[id].topic);
+          setarrThemes(themes[id].topic);
+        }
+      });
+
+      setIndex(index + 1);
+    }
+
+    // }); //indexが配列の現在地点を指してる
   };
   //player
-  let heartBeatP1 = 100;
-  let heartBeatP2 = 90;
+
+  console.log("heartrate1", heartBeatP1);
+  console.log("player1", player1Name);
 
   const FinishMeasuring = () => {
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
       console.log("useEffect called");
       const timer = setTimeout(() => {
-        navigate("/result");
+        navigate("/result", { player1: player1Name, player2: player2Name });
       }, 5 * 1000);
       return () => {
         console.log("cleanUp");
@@ -195,7 +213,7 @@ export const Main = () => {
                       fontSize: "7vw",
                     }}
                   >
-                    Player1
+                    {player1Name}
                   </Typography>
                   <Typography
                     variant="h2"
@@ -225,7 +243,7 @@ export const Main = () => {
                       fontSize: "7vw",
                     }}
                   >
-                    Player2
+                    {player2Name}
                   </Typography>
                   <Typography
                     variant="h2"
@@ -275,7 +293,7 @@ export const Main = () => {
                   width: "70vw",
                 }}
               >
-                {arrThemes[topicIndex]}
+                {arrThemes}
               </Typography>
               {/* ))} */}
             </Box>
