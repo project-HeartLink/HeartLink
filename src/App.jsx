@@ -37,7 +37,7 @@ function App() {
         <Route path="/connect" element={<Connect />} />
         <Route
           path="/selectPlayer"
-          element={<SelectPlayer player={player} setPlayer={setPlayer} />}
+          element={<SelectPlayer player={player} setPlayer={setPlayer} name={name}/>}
         />
         {/* <Route path="/getAverage" element={<GetAvgData />} />
         <Route path="/showAverage" element={<ShowAvgData player={player} />} /> */}
