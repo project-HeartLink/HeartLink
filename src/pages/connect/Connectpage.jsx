@@ -53,7 +53,7 @@ export const Connect = () => {
           CatchError();
         }
       }
-    }, 40 * 1000); //本番は60秒くらいあればいいと思うため変更
+    }, 40 * 1000); //本番は40秒くらいあればいいと思うため変更
 
     const intervalId = setInterval(handleSubmit, 5 * 1000);
 
