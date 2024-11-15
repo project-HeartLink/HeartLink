@@ -18,7 +18,6 @@ import HeartBeat from "./heart-beat/HeartBeat";
 
 export const Main = () => {
   const themes = themesArr; //locateで値を受け取る
-  const [topicIndex, setTopicIndex] = useState(0);
   const [topicId, setTopicId] = useState([]);
   const socketRef = useRef();
   const [message, setMessage] = useState();
@@ -27,7 +26,14 @@ export const Main = () => {
   const [heartBeatP1, setHeartBeatP1] = useState();
   const [heartBeatP2, setHeartBeatP2] = useState();
   const [arrThemes, setarrThemes] = useState();
-  const [index, setIndex] = useState(1);  //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
+  const [index, setIndex] = useState(1); //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
+  const [arrHeartBeatTheme, setArrHeartBeatTheme] = useState({
+    theme1: 0,
+    theme2: 0,
+    theme3: 0,
+    theme4: 0,
+  });
+  const [heartBeatSet, setHeartBeatSet] = useState();
 
   console.log("themes", themes);
 
@@ -60,20 +66,36 @@ export const Main = () => {
       setPlayr1Name(data.player1);
       setPlayr2Name(data.player2);
 
-      setHeartBeatP1(data.heartRate1);
-      console.log("🚀 ~ onMessage ~ heartBeatP1:", heartBeatP1);
+      if (index == 1) {
+        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme1: data.heartRate1 });
+      }
+      if (index == 2) {
+        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme2: data.heartRate1 });
+      }
+      if (index == 3) {
+        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme3: data.heartRate1 });
+      }
+      if (index == 4) {
+        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme4: data.heartRate1 });
+      }
+
+      //setHeartBeatP1(data.heartRate1);
+      console.log("🚀 ~ onMessage ~ heartBeatP1:", arrHeartBeatTheme.theme1);
+      console.log("arrHeartBeatTheme",arrHeartBeatTheme);
+
       setHeartBeatP2(data.heartRate2);
-      console.log("🚀 ~ onMessage ~ heartBeatP2:", heartBeatP2);
+      console.log("🚀 ~ onMessage ~ heartBeatP2:", arrHeartBeatTheme.theme2);
 
       console.log("🚀 ~ onMessage ~ player2Name:", player2Name);
 
-      console.log("data.topicId", data.topicId);
+      console.log("data.topicId", data.topicId[2]);
 
-      data.topicId = [[1], [3], [5]];      ///////////////////////////////////////////今はnullだから仮に入れた
+      //data.topicId = [[1], [3], [5]]; ///////////////////////////////////////////今はnullだから仮に入れた
 
-      const topicIds = data.topicId.map((topicid) => topicid[0]); //[[1], [3], [5]]だったのを[1,3,5]に直した
-      setTopicId(topicIds); //setTopicIdに入れることでws以外の処理で使えるようにした
-      setarrThemes(themes[data.topicId[0][0]].topic); //mainpageに遷移した直後にお題を写るように
+      //const topicIds = data.topicId.map((topicid) => topicid[0]); //[[1], [3], [5]]だったのを[1,3,5]に直した
+      setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
+
+      setarrThemes(themes[data.topicId[0]].topic); //mainpageに遷移した直後にお題を写るように
     };
 
     websocket.addEventListener("message", onMessage);
@@ -90,8 +112,11 @@ export const Main = () => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
 
+  console.log("topicId.length", topicId);
+
   const FinishTheme = () => {
-    if (index >= topicId.length ) {
+    console.log("indewx", index);
+    if (index == topicId.length) {
       setIsDone(true);
       setIndex(index);
     } else {
@@ -116,6 +141,14 @@ export const Main = () => {
   const FinishMeasuring = () => {
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
+      fetch("https://hartlink-api.onrender.com/end", { method: "GET" })
+        .then((res) => res.json()) //json方式でデータを受け取る
+        .then((data) => {
+          console.log("data:", data);
+        })
+
+        .catch((err) => console.error("Error fetching data:", err));
+
       console.log("useEffect called");
       const timer = setTimeout(() => {
         navigate("/result", { player1: player1Name, player2: player2Name });
@@ -222,7 +255,7 @@ export const Main = () => {
                       fontSize: "3rem",
                     }}
                   >
-                    {heartBeatP1}
+                    {arrHeartBeatTheme.theme1}
                   </Typography>
                 </Box>
               </SwiperSlide>
