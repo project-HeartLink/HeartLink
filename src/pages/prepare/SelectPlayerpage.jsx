@@ -43,7 +43,8 @@ export const SelectPlayer = ({ player, setPlayer ,name}) => {
           if (data.status === status) {
             setConnectValue(player); //playar番号をセット
             console.log("playar:", player);
-            navigate("/main" ,{ state: themes }); /////////////////////navigate("/selectTheme");//エラー吐いてたからパス変えた。変更してpullリク送ること
+            //navigate("/main" ,{ state: themes }); 
+            navigate("/selectTheme");//エラー吐いてたからパス変えた。変更してpullリク送ること
             sendinfo();
           }
         })
