@@ -12,7 +12,6 @@ import { useLocation } from 'react-router-dom';
 export const Result = ({ player}) => {
   const navigate = useNavigate();
 
-  const [message, setMessage] = useState();
   const [player1, setPlayer1] = useState();
   const [player2, setPlayer2] = useState();
   const [showId, setShowId] = useState();
