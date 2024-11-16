@@ -12,6 +12,7 @@ import { useLocation } from 'react-router-dom';
 export const Result = ({ player}) => {
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState();
   const [player1, setPlayer1] = useState();
   const [player2, setPlayer2] = useState();
   const [showId, setShowId] = useState();
@@ -26,7 +27,7 @@ export const Result = ({ player}) => {
   const socketRef = useRef();
   console.log("player", player);
 
-  console.log("player1",getPlayer.player1)
+  //console.log("player1",getPlayer.player1)
 
   return (
     <>
