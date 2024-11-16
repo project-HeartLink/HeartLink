@@ -59,7 +59,7 @@ export const Main = () => {
       const data = destr(event.data);
 
       console.log("event.data:", event.data);
-      console.log("heartRate2", data.heartRate2);
+      console.log("heartRate2", data.heartRate1);
       console.log("topicId", data.topicId);
 
       console.log("🚀 ~ onMessage ~ player1Name:", typeof data.player1);
@@ -81,7 +81,7 @@ export const Main = () => {
 
       //setHeartBeatP1(data.heartRate1);
       console.log("🚀 ~ onMessage ~ heartBeatP1:", arrHeartBeatTheme.theme1);
-      console.log("arrHeartBeatTheme",arrHeartBeatTheme);
+      console.log("arrHeartBeatTheme", arrHeartBeatTheme);
 
       setHeartBeatP2(data.heartRate2);
       console.log("🚀 ~ onMessage ~ heartBeatP2:", arrHeartBeatTheme.theme2);
@@ -106,6 +106,29 @@ export const Main = () => {
       websocket.removeEventListener("message", onMessage);
     };
   }, []);
+
+  
+
+  const getHeartBeatTheme = (index) => {
+    if (index == 1) {
+      console.log("1回目")
+      return arrHeartBeatTheme.theme1;
+      
+    }
+    if (index == 2) {
+      console.log("２回目")
+      return arrHeartBeatTheme.theme2;
+      
+    }
+    if (index == 3) {
+      console.log("３回目")
+      return arrHeartBeatTheme.theme3;
+    }
+    if (index == 4) {
+      console.log("４回目")
+      return arrHeartBeatTheme.theme4;
+    }
+  };
 
   //useEffectの発火が何にも依存しない,初回にしか起動しない。
 
@@ -255,7 +278,7 @@ export const Main = () => {
                       fontSize: "3rem",
                     }}
                   >
-                    {arrHeartBeatTheme.theme1}
+                    {getHeartBeatTheme(index)}
                   </Typography>
                 </Box>
               </SwiperSlide>
