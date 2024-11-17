@@ -20,22 +20,98 @@ export const Main = () => {
   const themes = themesArr; //locateで値を受け取る
   const [topicId, setTopicId] = useState([]);
   const socketRef = useRef();
-  const [message, setMessage] = useState();
   const [player1Name, setPlayr1Name] = useState();
   const [player2Name, setPlayr2Name] = useState();
-  const [heartBeatP1, setHeartBeatP1] = useState();
   const [heartBeatP2, setHeartBeatP2] = useState();
   const [arrThemes, setarrThemes] = useState();
   const [index, setIndex] = useState(1); //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
+  const [heartBeatP1, setHeartBeatP1] = useState([]);
+  const [heartBeat2P1, setHeartBeat2P1] = useState([]);
   const [arrHeartBeatTheme, setArrHeartBeatTheme] = useState({
-    theme1: 0,
-    theme2: 0,
-    theme3: 0,
-    theme4: 0,
+    theme1: [],
+    theme2: [],
+    theme3: [],
+    theme4: [],
   });
-  const [heartBeatSet, setHeartBeatSet] = useState();
+  const [arrHeartBeat, setArrHeartBeat] = useState();
+  const heartBeatSet = ["123", "113", "99", "123", "89"];
+
+  ///////////////////////////////////////////////////// デバッグ用にラ順次取得する
+  let debugIndex = 0;
+
+  const getSequentialHeartBeat = () => {
+    const value = heartBeatSet[debugIndex];
+    debugIndex = (debugIndex + 1) % heartBeatSet.length;
+    return value;
+  };
 
   console.log("themes", themes);
+
+  useEffect(() => {
+    const debugInterval = setInterval(() => {
+      const debugHeartBeat = getSequentialHeartBeat();
+      setHeartBeatP1(debugHeartBeat); // 状態更新
+    }, 1000);
+
+    // タイマーを10秒後にクリア
+    const timeout = setTimeout(() => {
+      clearInterval(debugInterval);
+    }, 10 * 1000);
+
+    // クリーンアップ関数でタイマーをクリア
+    return () => {
+      clearInterval(debugInterval);
+      clearTimeout(timeout);
+    };
+  }, []); // 依存配列は空。これにより一度だけ実行される。
+
+  console.log("heartBeatP1", heartBeatP1);
+
+  if (index == 1) {
+    //setHeartBeatP1((prev) => [...prev, debugHeartBeat]); // デバッグ用の値をステートに設定
+
+    useEffect(() => {
+      // heartBeatP1が変更されたときにarrHeartBeatThemeを更新
+      setArrHeartBeatTheme((prev) => ({
+        ...prev,
+        theme1: [...prev.theme1, heartBeatP1], // 最新のheartBeatP1でtheme1を更新
+      }));
+    }, [heartBeatP1]); // heartBeatP1を監視
+
+    console.log("1回目");
+  }
+  if (index == 2) {
+    useEffect(() => {
+      // heartBeatP1が変更されたときにarrHeartBeatThemeを更新
+      setArrHeartBeatTheme((prev) => ({
+        ...prev,
+        theme2: [...prev.theme2, heartBeatP1], // 最新のheartBeatP1でtheme1を更新
+      }));
+    }, [heartBeatP1]); // heartBeatP1を監視
+
+    console.log("２回目");
+  }
+  if (index == 3) {
+    useEffect(() => {
+      // heartBeatP1が変更されたときにarrHeartBeatThemeを更新
+      setArrHeartBeatTheme((prev) => ({
+        ...prev,
+        theme3: [...prev.theme3, heartBeatP1], // 最新のheartBeatP1でtheme1を更新
+      }));
+    }, [heartBeatP1]); // heartBeatP1を監視
+    console.log("３回目");
+  }
+  if (index == 4) {
+    useEffect(() => {
+      setArrHeartBeatTheme((prev) => ({
+        ...prev,
+        theme4: [...prev.theme4, heartBeatP1],
+      }));
+    },[heartBeatP1]);
+    console.log("４回目");
+  }
+
+  console.log("array");
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
   useEffect(() => {
@@ -53,8 +129,6 @@ export const Main = () => {
 
     // #2.メッセージ受信時のイベントハンドラを設定
     const onMessage = (event) => {
-      setMessage(event.data);
-
       // JSON文字列をJavaScriptオブジェクトに変換
       const data = destr(event.data);
 
@@ -63,24 +137,10 @@ export const Main = () => {
       console.log("topicId", data.topicId);
 
       console.log("🚀 ~ onMessage ~ player1Name:", typeof data.player1);
+
       setPlayr1Name(data.player1);
       setPlayr2Name(data.player2);
 
-      if (index == 1) {
-        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme1: data.heartRate1 });
-      }
-      if (index == 2) {
-        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme2: data.heartRate1 });
-      }
-      if (index == 3) {
-        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme3: data.heartRate1 });
-      }
-      if (index == 4) {
-        setArrHeartBeatTheme({ ...arrHeartBeatTheme, theme4: data.heartRate1 });
-      }
-
-      //setHeartBeatP1(data.heartRate1);
-      console.log("🚀 ~ onMessage ~ heartBeatP1:", arrHeartBeatTheme.theme1);
       console.log("arrHeartBeatTheme", arrHeartBeatTheme);
 
       setHeartBeatP2(data.heartRate2);
@@ -107,29 +167,15 @@ export const Main = () => {
     };
   }, []);
 
-  
+  console.log("hearBeatP1", arrHeartBeatTheme.theme1);
+  console.log("hearBeatP1", arrHeartBeatTheme.theme2);
+  console.log("hearBeatP1", arrHeartBeatTheme.theme3);
+  console.log("hearBeatP1", arrHeartBeatTheme.theme4);
 
-  const getHeartBeatTheme = (index) => {
-    if (index == 1) {
-      console.log("1回目")
-      return arrHeartBeatTheme.theme1;
-      
-    }
-    if (index == 2) {
-      console.log("２回目")
-      return arrHeartBeatTheme.theme2;
-      
-    }
-    if (index == 3) {
-      console.log("３回目")
-      return arrHeartBeatTheme.theme3;
-    }
-    if (index == 4) {
-      console.log("４回目")
-      return arrHeartBeatTheme.theme4;
-    }
-  };
+  console.log("index", index);
 
+  //getHeartBeatTheme(index)
+  console.log("arrHeartBeat", arrHeartBeat);
   //useEffectの発火が何にも依存しない,初回にしか起動しない。
 
   const navigate = useNavigate();
@@ -158,7 +204,6 @@ export const Main = () => {
   };
   //player
 
-  console.log("heartrate1", heartBeatP1);
   console.log("player1", player1Name);
 
   const FinishMeasuring = () => {
@@ -278,7 +323,8 @@ export const Main = () => {
                       fontSize: "3rem",
                     }}
                   >
-                    {getHeartBeatTheme(index)}
+                    {/* {getHeartBeatTheme(index)} */}
+                    aiu
                   </Typography>
                 </Box>
               </SwiperSlide>
