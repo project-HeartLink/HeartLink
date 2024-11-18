@@ -92,6 +92,7 @@ export const SelectTheme = ({ player }) => {
 
   const RandomSend = () => {
     const randomId = getRandomId(playerSelect, themes ,SelectedId);
+    setIndexplayer((indexplayer) => indexplayer+2);
     const data = { player: playerSelect, id: randomId,index: indexplayer+2 };
     console.log("ただいま、メールを送信してます", data);
     const url = "https://hartlink-api.onrender.com/topicId";
@@ -111,7 +112,6 @@ export const SelectTheme = ({ player }) => {
       })
       .then((data) => {
         console.log("Success:", data);
-        setIndexplayer((indexplayer) => indexplayer+2);
         console.log("index",indexplayer);
         
       })
