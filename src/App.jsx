@@ -42,7 +42,7 @@ function App() {
         {/* <Route path="/getAverage" element={<GetAvgData />} />
         <Route path="/showAverage" element={<ShowAvgData player={player} />} /> */}
         <Route path="/selectTheme" element={<SelectTheme player={player} />} />
-        <Route path="/main" element={<Main />} />
+        <Route path="/main" element={<Main player={player}/>} />
         <Route path="/result" element={<Result player={player} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

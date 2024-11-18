@@ -37,23 +37,15 @@ export const SelectTheme = ({ player }) => {
   const ClickYes = (id) => {
     console.log("theme", themes);
     console.log("theme", typeof themes);
-    console.log("indexplayer",indexplayer);
-    console.log("id",id)
+    console.log("indexplayer", indexplayer);
+    console.log("id", id);
 
-    if (indexplayer == 0) {
+    if (indexplayer == 0 || indexplayer == 1) {
       handleClose();
     }
-    if (indexplayer == 1) {
-      handleClose();
-    }
-    if (indexplayer == 2) {
+    if (indexplayer == 2 || indexplayer == 3) {
       navigate("/main", { state: themes });
     }
-
-    if (indexplayer == 3) {
-      navigate("/main", { state: themes });
-    }
-
 
     const data = { player: player, id: id, index: indexplayer };
 
