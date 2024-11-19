@@ -29,7 +29,6 @@ export const Form = ({ name, setName }) => {
   }, []);
 
   const handleNameChange = (e) => {
-    console.log(name);
     setName(e.target.value);
   };
 
@@ -72,6 +71,7 @@ export const Form = ({ name, setName }) => {
             sx={{ width: "60%", maxWidth: "400px" }}
           >
             <Input
+              autoFocus
               placeholder="名前を入力"
               name="Name"
               autoComplete="off"
