@@ -24,30 +24,37 @@ export const Main = ({ player }) => {
   const [player2Name, setPlayr2Name] = useState();
   const [heartBeatP2, setHeartBeatP2] = useState();
   const [arrThemes, setarrThemes] = useState();
-  const [index, setIndex] = useState(1); //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
+  const [index, setIndex] = useState(0); //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
   const [heartBeatP1, setHeartBeatP1] = useState([]);
   const [player1arrHeartBeat, setplayer1arrHeartBeat] = useState({
+    theme0: [],
     theme1: [],
     theme2: [],
     theme3: [],
-    theme4: [],
   });
   const [player2arrHeartBeat, setplayer2arrHeartBeat] = useState({
+    theme0: [],
     theme1: [],
     theme2: [],
     theme3: [],
-    theme4: [],
   });
 
   const heartBeatSet = ["123", "113", "99", "123", "89"];
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
-  const [sumIndex, setSumIndex] = useState();
+  const [proIndex, setProIndex] = useState();
+  const [player1Done, setPlayer1Done] = useState(false);
+  const [player2Done, setPlayer2Done] = useState(false);
 
   console.log("themes", themes);
+
+  player = "1"; /////////////////////////////////////////////////////戻って選択するのめんどくさいから固定値
   console.log("player", player);
+  console.log(`typeofPlayer: ${typeof player}`);
 
   console.log("heartBeatP1", heartBeatP1);
+
+  
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
   useEffect(() => {
@@ -76,7 +83,7 @@ export const Main = ({ player }) => {
 
       setPlayr1Name(data.player1);
       setPlayr2Name(data.player2);
-      setSumIndex(data.index);
+      setProIndex(data.index + 1); //data.indexだったら、前の段階の値が帰ってくるから(proindexの値が0から始まる)から無理やり+1にした
 
       console.log("player1arrHeartBeat", player1arrHeartBeat);
 
@@ -102,256 +109,108 @@ export const Main = ({ player }) => {
       websocket.removeEventListener("message", onMessage);
     };
   }, []);
-  if (index == 1) {
-    useEffect(
-      () => {
-        // heartBeatP1が変更されたときにplayer1arrHeartBeatを更新
 
-        if (heartBeatP1 > 0) {
-          setplayer1arrHeartBeat((prev) => ({
-            ...prev,
-            theme1: [...prev.theme1, heartBeatP1], // 最新のheartBeatP1でtheme1を更新
-          }));
-          setplayer2arrHeartBeat((prev) => ({
-            ...prev,
-            theme1: [...prev.theme1, heartBeatP2],
-          }));
-        }
-      },
-      [heartBeatP1] || [heartBeatP2]
-    ); // heartBeatP1を監視
+  useEffect(
+    () => {
+      // heartBeatP1が変更されたときにplayer1arrHeartBeatを更新
 
-    console.log("1回目");
-  }
-  if (index == 2) {
-    useEffect(
-      () => {
-        // heartBeatP1が変更されたときにplayer1arrHeartBeatを更新
+      if (heartBeatP1 > 0) {
         setplayer1arrHeartBeat((prev) => ({
           ...prev,
-          theme2: [...prev.theme2, heartBeatP1], // 最新のheartBeatP1でtheme1を更新
+          [`theme${index}`]: [...prev[`theme${index}`], heartBeatP1], // 最新のheartBeatP1でtheme1を更新
         }));
         setplayer2arrHeartBeat((prev) => ({
           ...prev,
-          theme2: [...prev.theme2, heartBeatP2], // 最新のheartBeatP1でtheme1を更新
+          [`theme${index}`]: [...prev[`theme${index}`], heartBeatP2],
         }));
-      },
-      [heartBeatP1] || [heartBeatP2]
-    ); // heartBeatP1を監視
+      }
+    },
+    [heartBeatP1] || [heartBeatP2]
+  ); // heartBeatP1を監視
 
-    console.log("２回目");
-  }
-  if (index == 3) {
-    useEffect(
-      () => {
-        // heartBeatP1が変更されたときにplayer1arrHeartBeatを更新
-        if (heartBeatP1 > 0) {
-          setplayer1arrHeartBeat((prev) => ({
-            ...prev,
-            theme3: [...prev.theme3, heartBeatP1], // 最新のheartBeatP1でtheme1を更新
-          }));
-          setplayer2arrHeartBeat((prev) => ({
-            ...prev,
-            theme3: [...prev.theme3, heartBeatP2], // 最新のheartBeatP1でtheme1を更新
-          }));
-        }
-      },
-      [heartBeatP1] || [heartBeatP2]
-    ); // heartBeatP1を監視
-    console.log("３回目");
-  }
-  if (index == 4) {
-    useEffect(
-      () => {
-        setplayer1arrHeartBeat((prev) => ({
-          ...prev,
-          theme4: [...prev.theme4, heartBeatP1],
-        }));
+  console.log("1回目");
 
-        setplayer2arrHeartBeat((prev) => ({
-          ...prev,
-          theme3: [...prev.theme3, heartBeatP2], // 最新のheartBeatP1でtheme1を更新
-        }));
-      },
-      [heartBeatP1] || [heartBeatP2]
-    );
-    console.log("４回目");
-  }
-
+  console.log("hearBeatP1", player1arrHeartBeat.theme0);
   console.log("hearBeatP1", player1arrHeartBeat.theme1);
   console.log("hearBeatP1", player1arrHeartBeat.theme2);
   console.log("hearBeatP1", player1arrHeartBeat.theme3);
-  console.log("hearBeatP1", player1arrHeartBeat.theme4);
 
+  console.log("hearBeatP2", player2arrHeartBeat.theme0);
   console.log("hearBeatP2", player2arrHeartBeat.theme1);
   console.log("hearBeatP2", player2arrHeartBeat.theme2);
   console.log("hearBeatP2", player2arrHeartBeat.theme3);
-  console.log("hearBeatP2", player2arrHeartBeat.theme4);
 
   console.log("🚀 ~ topicId.map ~ topicId:", topicId);
 
   const FinishTheme = () => {
-    if (player == 1) {
-      if (index == 1) {
-        console.log("indewx", index);
+    if (index == topicId.length - 1) {
+      setIsDone(true);
+      setIndex(index);
+    } else {
+      console.log("index", index);
 
-        topicId.map((id) => {
-          console.log("themes[index].id", themes[id]);
-          if (topicId[index] === themes[id].id) {
-            console.log("setarrThemes(themes.topicId)", themes[id].topic);
-            setarrThemes(themes[id].topic);
-          }
-        });
+      topicId.map((id) => {
+        console.log("themes[index].id", themes[id]);
+        if (topicId[index + 1] === themes[id].id) {
+          console.log("setarrThemes(themes.topicId)", themes[id].topic);
+          setarrThemes(themes[id].topic);
+        }
+      });
 
-        setIndex(index + 1);
-
-        const sendinfo = () => {
-          const data = {
-            player1arrHeartBeat1: player1arrHeartBeat.theme1,
-            player1arrHeartBeat2: player2arrHeartBeat.theme1,
-          };
-          if (player) {
-            fetch("https://hartlink-api.onrender.com/topicArray", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            })
-              .then((res) => res.json()) //json方式でデータを受け取る
-              .then((data) => {
-                console.log("data:", data);
-              })
-
-              .catch((err) => console.error("Error fetching data:", err));
-          } else {
-            setShowText(false);
-          }
-        };
-
-        sendinfo();
-      }
-      if (index == 3) {
-        console.log("indewx", index);
-
-        topicId.map((id) => {
-          console.log("themes[index].id", themes[id]);
-          if (topicId[index] === themes[id].id) {
-            console.log("setarrThemes(themes.topicId)", themes[id].topic);
-            setarrThemes(themes[id].topic);
-          }
-        });
-
-        setIndex(index + 1);
-
-        const sendinfo = () => {
-          const data = {
-            player1arrHeartBeat1: player1arrHeartBeat.theme3,
-            player1arrHeartBeat2: player2arrHeartBeat.theme3,
-          };
-          if (player) {
-            fetch("https://hartlink-api.onrender.com/topicArray", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            })
-              .then((res) => res.json()) //json方式でデータを受け取る
-              .then((data) => {
-                console.log("data:", data);
-              })
-
-              .catch((err) => console.error("Error fetching data:", err));
-          } else {
-            setShowText(false);
-          }
-        };
-
-        sendinfo();
-      }
+      setIndex(index + 1);
     }
 
-    if (player == 2) {
-      if (index == 2) {
-        topicId.map((id) => {
-          console.log("themes[index].id", themes[id]);
-          if (topicId[index] === themes[id].id) {
-            console.log("setarrThemes(themes.topicId)", themes[id].topic);
-            setarrThemes(themes[id].topic);
-          }
-        });
-        setIndex(index + 1);
+    console.log("proIndex", proIndex);
 
-        const sendinfo = () => {
-          const data = {
-            player1arrHeartBeat1: player1arrHeartBeat.theme3,
-            player1arrHeartBeat2: player2arrHeartBeat.theme3,
-          };
-          if (player) {
-            fetch("https://hartlink-api.onrender.com/topicArray", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            })
-              .then((res) => res.json()) //json方式でデータを受け取る
-              .then((data) => {
-                console.log("data:", data);
-              })
-
-              .catch((err) => console.error("Error fetching data:", err));
-          } else {
-            setShowText(false);
-          }
-        };
-
-        sendinfo();
-      }
-      if (index == 4) {
-        setIsDone(true);
-        setIndex(index);
-        const sendinfo = () => {
-          const data = {
-            player1arrHeartBeat1: player1arrHeartBeat.theme3,
-            player1arrHeartBeat2: player2arrHeartBeat.theme3,
-          };
-          if (player) {
-            fetch("https://hartlink-api.onrender.com/topicArray", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            })
-              .then((res) => res.json()) //json方式でデータを受け取る
-              .then((data) => {
-                console.log("data:", data);
-              })
-
-              .catch((err) => console.error("Error fetching data:", err));
-          } else {
-            setShowText(false);
-          }
-        };
-
-        sendinfo();
-      }
-    }
-
-    // }); //indexが配列の現在地点を指してる
-  };
-
-  useEffect(() => {
-    fetch("https://hartlink-api.onrender.com/indexTopicId", { method: "GET" })
+    const data = {
+      index: index,
+      player: player,
+    };
+    console.log(`player: ${player}, index: ${index}`);
+    console.log(`data : ${typeof index}`);
+    fetch("https://hartlink-api.onrender.com/indexTopicId", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
       .then((res) => res.json()) //json方式でデータを受け取る
       .then((data) => {
         console.log("data:", data);
+
+        console.log("(data.index)", data.index);
       })
 
       .catch((err) => console.error("Error fetching data:", err));
-  }, [index]);
+
+    console.log("array", player1arrHeartBeat.theme0);
+    console.log("index", index);
+    console.log("player", player);
+    const dataTopicArray = {
+      player: player,
+      index: index,
+      array: player1arrHeartBeat.theme0,
+    };
+
+    fetch("https://hartlink-api.onrender.com/topicArray", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataTopicArray),
+    })
+      .then((res) => res.json()) //json方式でデータを受け取る
+      .then((dataTopicArray) => {
+        console.log("data:", dataTopicArray);
+      })
+
+      .catch((err) => console.error("Error fetching dataTopicArray:", err));
+
+    console.log("array", player1arrHeartBeat.theme0);
+
+    // }); //indexが配列の現在地点を指してる
+  };
 
   const FinishMeasuring = () => {
     //5秒後にリザルト画面に飛ばす
