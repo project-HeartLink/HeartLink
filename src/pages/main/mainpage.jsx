@@ -48,13 +48,11 @@ export const Main = ({ player }) => {
 
   console.log("themes", themes);
 
-  player = "1"; /////////////////////////////////////////////////////戻って選択するのめんどくさいから固定値
+  //player = "1"; /////////////////////////////////////////////////////戻って選択するのめんどくさいから固定値
   console.log("player", player);
   console.log(`typeofPlayer: ${typeof player}`);
 
   console.log("heartBeatP1", heartBeatP1);
-
-  
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
   useEffect(() => {
@@ -78,12 +76,13 @@ export const Main = ({ player }) => {
       console.log("event.data:", event.data);
       console.log("heartRate2", data.heartRate1);
       console.log("topicId", data.topicId);
+      console.log("data.index", data.index);
 
       console.log("🚀 ~ onMessage ~ player1Name:", typeof data.player1);
 
       setPlayr1Name(data.player1);
       setPlayr2Name(data.player2);
-      setProIndex(data.index + 1); //data.indexだったら、前の段階の値が帰ってくるから(proindexの値が0から始まる)から無理やり+1にした
+      setProIndex(data.index); //data.indexだったら、前の段階の値が帰ってくるから(proindexの値が0から始まる)から無理やり+1にした
 
       console.log("player1arrHeartBeat", player1arrHeartBeat);
 
@@ -141,17 +140,20 @@ export const Main = ({ player }) => {
   console.log("hearBeatP2", player2arrHeartBeat.theme3);
 
   console.log("🚀 ~ topicId.map ~ topicId:", topicId);
+  console.log("proindex", proIndex);
+  console.log("index", index);
 
   const FinishTheme = () => {
-    if (index == topicId.length - 1) {
+    if (proIndex == topicId.length - 1) {
       setIsDone(true);
       setIndex(index);
+      console.log("イコール");
     } else {
-      console.log("index", index);
-
+      console.log("index", proIndex);
+      console.log("ノーイコール");
       topicId.map((id) => {
         console.log("themes[index].id", themes[id]);
-        if (topicId[index + 1] === themes[id].id) {
+        if (topicId[proIndex - 1] === themes[id].id) {
           console.log("setarrThemes(themes.topicId)", themes[id].topic);
           setarrThemes(themes[id].topic);
         }
@@ -161,6 +163,7 @@ export const Main = ({ player }) => {
     }
 
     console.log("proIndex", proIndex);
+    console.log("heartBeatP1", heartBeatP1);
 
     const data = {
       index: index,
@@ -184,13 +187,17 @@ export const Main = ({ player }) => {
 
       .catch((err) => console.error("Error fetching data:", err));
 
-    console.log("array", player1arrHeartBeat.theme0);
+    // 両プレイヤーが完了状態ならWebSocketを更新
+
+    //[`theme${index}`]: [...prev[`theme${index}`], heartBeatP1], // 最新のheartBeatP1でtheme1を更新
+
+    console.log("array", player1arrHeartBeat[`theme${proIndex}`]);
     console.log("index", index);
     console.log("player", player);
     const dataTopicArray = {
       player: player,
-      index: index,
-      array: player1arrHeartBeat.theme0,
+      index: proIndex,
+      array: player1arrHeartBeat[`theme${proIndex}`],
     };
 
     fetch("https://hartlink-api.onrender.com/topicArray", {
@@ -213,6 +220,19 @@ export const Main = ({ player }) => {
   };
 
   const FinishMeasuring = () => {
+
+      console.log("動いたよ");
+      fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" })
+        .then((res) => res.json()) //json方式でデータを受け取る
+        .then((data) => {
+          {
+            console.log("data",data);
+          }
+        })
+
+        .catch((err) => CatchError(err));
+
+
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
       fetch("https://hartlink-api.onrender.com/indexTopicId", { method: "GET" })
@@ -411,7 +431,9 @@ export const Main = ({ player }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.8 }}
             transition={{}}
-            onClick={() => FinishTheme()}
+            onClick={() => {
+              FinishMeasuring();
+            }}
             sx={{
               fontSize: "5vw",
               pt: "2vh",
