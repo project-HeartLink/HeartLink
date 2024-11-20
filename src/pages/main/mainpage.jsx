@@ -21,7 +21,7 @@ export const Main = ({ player }) => {
   const [topicId, setTopicId] = useState([]);
   const socketRef = useRef();
   const [player1Name, setPlayr1Name] = useState("");
-  const [player2Name, setPlayr2Name] = useState();
+  const [player2Name, setPlayr2Name] = useState("");
   const [heartBeatP2, setHeartBeatP2] = useState([]);
   const [arrThemes, setarrThemes] = useState();
   const [index, setIndex] = useState(0); //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
@@ -39,14 +39,12 @@ export const Main = ({ player }) => {
     theme3: [],
   });
 
-  const heartBeatSet = ["123", "113", "99", "123", "89"];
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
   const [proIndex, setProIndex] = useState();
 
   console.log("themes", themes);
 
-  //player = "1"; /////////////////////////////////////////////////////戻って選択するのめんどくさいから固定値
   console.log("player", player);
   console.log(`typeofPlayer: ${typeof player}`);
 
@@ -93,8 +91,8 @@ export const Main = ({ player }) => {
       setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
       console.log("topicId", data.topicId);
 
-      if (data.index == 0) {
-        setarrThemes(themes[data.topicId[0]].topic); //mainpageに遷移した直後にお題を写るように
+      if (data.index == 0) { //mainpageに遷移した直後にお題を写るように
+        setarrThemes(themes[data.topicId[0]].topic);
       }
     };
 
@@ -109,12 +107,10 @@ export const Main = ({ player }) => {
 
   useEffect(
     () => {
-      // heartBeatP1が変更されたときにplayer1arrHeartBeatを更新
-
       if (heartBeatP1 > 0) {
         setplayer1arrHeartBeat((prev) => ({
           ...prev,
-          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1], // 最新のheartBeatP1でtheme1を更新
+          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1], 
         }));
         setplayer2arrHeartBeat((prev) => ({
           ...prev,
@@ -192,11 +188,6 @@ export const Main = ({ player }) => {
       })
 
       .catch((err) => console.error("Error fetching data:", err));
-
-    // 両プレイヤーが完了状態ならWebSocketを更新
-
-    //[`theme${index}`]: [...prev[`theme${index}`], heartBeatP1], // 最新のheartBeatP1でtheme1を更新
-
     console.log("array", player1arrHeartBeat[`theme${proIndex}`]);
     console.log("index", index);
     console.log("player", player);
@@ -222,7 +213,6 @@ export const Main = ({ player }) => {
 
     console.log("array", player1arrHeartBeat.theme0);
 
-    // }); //indexが配列の現在地点を指してる
   };
 
   const FinishMeasuring = () => {
