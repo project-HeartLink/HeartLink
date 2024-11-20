@@ -12,8 +12,10 @@ export const SelectTheme = ({ player }) => {
   const [open, setOpen] = useState(false);
   const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
   const [SelectedId, setSelectedId] = useState(); //選択したid
-  const [indexplayer, setIndexplayer] = useState(player === "Player1" ? 0 : 1);
-  
+  const [indexplayer, setIndexplayer] = useState(player === "1" ? 0 : 1);
+
+  console.log("player", player);
+
   const handleOpen = (theme) => {
     setOpen(true);
     setSelectedTopic(theme.topic);
@@ -30,36 +32,22 @@ export const SelectTheme = ({ player }) => {
     setOddSelect(themes.filter((theme) => theme.id % 2 != 0));
   }, []);
 
-  const selectPlayer = player == "Player1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
-
-  const playerSelect = player == "Player1" ? 1 : 2; //player1の時は1,player2の時は2が帰ってくる
+  const selectPlayer = player == "1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
 
   const ClickYes = (id) => {
     console.log("theme", themes);
     console.log("theme", typeof themes);
+    console.log("indexplayer", indexplayer);
+    console.log("id", id);
 
-    if(player == "Player1"){
-      if(indexplayer == 0){
-        console.log("index",SelectedId);
-        navigate("/main", { state: themes });
-      }
-      else{
-        handleClose();
-      }
+    if (indexplayer == 0 || indexplayer == 1) {
+      handleClose();
     }
-    if(player == "Player2"){
-      if(indexplayer == 1){
-        console.log("index",SelectedId);
-        navigate("/main", { state: themes });
-        
-      }
-      else{
-        handleClose();
-      }
+    if (indexplayer == 2 || indexplayer == 3) {
+      navigate("/main", { state: themes });
     }
-    
 
-    const data = { player: playerSelect, id: id,index: indexplayer };
+    const data = { player: player, id: id, index: indexplayer };
 
     console.log("ただいま、メールを送信してます", data);
     console.log("id", id);
@@ -80,9 +68,8 @@ export const SelectTheme = ({ player }) => {
       })
       .then((data) => {
         console.log("Success:", data);
-        setIndexplayer((indexplayer) => indexplayer+2);
-        console.log("index",indexplayer);
-        
+        setIndexplayer((indexplayer) => indexplayer + 2);
+        console.log("index", indexplayer);
       })
       .catch((error) => {
         console.error("Error:", error);

@@ -6,6 +6,7 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import destr from "destr";
+import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Graph } from "./graph";
 import "swiper/css";
@@ -13,13 +14,15 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
 
-export const Result = ({ player }) => {
+export const Result = ({ player}) => {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState();
-  const [player1, setPlayer1] = useState("");
-  const [player2, setPlayer2] = useState("");
-  const [showId, setShowId] = useState("");
+  const [player1, setPlayer1] = useState();
+  const [player2, setPlayer2] = useState();
+  const [showId, setShowId] = useState();
+  const location = useLocation();
+  const getPlayer = location.state;
 
   //最大心拍&そのお題の情報を格納しておく
   let playerInfo = [
@@ -114,50 +117,7 @@ export const Result = ({ player }) => {
     }
   };
 
-  // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
-  useEffect(() => {
-    // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
-    const websocket = new ReconnectingWebSocket(
-      "wss://hartlink-api.onrender.com/ws"
-    );
-    socketRef.current = websocket;
-
-    websocket.onopen = () => {
-      //そのページを開いた瞬間に心拍取得するようにした
-      // WebSocket接続が確立されたらメッセージを送信
-      socketRef.current?.send("0.0");
-    };
-
-    // #2.メッセージ受信時のイベントハンドラを設定
-    const onMessage = (event) => {
-      setMessage(event.data);
-
-      // JSON文字列をJavaScriptオブジェクトに変換
-      //const data = JSON.parse(event.data);
-      const data = destr(event.data);
-
-      // undefined
-      // destr()
-
-      console.log("event.data:", event.data);
-      console.log("player1:", typeof data.player1);
-      console.log("heartRate2", data.heartRate2);
-      console.log("topicId", data.topicId);
-
-      setPlayer1(data.id1);
-      setPlayer2(data.id2);
-      setShowId(player === "player1" ? data.player1 : data.player2);
-    };
-
-    websocket.addEventListener("message", onMessage);
-
-    // #3.useEffectのクリーンアップの中で、WebSocketのクローズ処理を実行
-    return () => {
-      websocket.close();
-      websocket.removeEventListener("message", onMessage);
-    };
-  }, []);
-  //useEffectの発火が何にも依存しない,初回にしか起動しない。
+  //console.log("player1",getPlayer.player1)
 
   return (
     <>

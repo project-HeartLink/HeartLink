@@ -9,13 +9,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { themesArr } from "../main/themesArr";
 
-export const SelectPlayer = ({ player, setPlayer }) => {
+export const SelectPlayer = ({ player, setPlayer ,name}) => {
   const [open, setOpen] = useState(false);
 
   const [connectValue, setConnectValue] = useState("");
   const [showText, setShowText] = useState("");
   const navigate = useNavigate();
+  const themes = themesArr;
   //const startTime = performance.now(); //開始時間の取得
   const status = "ok";
 
@@ -28,8 +30,8 @@ export const SelectPlayer = ({ player, setPlayer }) => {
     setShowText(true);
   };
 
-  let p1 = "Player1";
-  let p2 = "Player2";
+  let p1 = "1";
+  let p2 = "2";
 
   const handleSubmit = () => {
     if (player) {
@@ -41,8 +43,32 @@ export const SelectPlayer = ({ player, setPlayer }) => {
           if (data.status === status) {
             setConnectValue(player); //playar番号をセット
             console.log("playar:", player);
-            navigate("/selectTheme");
+            //navigate("/main" ,{ state: themes }); 
+            navigate("/selectTheme");//エラー吐いてたからパス変えた。変更してpullリク送ること
+            sendinfo();
           }
+        })
+
+        .catch((err) => console.error("Error fetching data:", err));
+    } else {
+      setShowText(false);
+    }
+  };
+
+  const sendinfo = () => {
+    console.log(`name: ${name}`);
+    const data = { player: player, name: name };
+    if (player) {
+      fetch("https://hartlink-api.onrender.com/sendname", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json()) //json方式でデータを受け取る
+        .then((data) => {
+          console.log("data:", data);
         })
 
         .catch((err) => console.error("Error fetching data:", err));
@@ -95,7 +121,7 @@ export const SelectPlayer = ({ player, setPlayer }) => {
                 selected={player === p1}
               >
                 <ListItemText
-                  primary={p1}
+                  primary={"player1"}
                   primaryTypographyProps={{
                     fontSize: "1.5rem",
                     fontFamily: "Hachi Maru Pop, serif",
@@ -108,7 +134,7 @@ export const SelectPlayer = ({ player, setPlayer }) => {
                 selected={player === p2}
               >
                 <ListItemText
-                  primary={p2}
+                  primary={"player2"}
                   primaryTypographyProps={{
                     fontSize: "1.5rem",
                     fontFamily: "Hachi Maru Pop, serif",
