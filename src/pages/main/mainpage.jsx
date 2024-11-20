@@ -96,8 +96,11 @@ export const Main = ({ player }) => {
       console.log("data.topicId", data.topicId[2]);
 
       setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
+      console.log("topicId", data.topicId);
 
-      setarrThemes(themes[data.topicId[0]].topic); //mainpageに遷移した直後にお題を写るように
+      if (data.index == 0) {
+        setarrThemes(themes[data.topicId[0]].topic); //mainpageに遷移した直後にお題を写るように
+      }
     };
 
     websocket.addEventListener("message", onMessage);
@@ -116,11 +119,11 @@ export const Main = ({ player }) => {
       if (heartBeatP1 > 0) {
         setplayer1arrHeartBeat((prev) => ({
           ...prev,
-          [`theme${index}`]: [...prev[`theme${index}`], heartBeatP1], // 最新のheartBeatP1でtheme1を更新
+          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1], // 最新のheartBeatP1でtheme1を更新
         }));
         setplayer2arrHeartBeat((prev) => ({
           ...prev,
-          [`theme${index}`]: [...prev[`theme${index}`], heartBeatP2],
+          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP2],
         }));
       }
     },
@@ -143,26 +146,46 @@ export const Main = ({ player }) => {
   console.log("proindex", proIndex);
   console.log("index", index);
 
+  useEffect(() => {
+    if (proIndex != 0) {
+      topicId.map((id) => {
+        console.log("id", id);
+        console.log("themes[index].id", themes[id]);
+        console.log("proindex", topicId[proIndex]);
+        console.log("themes[id].id", themes[id].id);
+        if (topicId[proIndex ] === themes[id].id) {
+          //今の処理が同じだったら
+          console.log("setarrThemes(themes.topicId)", themes[id].topic);
+          setarrThemes(themes[id].topic);
+        }
+      });
+    }
+  }, [proIndex]);
+
   const FinishTheme = () => {
     if (proIndex == topicId.length - 1) {
       setIsDone(true);
       setIndex(index);
       console.log("イコール");
     } else {
-      console.log("index", proIndex);
       console.log("ノーイコール");
-      topicId.map((id) => {
-        console.log("themes[index].id", themes[id]);
-        if (topicId[proIndex - 1] === themes[id].id) {
-          console.log("setarrThemes(themes.topicId)", themes[id].topic);
-          setarrThemes(themes[id].topic);
-        }
-      });
+      // topicId.map((id) => {
+      //   console.log("id",id)
+      //   console.log("themes[index].id", themes[id]);
+      //   console.log("proindex",topicId[proIndex])
+      //   console.log("themes[id].id",themes[id].id)
+      //   if (topicId[proIndex+1] === themes[id].id) {  //今の処理が同じだったら
+      //     console.log("setarrThemes(themes.topicId)", themes[id].topic);
+      //     setarrThemes(themes[id].topic);
+      //   }
+      // });
 
       setIndex(index + 1);
     }
 
     console.log("proIndex", proIndex);
+    console.log("topicId", topicId);
+
     console.log("heartBeatP1", heartBeatP1);
 
     const data = {
@@ -220,18 +243,16 @@ export const Main = ({ player }) => {
   };
 
   const FinishMeasuring = () => {
+    console.log("動いたよ");
+    fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
+      .then((res) => res.json()) //json方式でデータを受け取る
+      .then((data) => {
+        {
+          console.log();
+        }
+      })
 
-      console.log("動いたよ");
-      fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
-        .then((res) => res.json()) //json方式でデータを受け取る
-        .then((data) => {
-          {
-            console.log()
-          }
-        })
-
-        .catch((err) => CatchError(err));
-
+      .catch((err) => CatchError(err));
 
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
