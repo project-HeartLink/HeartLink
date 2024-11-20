@@ -74,7 +74,53 @@ export const SelectTheme = ({ player }) => {
       .catch((error) => {
         console.error("Error:", error);
       });
+      RandomSend();
   };
+
+  const RandomSend = () => {
+    const randomId = getRandomId(playerSelect, themes ,SelectedId);
+    setIndexplayer((indexplayer) => indexplayer+2);
+    const data = { player: playerSelect, id: randomId,index: indexplayer+2 };
+    console.log("ただいま、メールを送信してます", data);
+    const url = "https://hartlink-api.onrender.com/topicId";
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("ネットワーク応答が正常ではありません");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Success:", data);
+        console.log("index",indexplayer);
+        
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
+  };
+
+  const getRandomId = (playerSelect, themes, excludedId) => {
+    // 対象のIDリストを取得 (偶数または奇数)かつ除外IDを除く
+    const validIds = themes
+      .map((theme) => theme.id)
+      .filter((id) => 
+        (playerSelect === 1 ? id % 2 === 0 : id % 2 !== 0) && id !== excludedId
+      );
+    // リストからランダムにIDを取得
+    const randomIndex = Math.floor(Math.random() * validIds.length);
+    return validIds[randomIndex];
+  };
+  
+  
 
   return (
     <>

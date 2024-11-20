@@ -24,7 +24,6 @@ export const Connect = () => {
   };
 
   useEffect(() => {
-    let timeoutId;
     const handleSubmit = () => {
       console.log("動いたよ");
       fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
@@ -32,41 +31,39 @@ export const Connect = () => {
         .then((data) => {
           if (data.connect == "2") {
             setDataConnect(data.connect);
-            console.log("connect:", data.connect);
+            console.log("data.connect:", data.connect);
             setIsReady(true);
             setTimeout(() => navigate("/SelectPlayer"), 3 * 1000);
           } else if (data.connect == "1") {
             setDataConnect(data.connect);
-            console.log("connect:", data.connect);
+            console.log("data.connect:", data.connect);
           } else if (data.connect == "0") {
             setDataConnect(data.connect);
-            console.log("playerHeartBeat", data);
+            console.log("data.connect", data);
           }
-          timeoutId = setTimeout(() => {
-            //20秒以上経ったら、アラート出るようにした
-            if (data.connect != "2") {
-              console.log("connect", data.connect);
-              if (!flag) {
-                if (!alert("2台目の接続を確認できません")) {
-                  clearInterval(setInterval);
-                  CatchError();
-                }
-              }
-            }
-          }, 10 * 1000); //本番は60秒くらいあればいいと思うため変更
         })
 
         .catch((err) => CatchError(err));
     };
+    const timeoutId = setTimeout(() => {
+      //20秒以上経ったら、アラート出るようにした
+      if (dataConnect != "2") {
+        console.log("dataConnect", dataConnect);
+        if (!alert("2台目の接続を確認できません")) {
+          CatchError();
+        }
+      }
+    }, 40 * 1000); //本番は40秒くらいあればいいと思うため変更
 
     const intervalId = setInterval(handleSubmit, 5 * 1000);
 
     //clearIntervalを入れることで、２回される処理を回避
     return () => {
+      console.log("クリーンアップ: インターバルとタイムアウトの解除");
       clearInterval(intervalId);
       clearTimeout(timeoutId);
     };
-  }); // 初回時のみ実行する
+  }, []); // 初回時のみ実行する
 
   return (
     <>
