@@ -196,8 +196,8 @@ export const Main = ({ player }) => {
     console.log("player", player);
     const dataTopicArray = {
       player: player,
-      index: proIndex,
-      array: player1arrHeartBeat[`theme${proIndex}`],
+      index: index,
+      array: player1arrHeartBeat[`theme${index}`],
     };
 
     fetch("https://hartlink-api.onrender.com/topicArray", {
@@ -222,11 +222,11 @@ export const Main = ({ player }) => {
   const FinishMeasuring = () => {
 
       console.log("動いたよ");
-      fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" })
+      fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           {
-            console.log("data",data);
+            console.log()
           }
         })
 
@@ -432,7 +432,7 @@ export const Main = ({ player }) => {
             whileTap={{ scale: 0.8 }}
             transition={{}}
             onClick={() => {
-              FinishMeasuring();
+              FinishTheme();
             }}
             sx={{
               fontSize: "5vw",
