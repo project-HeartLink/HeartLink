@@ -3,15 +3,22 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Connectpage.scss";
-import HeartImg from "../../assets/kkrn_icon_heart_3.png";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Modal } from "@mui/material";
 import HeartWave from "./heart-wave/HeartWave";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
   const [dataConnect, setDataConnect] = useState("0");
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    CatchError();
+    setOpen(false);
+  };
   const CatchError = (err) => {
     console.log("エラー:", err);
 
@@ -49,9 +56,7 @@ export const Connect = () => {
       //20秒以上経ったら、アラート出るようにした
       if (dataConnect != "2") {
         console.log("dataConnect", dataConnect);
-        if (!alert("2台目の接続を確認できません")) {
-          CatchError();
-        }
+        handleOpen();
       }
     }, 40 * 1000); //本番は40秒くらいあればいいと思うため変更
 
@@ -105,6 +110,62 @@ export const Connect = () => {
           </Box>
         </Box>
       </Box>
+      <Modal
+        component={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "75vw",
+            maxWidth: "400px",
+            maxHeight: "200px",
+            bgcolor: "background.paper",
+            border: "3px solid #FF4BB7",
+            borderRadius: "30px",
+            px: "5vw",
+            py: "5vh",
+          }}
+        >
+          <Typography
+            variant="p"
+            sx={{
+              fontSize: "1.2rem",
+            }}
+          >
+            接続に失敗しました...
+          </Typography>
+          <Typography
+            component={motion.div}
+            whileHover={{
+              scale: 1.1,
+            }}
+            whileTap={{
+              scale: 0.8,
+            }}
+            onClick={handleClose}
+            variant="p"
+            sx={{
+              margin: "3vh auto 0 auto",
+              width: "fit-content",
+              fontSize: "1.5rem",
+              borderBottom: "2px solid #6B75FF",
+              color: "#6B75FF",
+            }}
+          >
+            タイトルへ
+          </Typography>
+        </Box>
+      </Modal>
     </>
   );
 };

@@ -95,7 +95,7 @@ export const Title = () => {
               width: {
                 sm: "40vw",
                 xs: "40vw",
-                md: "30vw",
+                md: "25vw",
                 lg: "20vw",
                 xl: "20vw",
               },
