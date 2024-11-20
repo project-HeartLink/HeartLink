@@ -20,9 +20,9 @@ export const Main = ({ player }) => {
   const themes = themesArr; //locateで値を受け取る
   const [topicId, setTopicId] = useState([]);
   const socketRef = useRef();
-  const [player1Name, setPlayr1Name] = useState();
+  const [player1Name, setPlayr1Name] = useState("");
   const [player2Name, setPlayr2Name] = useState();
-  const [heartBeatP2, setHeartBeatP2] = useState();
+  const [heartBeatP2, setHeartBeatP2] = useState([]);
   const [arrThemes, setarrThemes] = useState();
   const [index, setIndex] = useState(0); //初期値を１にすることで、mainpageに遷移した直後のお題を写らないようにする
   const [heartBeatP1, setHeartBeatP1] = useState([]);
@@ -43,8 +43,6 @@ export const Main = ({ player }) => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
   const [proIndex, setProIndex] = useState();
-  const [player1Done, setPlayer1Done] = useState(false);
-  const [player2Done, setPlayer2Done] = useState(false);
 
   console.log("themes", themes);
 
@@ -74,7 +72,6 @@ export const Main = ({ player }) => {
       const data = destr(event.data);
 
       console.log("event.data:", event.data);
-      console.log("heartRate2", data.heartRate1);
       console.log("topicId", data.topicId);
       console.log("data.index", data.index);
 
@@ -82,7 +79,7 @@ export const Main = ({ player }) => {
 
       setPlayr1Name(data.player1);
       setPlayr2Name(data.player2);
-      setProIndex(data.index); //data.indexだったら、前の段階の値が帰ってくるから(proindexの値が0から始まる)から無理やり+1にした
+      setProIndex(data.index);
 
       console.log("player1arrHeartBeat", player1arrHeartBeat);
 
@@ -92,8 +89,6 @@ export const Main = ({ player }) => {
       console.log("🚀 ~ onMessage ~ heartBeatP2:", player1arrHeartBeat.theme2);
 
       console.log("🚀 ~ onMessage ~ player2Name:", player2Name);
-
-      console.log("data.topicId", data.topicId[2]);
 
       setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
       console.log("topicId", data.topicId);
@@ -153,7 +148,7 @@ export const Main = ({ player }) => {
         console.log("themes[index].id", themes[id]);
         console.log("proindex", topicId[proIndex]);
         console.log("themes[id].id", themes[id].id);
-        if (topicId[proIndex ] === themes[id].id) {
+        if (topicId[proIndex] === themes[id].id) {
           //今の処理が同じだったら
           console.log("setarrThemes(themes.topicId)", themes[id].topic);
           setarrThemes(themes[id].topic);
@@ -168,18 +163,6 @@ export const Main = ({ player }) => {
       setIndex(index);
       console.log("イコール");
     } else {
-      console.log("ノーイコール");
-      // topicId.map((id) => {
-      //   console.log("id",id)
-      //   console.log("themes[index].id", themes[id]);
-      //   console.log("proindex",topicId[proIndex])
-      //   console.log("themes[id].id",themes[id].id)
-      //   if (topicId[proIndex+1] === themes[id].id) {  //今の処理が同じだったら
-      //     console.log("setarrThemes(themes.topicId)", themes[id].topic);
-      //     setarrThemes(themes[id].topic);
-      //   }
-      // });
-
       setIndex(index + 1);
     }
 
@@ -256,7 +239,7 @@ export const Main = ({ player }) => {
 
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
-      fetch("https://hartlink-api.onrender.com/indexTopicId", { method: "GET" })
+      fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           console.log("data:", data);
