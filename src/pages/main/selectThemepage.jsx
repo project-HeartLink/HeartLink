@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { themesArr } from "./themesArr";
+import PropTypes from "prop-types";
 
 export const SelectTheme = ({ player }) => {
   const themes = themesArr;
@@ -12,7 +13,7 @@ export const SelectTheme = ({ player }) => {
   const [open, setOpen] = useState(false);
   const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
   const [SelectedId, setSelectedId] = useState(); //選択したid
-  const [indexplayer, setIndexplayer] = useState(player === "1" ? 0 : 1);
+  const [indexplayer, setIndexplayer] = useState(player === "Player1" ? 0 : 1);
 
   console.log("player", player);
 
@@ -41,10 +42,12 @@ export const SelectTheme = ({ player }) => {
     console.log("id", id);
 
     if (indexplayer == 0 || indexplayer == 1) {
+      navigate("/main", { state: themes });
       handleClose();
     }
     if (indexplayer == 2 || indexplayer == 3) {
       navigate("/main", { state: themes });
+      handleClose();
     }
 
     const data = { player: player, id: id, index: indexplayer };
@@ -78,9 +81,9 @@ export const SelectTheme = ({ player }) => {
   };
 
   const RandomSend = () => {
-    const randomId = getRandomId(playerSelect, themes ,SelectedId);
+    const randomId = getRandomId(player, themes ,SelectedId);
     setIndexplayer((indexplayer) => indexplayer+2);
-    const data = { player: playerSelect, id: randomId,index: indexplayer+2 };
+    const data = { player: player, id: randomId,index: indexplayer+2 };
     console.log("ただいま、メールを送信してます", data);
     const url = "https://hartlink-api.onrender.com/topicId";
 
@@ -293,4 +296,8 @@ export const SelectTheme = ({ player }) => {
       </Modal>
     </>
   );
+};
+
+SelectTheme.propTypes = {
+  player: PropTypes.string.isRequired,
 };
