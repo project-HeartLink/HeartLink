@@ -18,6 +18,7 @@ function App() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [player, setPlayer] = useState("");
+  const [arrSelectTopic,setArrSelectTopic] = useState()
 
   return (
     <AnimatePresence>
@@ -42,8 +43,8 @@ function App() {
         {/* <Route path="/getAverage" element={<GetAvgData />} />
         <Route path="/showAverage" element={<ShowAvgData player={player} />} /> */}
         <Route path="/selectTheme" element={<SelectTheme player={player} />} />
-        <Route path="/main" element={<Main player={player}/>} />
-        <Route path="/result" element={<Result player={player} />} />
+        <Route path="/main" element={<Main player={player} setArrSelectTopic={setArrSelectTopic}/>} />
+        <Route path="/result" element={<Result arrSelectTopic={arrSelectTopic} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

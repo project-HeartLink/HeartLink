@@ -16,7 +16,7 @@ import { themesArr } from "./themesArr";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
 
-export const Main = ({ player }) => {
+export const Main = ({ player, setArrSelectTopic }) => {
   const themes = themesArr; //locateで値を受け取る
   const [topicId, setTopicId] = useState([]);
   const socketRef = useRef();
@@ -70,7 +70,9 @@ export const Main = ({ player }) => {
       const data = destr(event.data);
 
       console.log("event.data:", event.data);
+
       console.log("topicId", data.topicId);
+      setArrSelectTopic(data.topicId);
       console.log("data.index", data.index);
 
       console.log("🚀 ~ onMessage ~ player1Name:", typeof data.player1);
@@ -91,7 +93,8 @@ export const Main = ({ player }) => {
       setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
       console.log("topicId", data.topicId);
 
-      if (data.index == 0) { //mainpageに遷移した直後にお題を写るように
+      if (data.index == 0) {
+        //mainpageに遷移した直後にお題を写るように
         setarrThemes(themes[data.topicId[0]].topic);
       }
     };
@@ -110,7 +113,7 @@ export const Main = ({ player }) => {
       if (heartBeatP1 > 0) {
         setplayer1arrHeartBeat((prev) => ({
           ...prev,
-          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1], 
+          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1],
         }));
         setplayer2arrHeartBeat((prev) => ({
           ...prev,
@@ -194,7 +197,7 @@ export const Main = ({ player }) => {
     const dataTopicArray = {
       player: player,
       index: index,
-      array: player1arrHeartBeat[`theme${index}`],
+      array: player == "1" ? player1arrHeartBeat[`theme${index}`] : player2arrHeartBeat[`theme${index}`],
     };
 
     fetch("https://hartlink-api.onrender.com/topicArray", {
@@ -212,7 +215,6 @@ export const Main = ({ player }) => {
       .catch((err) => console.error("Error fetching dataTopicArray:", err));
 
     console.log("array", player1arrHeartBeat.theme0);
-
   };
 
   const FinishMeasuring = () => {
@@ -229,7 +231,9 @@ export const Main = ({ player }) => {
 
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
-      fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" })
+      fetch("https://hartlink-api.onrender.com/getTopicArray", {
+        method: "GET",
+      })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           console.log("data:", data);
@@ -239,7 +243,9 @@ export const Main = ({ player }) => {
 
       console.log("useEffect called");
       const timer = setTimeout(() => {
-        navigate("/result", { player1: player1Name, player2: player2Name });
+        navigate("/result", {
+          state: { player1Name: player1Name, player2Name: player2Name },
+        });
       }, 5 * 1000);
       return () => {
         console.log("cleanUp");
