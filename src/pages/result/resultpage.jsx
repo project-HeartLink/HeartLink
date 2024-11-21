@@ -6,15 +6,16 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import destr from "destr";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Graph } from "./graph";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
+import Syncronization from "./SynchronizationRate";
 
-export const Result = ({ player}) => {
+export const Result = ({ player }) => {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState();
