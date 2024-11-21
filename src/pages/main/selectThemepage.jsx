@@ -43,9 +43,11 @@ export const SelectTheme = ({ player }) => {
 
     if (indexplayer == 0 || indexplayer == 1) {
       navigate("/main", { state: themes });
+      handleClose();
     }
     if (indexplayer == 2 || indexplayer == 3) {
       navigate("/main", { state: themes });
+      handleClose();
     }
 
     const data = { player: player, id: id, index: indexplayer };
