@@ -42,7 +42,7 @@ export const SelectTheme = ({ player }) => {
     console.log("id", id);
 
     if (indexplayer == 0 || indexplayer == 1) {
-      handleClose();
+      navigate("/main", { state: themes });
     }
     if (indexplayer == 2 || indexplayer == 3) {
       navigate("/main", { state: themes });
@@ -79,9 +79,9 @@ export const SelectTheme = ({ player }) => {
   };
 
   const RandomSend = () => {
-    const randomId = getRandomId(selectPlayer, themes ,SelectedId);
+    const randomId = getRandomId(player, themes ,SelectedId);
     setIndexplayer((indexplayer) => indexplayer+2);
-    const data = { player: selectPlayer, id: randomId,index: indexplayer+2 };
+    const data = { player: player, id: randomId,index: indexplayer+2 };
     console.log("ただいま、メールを送信してます", data);
     const url = "https://hartlink-api.onrender.com/topicId";
 
