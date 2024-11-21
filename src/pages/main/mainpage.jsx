@@ -16,7 +16,7 @@ import { themesArr } from "./themesArr";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
 
-export const Main = ({ player, setArrSelectTopic }) => {
+export const Main = ({ player }) => {
   const themes = themesArr; //locateで値を受け取る
   const [topicId, setTopicId] = useState([]);
   const socketRef = useRef();
@@ -42,6 +42,7 @@ export const Main = ({ player, setArrSelectTopic }) => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
   const [proIndex, setProIndex] = useState();
+  const [arrSelectTopic,setArrSelectTopic] = useState()
 
   console.log("themes", themes);
 
@@ -139,6 +140,7 @@ export const Main = ({ player, setArrSelectTopic }) => {
   console.log("🚀 ~ topicId.map ~ topicId:", topicId);
   console.log("proindex", proIndex);
   console.log("index", index);
+  console.log("arrSelectTopic",arrSelectTopic)
 
   useEffect(() => {
     if (proIndex != 0) {
@@ -244,7 +246,7 @@ export const Main = ({ player, setArrSelectTopic }) => {
       console.log("useEffect called");
       const timer = setTimeout(() => {
         navigate("/result", {
-          state: { player1Name: player1Name, player2Name: player2Name },
+          state: { player1Name: player1Name, player2Name: player2Name ,arrSelectTopic:arrSelectTopic},
         });
       }, 5 * 1000);
       return () => {

@@ -15,7 +15,7 @@ import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
 import { themesArr } from "../main/themesArr";
 
-export const Result = ({ player, arrSelectTopic }) => {
+export const Result = ({ player}) => {
   const navigate = useNavigate();
 
   const [player1, setPlayer1] = useState();
@@ -40,27 +40,22 @@ export const Result = ({ player, arrSelectTopic }) => {
   const [arrMaxThemePl1, setArrMaxThemePl1] = useState([]);
   const [arrMaxThemePl2, setArrMaxThemePl2] = useState([]);
   const location = useLocation();
-  const player1Name = location.state;
-  const player2Name = location.state;
+  const props = location.state;
   const themes = themesArr; //locateで値を受け取る
 
-  arrSelectTopic = [1, 2, 5, 3]; ////////////////////////////デバック用
-  player1Name.player1Name = "aiueo";
-  player2Name.player2Name = "kakikukeko";
-
-  console.log("player1Name", player1Name.player1Name);
-  console.log("player2Name", player2Name.player2Name);
-  console.log("arrSelectTopic", arrSelectTopic);
+  console.log("player1Name", props.player1Name);
+  console.log("player2Name", props.player2Name);
+  console.log("arrSelectTopic", props.arrSelectTopic);
 
   //最大心拍&そのお題の情報を格納しておく
   let playerInfo = [
     {
-      name: player1Name.player1Name,
+      name: props.player1Name,
       theme: arrMaxThemePl1,
       bestHR: maxPlayer1,
     },
     {
-      name: player2Name.player2Name,
+      name: props.player2Name,
       theme: arrMaxThemePl2,
       bestHR: maxPlayer2,
     },
@@ -88,38 +83,38 @@ export const Result = ({ player, arrSelectTopic }) => {
 
             p1: {
               heart: data.array1[0].map(Number),
-              theme: themes[arrSelectTopic[0]].topic,
+              theme: themes[props.arrSelectTopic[0]].topic,
             },
             p2: {
               heart: data.array1[1].map(Number),
-              theme: themes[arrSelectTopic[1]].topic,
+              theme: themes[props.arrSelectTopic[1]].topic,
             },
             p3: {
               heart: data.array1[2].map(Number),
-              theme: themes[arrSelectTopic[2]].topic,
+              theme: themes[props.arrSelectTopic[2]].topic,
             },
             p4: {
               heart: data.array1[3].map(Number),
-              theme: themes[arrSelectTopic[3]].topic,
+              theme: themes[props.arrSelectTopic[3]].topic,
             },
           }));
 
           setArrHeartBeatP2((prev) => ({
             p1: {
               heart: data.array2[0].map(Number),
-              theme: themes[arrSelectTopic[0]].topic,
+              theme: themes[props.arrSelectTopic[0]].topic,
             },
             p2: {
               heart: data.array2[1].map(Number),
-              theme: themes[arrSelectTopic[1]].topic,
+              theme: themes[props.arrSelectTopic[1]].topic,
             },
             p3: {
               heart: data.array2[2].map(Number),
-              theme: themes[arrSelectTopic[2]].topic,
+              theme: themes[props.arrSelectTopic[2]].topic,
             },
             p4: {
               heart: data.array2[3].map(Number),
-              theme: themes[arrSelectTopic[3]].topic,
+              theme: themes[props.arrSelectTopic[3]].topic,
             },
           }));
 
@@ -164,13 +159,13 @@ export const Result = ({ player, arrSelectTopic }) => {
         );
 
         // 状態を一括更新
-        console.log("theme", themes[arrSelectTopic[tempmaxKeyPl1[1]]]);
+
 
         const newArrP1 =  Array.from(new Set(tempmaxKeyPl1)).map(
-          (id) => themes[arrSelectTopic[id]].topic
+          (id) => themes[props.arrSelectTopic[id]].topic
         );
         const newArrP2 = Array.from(new Set(tempmaxKeyPl2)).map(
-          (id) => themes[arrSelectTopic[id]].topic
+          (id) => themes[props.garrSelectTopic[id]].topic
         );
 
         setArrMaxThemePl1(newArrP1);
