@@ -15,7 +15,7 @@ import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
 import { themesArr } from "../main/themesArr";
 
-export const Result = ({ player}) => {
+export const Result = ({ player }) => {
   const navigate = useNavigate();
 
   const [player1, setPlayer1] = useState();
@@ -76,11 +76,9 @@ export const Result = ({ player}) => {
 
         // プレイヤー1のデータ解析
         for (const key in data.array1) {
-
           console.log("data.arr", parseInt(data.array1[key]));
 
           setArrHeartBeatP1((prev) => ({
-
             p1: {
               heart: data.array1[0].map(Number),
               theme: themes[props.arrSelectTopic[0]].topic,
@@ -160,8 +158,7 @@ export const Result = ({ player}) => {
 
         // 状態を一括更新
 
-
-        const newArrP1 =  Array.from(new Set(tempmaxKeyPl1)).map(
+        const newArrP1 = Array.from(new Set(tempmaxKeyPl1)).map(
           (id) => themes[props.arrSelectTopic[id]].topic
         );
         const newArrP2 = Array.from(new Set(tempmaxKeyPl2)).map(
@@ -385,7 +382,11 @@ export const Result = ({ player}) => {
                             fontSize: "1.3rem",
                           }}
                         >
-                          {info.theme}
+                          
+                            {info.theme.map((theme) => (
+                              <Box>{theme}</Box>
+                            ))}
+                          
                         </Typography>
                         <Typography
                           sx={{
