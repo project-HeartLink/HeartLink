@@ -165,7 +165,7 @@ export const Result = ({ player}) => {
           (id) => themes[props.arrSelectTopic[id]].topic
         );
         const newArrP2 = Array.from(new Set(tempmaxKeyPl2)).map(
-          (id) => themes[props.garrSelectTopic[id]].topic
+          (id) => themes[props.arrSelectTopic[id]].topic
         );
 
         setArrMaxThemePl1(newArrP1);
