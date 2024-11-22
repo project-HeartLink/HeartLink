@@ -22,30 +22,31 @@ export const Result = ({ player }) => {
   const [player2, setPlayer2] = useState();
   const [showId, setShowId] = useState();
   const [arrHeartBeatP1, setArrHeartBeatP1] = useState({
-    p1: { heart: [], theme: "" },
-    p2: { heart: [], theme: "" },
-    p3: { heart: [], theme: "" },
-    p4: { heart: [], theme: "" },
+    theme1: { heart: [], topic: "" }, //player1の選択したお題の心拍とお題の格納
+    theme2: { heart: [], topic: "" },
+    theme3: { heart: [], topic: "" },
+    theme4: { heart: [], topic: "" },
   });
   const [arrHeartBeatP2, setArrHeartBeatP2] = useState({
-    p1: { heart: [], theme: "" },
-    p2: { heart: [], theme: "" },
-    p3: { heart: [], theme: "" },
-    p4: { heart: [], theme: "" },
+    //player1の選択したお題の心拍とお題の格納
+    theme1: { heart: [], topic: "" },
+    theme2: { heart: [], topic: "" },
+    theme3: { heart: [], topic: "" },
+    theme4: { heart: [], topic: "" },
   });
-  const [maxPlayer1, setMaxPlayer1] = useState(0);
-  const [maxPlayer2, setMaxPlayer2] = useState(0);
-  const [maxKeyPl1, setmaxKeyPl1] = useState([]);
-  const [maxKeyPl2, setmaxKeyPl2] = useState([]);
-  const [arrMaxThemePl1, setArrMaxThemePl1] = useState([]);
-  const [arrMaxThemePl2, setArrMaxThemePl2] = useState([]);
+  const [maxPlayer1, setMaxPlayer1] = useState(0); //最大の心拍
+  const [maxPlayer2, setMaxPlayer2] = useState(0); //最大の心拍
+  const [maxKeyPl1, setmaxKeyPl1] = useState([]); //最大の心拍の位置
+  const [maxKeyPl2, setmaxKeyPl2] = useState([]); //最大の心拍の位置
+  const [arrMaxThemePl1, setArrMaxThemePl1] = useState([]); //pl1の最大の時のお題の名前
+  const [arrMaxThemePl2, setArrMaxThemePl2] = useState([]); //pl2最大の時のお題の名前
   const location = useLocation();
   const props = location.state;
   const themes = themesArr; //locateで値を受け取る
 
-  console.log("player1Name", props.player1Name);
-  console.log("player2Name", props.player2Name);
-  console.log("arrSelectTopic", props.arrSelectTopic);
+  console.log("player1Name", props.player1Name); //player1の名前
+  console.log("player2Name", props.player2Name); //player2の名前
+  console.log("arrSelectTopic", props.arrSelectTopic); //選択したお題の配列
 
   //最大心拍&そのお題の情報を格納しておく
   let playerInfo = [
@@ -64,66 +65,69 @@ export const Result = ({ player }) => {
   //お題ごとの結果を表示する時の情報を格納しておく
 
   const CatchArray = () => {
-    fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" })
+    fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" }) //心拍の配列を獲得
       .then((response) => response.json())
       .then((data) => {
         console.log("data", data);
 
-        let tempMaxPlayer1 = 0;
-        let tempmaxKeyPl1 = []; // 最大値に対応するテーマの配列
-        let tempMaxPlayer2 = 0;
-        let tempmaxKeyPl2 = []; // プレイヤー2用
+        let tempMaxPl1 = 0; //仮の最大心拍
+        let tempmaxKeyPl1 = []; // 仮の最大のkey番号
+        let tempMaxPl2 = 0; //仮の最大心拍
+        let tempmaxKeyPl2 = []; // 仮の最大のkey番号
 
         // プレイヤー1のデータ解析
         for (const key in data.array1) {
+          // data.array1は心拍が入っている配列0〜3
           console.log("data.arr", parseInt(data.array1[key]));
 
-          setArrHeartBeatP1((prev) => ({
-            p1: {
+          setArrHeartBeatP1(() => ({
+            theme1: {
+              //選択したテーマの番号
               heart: data.array1[0].map(Number),
-              theme: themes[props.arrSelectTopic[0]].topic,
+              topic: themes[props.arrSelectTopic[0]].topic,
             },
-            p2: {
+            theme2: {
               heart: data.array1[1].map(Number),
-              theme: themes[props.arrSelectTopic[1]].topic,
+              topic: themes[props.arrSelectTopic[1]].topic,
             },
-            p3: {
+            theme3: {
               heart: data.array1[2].map(Number),
-              theme: themes[props.arrSelectTopic[2]].topic,
+              topic: themes[props.arrSelectTopic[2]].topic,
             },
-            p4: {
+            theme4: {
               heart: data.array1[3].map(Number),
-              theme: themes[props.arrSelectTopic[3]].topic,
+              topic: themes[props.arrSelectTopic[3]].topic,
             },
           }));
 
           setArrHeartBeatP2((prev) => ({
-            p1: {
+            theme1: {
               heart: data.array2[0].map(Number),
-              theme: themes[props.arrSelectTopic[0]].topic,
+              topic: themes[props.arrSelectTopic[0]].topic,
             },
-            p2: {
+            theme2: {
               heart: data.array2[1].map(Number),
-              theme: themes[props.arrSelectTopic[1]].topic,
+              topic: themes[props.arrSelectTopic[1]].topic,
             },
-            p3: {
+            theme3: {
               heart: data.array2[2].map(Number),
-              theme: themes[props.arrSelectTopic[2]].topic,
+              topic: themes[props.arrSelectTopic[2]].topic,
             },
-            p4: {
+            theme4: {
               heart: data.array2[3].map(Number),
-              theme: themes[props.arrSelectTopic[3]].topic,
+              topic: themes[props.arrSelectTopic[3]].topic,
             },
           }));
 
-          data.array1[key].forEach((index) => {
+          data.array1[key].map((index) => {
+            //data.array1[key]→心拍が入っている配列0〜3の中から一番高くなった０−３の番号を取ってきた
             const value = parseInt(index);
 
-            if (value > tempMaxPlayer1) {
+            if (value > tempMaxPl1) {
               // 最大値を更新
-              tempMaxPlayer1 = value;
+              tempMaxPl1 = value;
               tempmaxKeyPl1 = [key]; // 新しい最大値なので配列をリセット
-            } else if (value === tempMaxPlayer1) {
+            } else if (value === tempMaxPl1) {
               // 最大値と同じ場合はテーマを追加
               tempmaxKeyPl1.push(key);
             }
@@ -132,12 +136,13 @@ export const Result = ({ player }) => {
 
         // プレイヤー2のデータ解析
         for (const key in data.array2) {
-          data.array2[key].forEach((index) => {
+          //player2の心拍の配列
+          data.array2[key].map((index) => {
             const value = parseInt(index);
-            if (value > tempMaxPlayer2) {
-              tempMaxPlayer2 = value;
+            if (value > tempMaxPl2) {
+              tempMaxPl2 = value;
               tempmaxKeyPl2 = [key];
-            } else if (value === tempMaxPlayer2) {
+            } else if (value === tempMaxPl2) {
               tempmaxKeyPl2.push(key);
             }
           });
@@ -145,13 +150,13 @@ export const Result = ({ player }) => {
 
         console.log(
           "Player 1 Max HR:",
-          tempMaxPlayer1,
+          tempMaxPl1,
           "Themes:",
           Array.from(new Set(tempmaxKeyPl1)) //同じ数字を避けた
         );
         console.log(
           "Player 2 Max HR:",
-          tempMaxPlayer2,
+          tempMaxPl2,
           "Themes:",
           Array.from(new Set(tempmaxKeyPl2))
         );
@@ -168,17 +173,17 @@ export const Result = ({ player }) => {
         setArrMaxThemePl1(newArrP1);
         setArrMaxThemePl2(newArrP2);
 
-        setMaxPlayer1(tempMaxPlayer1);
+        setMaxPlayer1(tempMaxPl1);
         setmaxKeyPl1(Array.from(new Set(tempmaxKeyPl1))); // 配列をセット
-        setMaxPlayer2(tempMaxPlayer2);
+        setMaxPlayer2(tempMaxPl2);
         setmaxKeyPl2(Array.from(new Set(tempmaxKeyPl2))); // 配列をセット
       });
   };
 
-  console.log("p1", arrHeartBeatP1.p1[0]);
-  console.log("p1", arrHeartBeatP1.p2);
-  console.log("p1", arrHeartBeatP1.p3);
-  console.log("p1", arrHeartBeatP1.p4);
+  console.log("p1", arrHeartBeatP1.theme1);
+  console.log("p1", arrHeartBeatP1.theme2);
+  console.log("p1", arrHeartBeatP1.theme3);
+  console.log("p1", arrHeartBeatP1.theme4);
 
   console.log("arrmaxthemepl1", arrMaxThemePl1);
 
@@ -189,24 +194,24 @@ export const Result = ({ player }) => {
 
   let graphArray = [
     {
-      theme: arrHeartBeatP1.p1.theme,
-      p1: arrHeartBeatP1.p1.heart,
-      p2: arrHeartBeatP2.p1.heart,
+      theme: arrHeartBeatP1.theme1.topic,
+      p1: arrHeartBeatP1.theme1.heart,
+      p2: arrHeartBeatP2.theme1.heart,
     },
     {
-      theme: arrHeartBeatP1.p2.theme,
-      p1: arrHeartBeatP1.p2.heart,
-      p2: arrHeartBeatP2.p2.heart,
+      theme: arrHeartBeatP1.theme2.topic,
+      p1: arrHeartBeatP1.theme2.heart,
+      p2: arrHeartBeatP2.theme2.heart,
     },
     {
-      theme: arrHeartBeatP1.p3.theme,
-      p1: arrHeartBeatP1.p3.heart,
-      p2: arrHeartBeatP2.p3.heart,
+      theme: arrHeartBeatP1.theme3.topic,
+      p1: arrHeartBeatP1.theme3.heart,
+      p2: arrHeartBeatP2.theme3.heart,
     },
     {
-      theme: arrHeartBeatP1.p4.theme,
-      p1: arrHeartBeatP1.p4.heart,
-      p2: arrHeartBeatP2.p4.heart,
+      theme: arrHeartBeatP1.theme4.topic,
+      p1: arrHeartBeatP1.theme4.heart,
+      p2: arrHeartBeatP2.theme4.heart,
     },
   ];
   let syncroMeter = 100; //シンクロ率
@@ -377,17 +382,18 @@ export const Result = ({ player }) => {
                         >
                           {info.name}
                         </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "1.3rem",
-                          }}
-                        >
-                          
-                            {info.theme.map((theme) => (
-                              <Box>{theme}</Box>
-                            ))}
-                          
-                        </Typography>
+
+                        {info.theme.map((theme, index) => (
+                          <Typography
+                            key={index}
+                            sx={{
+                              fontSize: "1.3rem",
+                            }}
+                          >
+                            {theme}
+                          </Typography>
+                        ))}
+
                         <Typography
                           sx={{
                             my: "2vh",
