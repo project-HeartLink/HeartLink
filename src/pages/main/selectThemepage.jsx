@@ -15,7 +15,8 @@ export const SelectTheme = ({ player }) => {
   const [SelectedId, setSelectedId] = useState(); //選択したid
   const [indexplayer, setIndexplayer] = useState(player === "Player1" ? 0 : 1);
 
-  console.log("player", player);
+  
+  console.log("プレイヤーだよ", indexplayer);
 
   const handleOpen = (theme) => {
     setOpen(true);
@@ -33,7 +34,7 @@ export const SelectTheme = ({ player }) => {
     setOddSelect(themes.filter((theme) => theme.id % 2 != 0));
   }, []);
 
-  const selectPlayer = player == "1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
+  const selectPlayer = player == "Player1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
 
   const ClickYes = (id) => {
     console.log("theme", themes);
@@ -43,11 +44,9 @@ export const SelectTheme = ({ player }) => {
 
     if (indexplayer == 0 || indexplayer == 1) {
       navigate("/main", { state: themes });
-      handleClose();
     }
     if (indexplayer == 2 || indexplayer == 3) {
       navigate("/main", { state: themes });
-      handleClose();
     }
 
     const data = { player: player, id: id, index: indexplayer };
@@ -111,13 +110,14 @@ export const SelectTheme = ({ player }) => {
 
   };
 
-  const getRandomId = (playerSelect, themes, excludedId) => {
+  const getRandomId = (player, themes, excludedId) => {
     // 対象のIDリストを取得 (偶数または奇数)かつ除外IDを除く
     const validIds = themes
       .map((theme) => theme.id)
       .filter((id) => 
-        (playerSelect === 1 ? id % 2 === 0 : id % 2 !== 0) && id !== excludedId
+        (player === "Player1" ? id % 2 === 0 : id % 2 !== 0) && id !== excludedId
       );
+    console.log("除外するやつ",validIds);
     // リストからランダムにIDを取得
     const randomIndex = Math.floor(Math.random() * validIds.length);
     return validIds[randomIndex];
