@@ -44,7 +44,7 @@ export const Main = ({ player }) => {
   const [speed2, setSpeed2] = useState(1); //アニメーション2の速度
 
   const navigate = useNavigate();
-  const [isDone, setIsDone] = useState(true);
+  const [isDone, setIsDone] = useState(false);
   const [proIndex, setProIndex] = useState();
 
   console.log("themes", themes);
