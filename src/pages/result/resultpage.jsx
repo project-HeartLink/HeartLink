@@ -13,93 +13,204 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
+import { themesArr } from "../main/themesArr";
 import Syncronization from "./SynchronizationRate";
 
 export const Result = ({ player }) => {
   const navigate = useNavigate();
 
-  const [message, setMessage] = useState();
-  const [player1, setPlayer1] = useState();
-  const [player2, setPlayer2] = useState();
-  const [showId, setShowId] = useState();
+  const [arrHeartBeatP1, setArrHeartBeatP1] = useState({
+    theme1: { heart: [], topic: "" }, //player1の選択したお題の心拍とお題の格納
+    theme2: { heart: [], topic: "" },
+    theme3: { heart: [], topic: "" },
+    theme4: { heart: [], topic: "" },
+  });
+  const [arrHeartBeatP2, setArrHeartBeatP2] = useState({
+    //player2の選択したお題の心拍とお題の格納
+    theme1: { heart: [], topic: "" },
+    theme2: { heart: [], topic: "" },
+    theme3: { heart: [], topic: "" },
+    theme4: { heart: [], topic: "" },
+  });
+  const [maxPlayer1, setMaxPlayer1] = useState(0); //最大の心拍
+  const [maxPlayer2, setMaxPlayer2] = useState(0); //最大の心拍
+  const [maxKeyPl1, setmaxKeyPl1] = useState([]); //最大の心拍の位置
+  const [maxKeyPl2, setmaxKeyPl2] = useState([]); //最大の心拍の位置
+  const [arrMaxThemePl1, setArrMaxThemePl1] = useState([]); //pl1の最大の時のお題の名前
+  const [arrMaxThemePl2, setArrMaxThemePl2] = useState([]); //pl2最大の時のお題の名前
   const location = useLocation();
-  const getPlayer = location.state;
+  const props = location.state;
+  const themes = themesArr; //locateで値を受け取る
+
+  console.log("player1Name", props.player1Name); //player1の名前
+  console.log("player2Name", props.player2Name); //player2の名前
+  console.log("arrSelectTopic", props.arrSelectTopic); //選択したお題の配列
+  console.log("player",player)
 
   //最大心拍&そのお題の情報を格納しておく
   let playerInfo = [
     {
-      name: "ayumu",
-      theme: "初恋の思い出",
-      bestHR: 100,
+      name: props.player1Name,
+      theme: arrMaxThemePl1,
+      bestHR: maxPlayer1,
     },
     {
-      name: "hiroto",
-      theme: "第一印象について話す",
-      bestHR: 130,
+      name: props.player2Name,
+      theme: arrMaxThemePl2,
+      bestHR: maxPlayer2,
     },
   ];
 
   //お題ごとの結果を表示する時の情報を格納しておく
+
+  const CatchArray = () => {
+    fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" }) //心拍の配列を獲得
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data", data);
+
+        let tempMaxPl1 = 0; //仮の最大心拍
+        let tempmaxKeyPl1 = []; // 仮の最大のkey番号
+        let tempMaxPl2 = 0; //仮の最大心拍
+        let tempmaxKeyPl2 = []; // 仮の最大のkey番号
+
+        // プレイヤー1のデータ解析
+        for (const key in data.array1) {
+          // data.array1は心拍が入っている配列0〜3
+          console.log("data.arr", parseInt(data.array1[key]));
+
+          setArrHeartBeatP1(() => ({
+            theme1: {
+              //選択したテーマの番号
+              heart: data.array1[0].map(Number),
+              topic: themes[props.arrSelectTopic[0]].topic,
+            },
+            theme2: {
+              heart: data.array1[1].map(Number),
+              topic: themes[props.arrSelectTopic[1]].topic,
+            },
+            theme3: {
+              heart: data.array1[2].map(Number),
+              topic: themes[props.arrSelectTopic[2]].topic,
+            },
+            theme4: {
+              heart: data.array1[3].map(Number),
+              topic: themes[props.arrSelectTopic[3]].topic,
+            },
+          }));
+
+          setArrHeartBeatP2((prev) => ({
+            theme1: {
+              heart: data.array2[0].map(Number),
+              topic: themes[props.arrSelectTopic[0]].topic,
+            },
+            theme2: {
+              heart: data.array2[1].map(Number),
+              topic: themes[props.arrSelectTopic[1]].topic,
+            },
+            theme3: {
+              heart: data.array2[2].map(Number),
+              topic: themes[props.arrSelectTopic[2]].topic,
+            },
+            theme4: {
+              heart: data.array2[3].map(Number),
+              topic: themes[props.arrSelectTopic[3]].topic,
+            },
+          }));
+
+          data.array1[key].map((index) => {
+            //data.array1[key]→心拍が入っている配列0〜3の中から一番高くなった０−３の番号を取ってきた
+            const value = parseInt(index);
+
+            if (value > tempMaxPl1) {
+              // 最大値を更新
+              tempMaxPl1 = value;
+              tempmaxKeyPl1 = [key]; // 新しい最大値なので配列をリセット
+            } else if (value === tempMaxPl1) {
+              // 最大値と同じ場合はテーマを追加
+              tempmaxKeyPl1.push(key);
+            }
+          });
+        }
+
+        // プレイヤー2のデータ解析
+        for (const key in data.array2) {
+          //player2の心拍の配列
+          data.array2[key].map((index) => {
+            const value = parseInt(index);
+            if (value > tempMaxPl2) {
+              tempMaxPl2 = value;
+              tempmaxKeyPl2 = [key];
+            } else if (value === tempMaxPl2) {
+              tempmaxKeyPl2.push(key);
+            }
+          });
+        }
+
+        console.log(
+          "Player 1 Max HR:",
+          tempMaxPl1,
+          "Themes:",
+          Array.from(new Set(tempmaxKeyPl1)) //同じ数字を避けた
+        );
+        console.log(
+          "Player 2 Max HR:",
+          tempMaxPl2,
+          "Themes:",
+          Array.from(new Set(tempmaxKeyPl2))
+        );
+
+        // 状態を一括更新
+
+        const newArrP1 = Array.from(new Set(tempmaxKeyPl1)).map(
+          (id) => themes[props.arrSelectTopic[id]].topic
+        );
+        const newArrP2 = Array.from(new Set(tempmaxKeyPl2)).map(
+          (id) => themes[props.arrSelectTopic[id]].topic
+        );
+
+        setArrMaxThemePl1(newArrP1);
+        setArrMaxThemePl2(newArrP2);
+
+        setMaxPlayer1(tempMaxPl1);
+        setmaxKeyPl1(Array.from(new Set(tempmaxKeyPl1))); // 配列をセット
+        setMaxPlayer2(tempMaxPl2);
+        setmaxKeyPl2(Array.from(new Set(tempmaxKeyPl2))); // 配列をセット
+      });
+  };
+
+  console.log("p1", arrHeartBeatP1.theme1);
+  console.log("p1", arrHeartBeatP1.theme2);
+  console.log("p1", arrHeartBeatP1.theme3);
+  console.log("p1", arrHeartBeatP1.theme4);
+
+  console.log("arrmaxthemepl1", arrMaxThemePl1);
+
+  console.log("max", maxPlayer2);
+  useEffect(() => {
+    CatchArray();
+  }, []);
+
   let graphArray = [
     {
-      theme: "お題1",
-      p1: [
-        99, 84, 97, 88, 90, 93, 92, 94, 95, 86, 89, 91, 88, 87, 82, 96, 83, 81,
-        85, 100, 86, 99, 90, 80, 83, 91, 88, 97, 94, 85, 93, 92, 100, 96, 84,
-        89, 87, 83, 99, 90, 92, 88, 86, 95, 91, 80, 87, 89, 94, 93, 84, 81, 85,
-        96, 82, 100, 99, 83, 90, 97,
-      ],
-      p2: [
-        90, 88, 81, 95, 97, 89, 84, 92, 94, 93, 99, 85, 86, 87, 91, 88, 83, 96,
-        82, 100, 94, 81, 92, 93, 88, 99, 80, 86, 97, 84, 95, 83, 87, 100, 96,
-        90, 91, 90, 85, 83, 89, 82, 96, 94, 86, 84, 93, 100, 92, 97, 87, 91, 81,
-        80, 89, 95, 99, 88, 87, 90,
-      ],
+      theme: arrHeartBeatP1.theme1.topic,
+      p1: arrHeartBeatP1.theme1.heart,
+      p2: arrHeartBeatP2.theme1.heart,
     },
     {
-      theme: "お題2",
-      p1: [
-        96, 83, 90, 99, 91, 84, 87, 88, 86, 93, 89, 92, 100, 97, 81, 95, 94, 85,
-        80, 99, 83, 91, 84, 82, 94, 88, 96, 92, 95, 80, 87, 93, 97, 90, 85, 89,
-        86, 81, 100, 89, 90, 99, 88, 96, 82, 97, 94, 91, 95, 84, 85, 83, 93, 80,
-        87, 100, 86, 92, 83, 81,
-      ],
-      p2: [
-        91, 87, 83, 85, 84, 90, 97, 94, 82, 96, 88, 80, 93, 99, 92, 81, 89, 94,
-        95, 100, 97, 86, 88, 92, 85, 84, 83, 93, 91, 87, 80, 82, 96, 86, 99, 88,
-        94, 81, 83, 90, 97, 95, 93, 100, 80, 89, 84, 92, 87, 86, 96, 94, 90, 85,
-        83, 97, 82, 99, 81, 88,
-      ],
+      theme: arrHeartBeatP1.theme2.topic,
+      p1: arrHeartBeatP1.theme2.heart,
+      p2: arrHeartBeatP2.theme2.heart,
     },
     {
-      theme: "お題3",
-      p1: [
-        99, 89, 86, 92, 80, 83, 94, 85, 91, 81, 96, 87, 93, 90, 100, 88, 84, 97,
-        95, 82, 91, 86, 85, 99, 89, 88, 83, 94, 96, 81, 92, 100, 90, 93, 80, 87,
-        84, 95, 97, 86, 88, 85, 99, 89, 83, 81, 92, 96, 87, 94, 93, 100, 90, 84,
-        80, 97, 95, 88, 86, 89,
-      ],
-      p2: [
-        95, 92, 96, 89, 97, 84, 81, 86, 85, 90, 100, 87, 99, 80, 94, 93, 91, 88,
-        83, 82, 96, 89, 100, 81, 92, 95, 84, 93, 94, 86, 85, 80, 87, 83, 99, 97,
-        90, 91, 88, 86, 84, 85, 83, 95, 89, 87, 100, 82, 96, 92, 80, 90, 81, 97,
-        88, 91, 99, 93, 94, 89,
-      ],
+      theme: arrHeartBeatP1.theme3.topic,
+      p1: arrHeartBeatP1.theme3.heart,
+      p2: arrHeartBeatP2.theme3.heart,
     },
     {
-      theme: "お題4",
-      p1: [
-        92, 84, 89, 96, 85, 90, 81, 82, 94, 88, 91, 97, 86, 83, 98, 95, 84, 93,
-        87, 100, 92, 90, 85, 99, 80, 88, 97, 96, 83, 89, 92, 91, 94, 86, 90, 88,
-        87, 99, 95, 93, 89, 84, 98, 91, 92, 80, 100, 85, 88, 96, 93, 87, 90, 89,
-        84, 91, 97, 82, 83, 94,
-      ],
-      p2: [
-        81, 88, 84, 90, 96, 95, 99, 83, 86, 100, 92, 97, 85, 94, 93, 91, 82, 88,
-        80, 89, 84, 86, 91, 95, 89, 87, 92, 88, 100, 85, 80, 98, 94, 93, 90, 99,
-        87, 82, 97, 83, 92, 96, 84, 94, 91, 99, 89, 90, 86, 85, 81, 88, 82, 100,
-        87, 83, 97, 96, 93, 88,
-      ],
+      theme: arrHeartBeatP1.theme4.topic,
+      p1: arrHeartBeatP1.theme4.heart,
+      p2: arrHeartBeatP2.theme4.heart,
     },
   ];
   let syncroMeter = 100; //シンクロ率
@@ -117,8 +228,6 @@ export const Result = ({ player }) => {
         .catch((err) => console.error("Error fetching data:", err));
     }
   };
-
-  //console.log("player1",getPlayer.player1)
 
   return (
     <>
@@ -272,13 +381,18 @@ export const Result = ({ player }) => {
                         >
                           {info.name}
                         </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "1.3rem",
-                          }}
-                        >
-                          {info.theme}
-                        </Typography>
+
+                        {info.theme.map((theme, index) => (
+                          <Typography
+                            key={index}
+                            sx={{
+                              fontSize: "1.3rem",
+                            }}
+                          >
+                            {theme}
+                          </Typography>
+                        ))}
+
                         <Typography
                           sx={{
                             my: "2vh",
@@ -352,7 +466,7 @@ export const Result = ({ player }) => {
           component={motion.button}
           whileHover={{ scale: 1.0 }}
           whileTap={{ scale: 0.8 }}
-          onClick={resetSubmit}
+          onClick={() => resetSubmit()}
           sx={{
             fontSize: "2rem",
             fontWeight: "bold",

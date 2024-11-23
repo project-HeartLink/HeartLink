@@ -45,7 +45,8 @@ export const Main = ({ player }) => {
 
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
-  const [proIndex, setProIndex] = useState();
+  const [proIndex, setProIndex] = useState(0);
+  const [arrSelectTopic,setArrSelectTopic] = useState([])
 
   console.log("themes", themes);
 
@@ -74,7 +75,9 @@ export const Main = ({ player }) => {
       const data = destr(event.data);
 
       console.log("event.data:", event.data);
+
       console.log("topicId", data.topicId);
+      setArrSelectTopic(data.topicId);
       console.log("data.index", data.index);
 
       console.log("🚀 ~ onMessage ~ player1Name:", typeof data.player1);
@@ -145,6 +148,7 @@ export const Main = ({ player }) => {
   console.log("🚀 ~ topicId.map ~ topicId:", topicId);
   console.log("proindex", proIndex);
   console.log("index", index);
+  console.log("arrSelectTopic",arrSelectTopic)
 
   useEffect(() => {
     if (proIndex != 0) {
@@ -215,7 +219,7 @@ export const Main = ({ player }) => {
     const dataTopicArray = {
       player: player,
       index: index,
-      array: player1arrHeartBeat[`theme${index}`],
+      array: player == "1" ? player1arrHeartBeat[`theme${index}`] : player2arrHeartBeat[`theme${index}`],
     };
 
     fetch("https://hartlink-api.onrender.com/topicArray", {
@@ -261,7 +265,9 @@ export const Main = ({ player }) => {
 
       console.log("useEffect called");
       const timer = setTimeout(() => {
-        navigate("/result", { player1: player1Name, player2: player2Name });
+        navigate("/result", {
+          state: { player1Name: player1Name, player2Name: player2Name ,arrSelectTopic:arrSelectTopic},
+        });
       }, 5 * 1000);
       return () => {
         console.log("cleanUp");
