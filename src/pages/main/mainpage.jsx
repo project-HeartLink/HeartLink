@@ -13,7 +13,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import destr from "destr";
 import { themesArr } from "./themesArr";
-
+import PropTypes from "prop-types";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
 
@@ -40,8 +40,11 @@ export const Main = ({ player }) => {
     theme3: [],
   });
 
+  const [speed1, setSpeed1] = useState(1); //アニメーション1の速度
+  const [speed2, setSpeed2] = useState(1); //アニメーション2の速度
+
   const navigate = useNavigate();
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState(true);
   const [proIndex, setProIndex] = useState();
 
   console.log("themes", themes);
@@ -85,6 +88,7 @@ export const Main = ({ player }) => {
       setHeartBeatP1(data.heartRate1);
 
       setHeartBeatP2(data.heartRate2);
+
       console.log("🚀 ~ onMessage ~ heartBeatP2:", player1arrHeartBeat.theme2);
 
       console.log("🚀 ~ onMessage ~ player2Name:", player2Name);
@@ -96,6 +100,9 @@ export const Main = ({ player }) => {
         //mainpageに遷移した直後にお題を写るように
         setarrThemes(themes[data.topicId[0]].topic);
       }
+
+      SpeedChanger1(data.heartRate1);
+      SpeedChanger2(data.heartRate2);
     };
 
     websocket.addEventListener("message", onMessage);
@@ -154,6 +161,19 @@ export const Main = ({ player }) => {
       });
     }
   }, [proIndex]);
+
+  const SpeedChanger1 = (heartRate) => {
+    console.log("player1arrHeartBeat", heartRate);
+    if (heartRate < 70) setSpeed1(1.5);
+    else if (heartRate >= 70 && heartRate < 110) setSpeed1(1);
+    else if (heartRate >= 110) setSpeed1(0.5);
+  };
+
+  const SpeedChanger2 = (heartRate) => {
+    if (heartRate < 70) heartRate(1.5);
+    else if (heartRate >= 70 && heartRate < 110) setSpeed2(1);
+    else if (heartRate >= 110) setSpeed2(0.5);
+  };
 
   const FinishTheme = () => {
     if (proIndex == topicId.length - 1) {
@@ -243,7 +263,7 @@ export const Main = ({ player }) => {
       console.log("useEffect called");
       const timer = setTimeout(() => {
         navigate("/result", { player1: player1Name, player2: player2Name });
-      }, 50 * 1000);
+      }, 5 * 1000);
       return () => {
         console.log("cleanUp");
         clearTimeout(timer);
@@ -303,19 +323,48 @@ export const Main = ({ player }) => {
                   maxWidth: "350px",
                 }}
               />
-              <Box>
+              <Box
+                sx={{
+                  margin: 0,
+                  position: "absolute",
+                  width: "100%",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -60%)",
+                }}
+              >
                 <Typography
                   variant="body1"
                   sx={{
-                    margin: 0,
-                    position: "absolute",
-                    width: "100%",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -55%)",
-                    fontSize: "2rem",
+                    fontSize: "1.5rem",
                   }}
-                ></Typography>
+                >
+                  一般的な心拍は
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  男性は60~70
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  女性は70~80
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  と言われているよ
+                </Typography>
               </Box>
             </Box>
           </Box>
@@ -353,7 +402,7 @@ export const Main = ({ player }) => {
               className="mySwiper"
             >
               <SwiperSlide>
-                <HeartBeat speed={1} />
+                <HeartBeat speed={speed1} />
 
                 <Box
                   sx={{
@@ -384,7 +433,7 @@ export const Main = ({ player }) => {
                 </Box>
               </SwiperSlide>
               <SwiperSlide>
-                <HeartBeat speed={1} />
+                <HeartBeat speed={speed2} />
                 <Box
                   sx={{
                     position: "absolute",
@@ -495,4 +544,8 @@ export const Main = ({ player }) => {
       </Box>
     </>
   );
+};
+
+Main.propTypes = {
+  player: PropTypes.string,
 };
