@@ -44,7 +44,7 @@ export const Main = ({ player }) => {
   const [speed2, setSpeed2] = useState(1); //アニメーション2の速度
 
   const navigate = useNavigate();
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState(true);
   const [proIndex, setProIndex] = useState();
 
   console.log("themes", themes);
@@ -308,7 +308,7 @@ export const Main = ({ player }) => {
             <Box
               sx={{
                 position: "absolute",
-                top: "70vw",
+                top: "35vh",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 zIndex: "-1",
