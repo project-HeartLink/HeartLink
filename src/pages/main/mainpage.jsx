@@ -169,7 +169,7 @@ export const Main = ({ player }) => {
   };
 
   const SpeedChanger2 = (heartRate) => {
-    if (heartRate < 70) heartRate(1.5);
+    if (heartRate < 70) setSpeed2(1.5);
     else if (heartRate >= 70 && heartRate < 110) setSpeed2(1);
     else if (heartRate >= 110) setSpeed2(0.5);
   };
