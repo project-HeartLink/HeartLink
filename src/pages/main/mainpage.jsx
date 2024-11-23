@@ -12,7 +12,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import destr from "destr";
 import { themesArr } from "./themesArr";
-
+import PropTypes from "prop-types";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
 
@@ -38,6 +38,9 @@ export const Main = ({ player }) => {
     theme2: [],
     theme3: [],
   });
+
+  const [speed1, setSpeed1] = useState(1);  //アニメーション1の速度
+  const [speed2, setSpeed2] = useState(1);  //アニメーション2の速度
 
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
@@ -84,6 +87,7 @@ export const Main = ({ player }) => {
       setHeartBeatP1(data.heartRate1);
 
       setHeartBeatP2(data.heartRate2);
+
       console.log("🚀 ~ onMessage ~ heartBeatP2:", player1arrHeartBeat.theme2);
 
       console.log("🚀 ~ onMessage ~ player2Name:", player2Name);
@@ -94,6 +98,9 @@ export const Main = ({ player }) => {
       if (data.index == 0) { //mainpageに遷移した直後にお題を写るように
         setarrThemes(themes[data.topicId[0]].topic);
       }
+
+      SpeedChanger1(data.heartRate1);
+      SpeedChanger2(data.heartRate2);
     };
 
     websocket.addEventListener("message", onMessage);
@@ -117,10 +124,11 @@ export const Main = ({ player }) => {
           [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP2],
         }));
       }
+
     },
     [heartBeatP1] || [heartBeatP2]
   ); // heartBeatP1を監視
-
+  
   console.log("1回目");
 
   console.log("hearBeatP1", player1arrHeartBeat.theme0);
@@ -152,6 +160,20 @@ export const Main = ({ player }) => {
       });
     }
   }, [proIndex]);
+
+
+  const SpeedChanger1 = (heartRate) => {
+    console.log("player1arrHeartBeat", heartRate);
+    if (heartRate < 70) setSpeed1(1.5);
+    else if (heartRate >= 70 && heartRate < 110) setSpeed1(1);
+    else if (heartRate >= 110) setSpeed1(0.5);
+  };
+
+  const SpeedChanger2 = (heartRate) => {
+    if (heartRate < 70) heartRate(1.5);
+    else if (heartRate >= 70 && heartRate < 110) setSpeed2(1);
+    else if (heartRate >= 110) setSpeed2(0.5);
+  };
 
   const FinishTheme = () => {
     if (proIndex == topicId.length - 1) {
@@ -317,7 +339,7 @@ export const Main = ({ player }) => {
               className="mySwiper"
             >
               <SwiperSlide>
-                <HeartBeat speed={1} />
+                <HeartBeat speed={speed1} />
 
                 <Box
                   sx={{
@@ -348,7 +370,7 @@ export const Main = ({ player }) => {
                 </Box>
               </SwiperSlide>
               <SwiperSlide>
-                <HeartBeat speed={1} />
+                <HeartBeat speed={speed2} />
                 <Box
                   sx={{
                     position: "absolute",
@@ -457,4 +479,8 @@ export const Main = ({ player }) => {
       </Box>
     </>
   );
+};
+
+Main.propTypes = {
+  player: PropTypes.string,
 };
