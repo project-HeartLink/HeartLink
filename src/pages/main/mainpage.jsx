@@ -41,8 +41,8 @@ export const Main = ({ player }) => {
 
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
-  const [proIndex, setProIndex] = useState();
-  const [arrSelectTopic,setArrSelectTopic] = useState()
+  const [proIndex, setProIndex] = useState(0);
+  const [arrSelectTopic,setArrSelectTopic] = useState([])
 
   console.log("themes", themes);
 
