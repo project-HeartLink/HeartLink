@@ -1,10 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import talkThemeBox from "../../assets/talkThemeBox.png";
 import "./mainpage.scss";
+import mainpageFukidashi from "../../assets/mainpage_fukidashi.png";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -43,7 +44,7 @@ export const Main = ({ player }) => {
   const [speed2, setSpeed2] = useState(1);  //アニメーション2の速度
 
   const navigate = useNavigate();
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState(true);
   const [proIndex, setProIndex] = useState();
 
   console.log("themes", themes);
@@ -95,7 +96,8 @@ export const Main = ({ player }) => {
       setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
       console.log("topicId", data.topicId);
 
-      if (data.index == 0) { //mainpageに遷移した直後にお題を写るように
+      if (data.index == 0) {
+        //mainpageに遷移した直後にお題を写るように
         setarrThemes(themes[data.topicId[0]].topic);
       }
 
@@ -117,7 +119,7 @@ export const Main = ({ player }) => {
       if (heartBeatP1 > 0) {
         setplayer1arrHeartBeat((prev) => ({
           ...prev,
-          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1], 
+          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1],
         }));
         setplayer2arrHeartBeat((prev) => ({
           ...prev,
@@ -160,8 +162,6 @@ export const Main = ({ player }) => {
       });
     }
   }, [proIndex]);
-
-
   const SpeedChanger1 = (heartRate) => {
     console.log("player1arrHeartBeat", heartRate);
     if (heartRate < 70) setSpeed1(1.5);
@@ -234,7 +234,6 @@ export const Main = ({ player }) => {
       .catch((err) => console.error("Error fetching dataTopicArray:", err));
 
     console.log("array", player1arrHeartBeat.theme0);
-
   };
 
   const FinishMeasuring = () => {
@@ -243,15 +242,17 @@ export const Main = ({ player }) => {
       .then((res) => res.json()) //json方式でデータを受け取る
       .then((data) => {
         {
-          console.log();
+          console.log(data);
         }
       })
 
-      .catch((err) => CatchError(err));
+      .catch((err) => console.error("Error fetching data:", err));
 
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
-      fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" })
+      fetch("https://hartlink-api.onrender.com/getTopicArray", {
+        method: "GET",
+      })
         .then((res) => res.json()) //json方式でデータを受け取る
         .then((data) => {
           console.log("data:", data);
@@ -285,25 +286,87 @@ export const Main = ({ player }) => {
               left: "50%",
               transform: "translate(-50%, -50%)",
               zIndex: "-1",
-              width: "100vw",
             }}
           >
-            <Typography
-              variant="body1"
+            <Box>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: "2rem",
+                }}
+              >
+                おわり！
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: "1.1rem",
+                }}
+              >
+                あなたたちの相性は...
+              </Typography>
+            </Box>
+            <Box
               sx={{
-                fontSize: "2rem",
+                position: "absolute",
+                top: "70vw",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: "-1",
               }}
             >
-              おわり！
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                fontSize: "1.1rem",
-              }}
-            >
-              あなたたちの相性は...
-            </Typography>
+              <img
+                src={mainpageFukidashi}
+                style={{
+                  width: "75w",
+                  height: "auto",
+                  maxWidth: "350px",
+                }}
+              />
+              <Box
+                sx={{
+                  margin: 0,
+                  position: "absolute",
+                  width: "100%",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -60%)",
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  一般的な心拍は
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  男性は60~70
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  女性は70~80
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  と言われているよ
+                </Typography>
+              </Box>
+            </Box>
           </Box>
         </Box>
       </>
@@ -441,22 +504,24 @@ export const Main = ({ player }) => {
               {/* ))} */}
             </Box>
           </Box>
-          <Typography
-            variant="body1"
-            component={motion.div}
-            whileHover={{ scale: 1.1 }}
+          <Button
+            component={motion.button}
+            whileHover={{ scale: 1.0 }}
             whileTap={{ scale: 0.8 }}
-            transition={{}}
-            onClick={() => {
-              FinishTheme();
-            }}
+            onClick={FinishTheme}
             sx={{
-              fontSize: "5vw",
-              pt: "2vh",
+              fontSize: "1.8rem",
+              fontWeight: "bold",
+              color: "white",
+              backgroundColor: "#ffdbdb",
+              marginTop: "7vh",
+              border: "10px solid white",
+              borderRadius: "15px",
+              padding: "2px 30px 2px 30px",
             }}
           >
-            完了
-          </Typography>
+            次のお題へ
+          </Button>
         </Box>
       </>
     );

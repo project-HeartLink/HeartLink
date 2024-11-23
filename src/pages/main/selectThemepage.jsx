@@ -36,6 +36,7 @@ export const SelectTheme = ({ player }) => {
 
   const selectPlayer = player == 1 ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
 
+
   const ClickYes = (id) => {
     console.log("theme", themes);
     console.log("theme", typeof themes);
@@ -76,7 +77,7 @@ export const SelectTheme = ({ player }) => {
       .catch((error) => {
         console.error("Error:", error);
       });
-      RandomSend();
+    RandomSend();
   };
 
   const RandomSend = () => {
@@ -101,13 +102,11 @@ export const SelectTheme = ({ player }) => {
       })
       .then((data) => {
         console.log("Success:", data);
-        console.log("index",indexplayer);
-        
+        console.log("index", indexplayer);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-
   };
 
   const getRandomId = (player, themes, excludedId) => {
@@ -131,8 +130,6 @@ export const SelectTheme = ({ player }) => {
   const randomIndex = Math.floor(Math.random() * validIds.length);
   return validIds[randomIndex];
   };
-  
-  
 
   return (
     <>
