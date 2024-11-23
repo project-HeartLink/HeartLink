@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { themesArr } from "./themesArr";
+import PropTypes from "prop-types";
 
 export const SelectTheme = ({ player }) => {
   const themes = themesArr;
@@ -12,9 +13,10 @@ export const SelectTheme = ({ player }) => {
   const [open, setOpen] = useState(false);
   const [SelectedTopic, setSelectedTopic] = useState(null); //選択したtopic
   const [SelectedId, setSelectedId] = useState(); //選択したid
-  const [indexplayer, setIndexplayer] = useState(player === "1" ? 0 : 1);
+  const [indexplayer, setIndexplayer] = useState(player === 1 ? 0 : 1);
 
-  console.log("player", player);
+  
+  console.log("プレイヤーだよ", indexplayer);
 
   const handleOpen = (theme) => {
     setOpen(true);
@@ -32,7 +34,8 @@ export const SelectTheme = ({ player }) => {
     setOddSelect(themes.filter((theme) => theme.id % 2 != 0));
   }, []);
 
-  const selectPlayer = player == "1" ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
+  const selectPlayer = player == 1 ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
+
 
   const ClickYes = (id) => {
     console.log("theme", themes);
@@ -41,7 +44,7 @@ export const SelectTheme = ({ player }) => {
     console.log("id", id);
 
     if (indexplayer == 0 || indexplayer == 1) {
-      handleClose();
+      navigate("/main", { state: themes });
     }
     if (indexplayer == 2 || indexplayer == 3) {
       navigate("/main", { state: themes });
@@ -74,13 +77,13 @@ export const SelectTheme = ({ player }) => {
       .catch((error) => {
         console.error("Error:", error);
       });
-      RandomSend();
+    RandomSend();
   };
 
   const RandomSend = () => {
-    const randomId = getRandomId(playerSelect, themes ,SelectedId);
+    const randomId = getRandomId(player, themes ,SelectedId);
     setIndexplayer((indexplayer) => indexplayer+2);
-    const data = { player: playerSelect, id: randomId,index: indexplayer+2 };
+    const data = { player: player, id: randomId,index: indexplayer+2 };
     console.log("ただいま、メールを送信してます", data);
     const url = "https://hartlink-api.onrender.com/topicId";
 
@@ -99,28 +102,34 @@ export const SelectTheme = ({ player }) => {
       })
       .then((data) => {
         console.log("Success:", data);
-        console.log("index",indexplayer);
-        
+        console.log("index", indexplayer);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-
   };
 
-  const getRandomId = (playerSelect, themes, excludedId) => {
+  const getRandomId = (player, themes, excludedId) => {
     // 対象のIDリストを取得 (偶数または奇数)かつ除外IDを除く
     const validIds = themes
-      .map((theme) => theme.id)
-      .filter((id) => 
-        (playerSelect === 1 ? id % 2 === 0 : id % 2 !== 0) && id !== excludedId
-      );
-    // リストからランダムにIDを取得
-    const randomIndex = Math.floor(Math.random() * validIds.length);
-    return validIds[randomIndex];
+    .map((theme) => theme.id)
+    .filter(
+      (id) =>
+        (player === "1" ? id % 2 === 0 : id % 2 !== 0) && id !== excludedId
+    );
+
+  console.log("候補ID (除外済み):", validIds);
+
+  // 候補IDが存在しない場合はnullを返す
+  if (validIds.length === 0) {
+    console.warn("有効なIDがありません");
+    return null;
+  }
+
+  // リストからランダムにIDを取得
+  const randomIndex = Math.floor(Math.random() * validIds.length);
+  return validIds[randomIndex];
   };
-  
-  
 
   return (
     <>
@@ -293,4 +302,8 @@ export const SelectTheme = ({ player }) => {
       </Modal>
     </>
   );
+};
+
+SelectTheme.propTypes = {
+  player: PropTypes.string.isRequired,
 };

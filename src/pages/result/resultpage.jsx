@@ -14,6 +14,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
 import { themesArr } from "../main/themesArr";
+import Syncronization from "./SynchronizationRate";
 
 export const Result = ({ player }) => {
   const navigate = useNavigate();
