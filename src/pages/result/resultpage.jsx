@@ -18,9 +18,6 @@ import { themesArr } from "../main/themesArr";
 export const Result = ({ player }) => {
   const navigate = useNavigate();
 
-  const [player1, setPlayer1] = useState();
-  const [player2, setPlayer2] = useState();
-  const [showId, setShowId] = useState();
   const [arrHeartBeatP1, setArrHeartBeatP1] = useState({
     theme1: { heart: [], topic: "" }, //player1の選択したお題の心拍とお題の格納
     theme2: { heart: [], topic: "" },
@@ -28,7 +25,7 @@ export const Result = ({ player }) => {
     theme4: { heart: [], topic: "" },
   });
   const [arrHeartBeatP2, setArrHeartBeatP2] = useState({
-    //player1の選択したお題の心拍とお題の格納
+    //player2の選択したお題の心拍とお題の格納
     theme1: { heart: [], topic: "" },
     theme2: { heart: [], topic: "" },
     theme3: { heart: [], topic: "" },
@@ -47,6 +44,7 @@ export const Result = ({ player }) => {
   console.log("player1Name", props.player1Name); //player1の名前
   console.log("player2Name", props.player2Name); //player2の名前
   console.log("arrSelectTopic", props.arrSelectTopic); //選択したお題の配列
+  console.log("player",player)
 
   //最大心拍&そのお題の情報を格納しておく
   let playerInfo = [
@@ -467,7 +465,7 @@ export const Result = ({ player }) => {
           component={motion.button}
           whileHover={{ scale: 1.0 }}
           whileTap={{ scale: 0.8 }}
-          onClick={resetSubmit}
+          onClick={() => resetSubmit()}
           sx={{
             fontSize: "2rem",
             fontWeight: "bold",
