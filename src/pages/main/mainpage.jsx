@@ -40,8 +40,8 @@ export const Main = ({ player }) => {
     theme3: [],
   });
 
-  const [speed1, setSpeed1] = useState(1); //アニメーション1の速度
-  const [speed2, setSpeed2] = useState(1); //アニメーション2の速度
+  const [speed1, setSpeed1] = useState(1);  //アニメーション1の速度
+  const [speed2, setSpeed2] = useState(1);  //アニメーション2の速度
 
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(true);
@@ -126,10 +126,11 @@ export const Main = ({ player }) => {
           [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP2],
         }));
       }
+
     },
     [heartBeatP1] || [heartBeatP2]
   ); // heartBeatP1を監視
-
+  
   console.log("1回目");
 
   console.log("hearBeatP1", player1arrHeartBeat.theme0);
@@ -161,7 +162,6 @@ export const Main = ({ player }) => {
       });
     }
   }, [proIndex]);
-
   const SpeedChanger1 = (heartRate) => {
     console.log("player1arrHeartBeat", heartRate);
     if (heartRate < 70) setSpeed1(1.5);

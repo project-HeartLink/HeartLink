@@ -1,63 +1,87 @@
-@import "compass-mixins/lib/compass";
+@import "compass-mixins/lib/compass"; 
+// Compassのライブラリをインポート。背景クリップやベンダープレフィックスの記述を簡略化するために使用。
 
-body{
+body {
 }
-.loading{
-	font-weight:bold;
-	font-size:150pt;	//文字のサイズを変える
-	height:140px;
-	line-height:90px;
-	//-webkit-text-stroke: 2px black; // 黒い縁取りを追加
+// ページ全体のスタイルを設定するための`body`タグ。ただし、現在は空の状態。
+
+.loading {
+    font-weight: bold; // フォントの太さを設定。
+    font-size: 150pt; // テキストのサイズを設定。
+    height: 140px; // 要素の高さを設定。
+    line-height: 90px; // テキストの行の高さを調整。
+    // -webkit-text-stroke: 2px black; 
+    // テキストに黒い縁取りを追加（現在はコメントアウトされている）。
 }
-@keyframes wave-animation{
-	0%{background-position:0 bottom};
-	100%{background-position:200px bottom};
+
+@keyframes wave-animation {
+    0% { background-position: 0 bottom; }
+    100% { background-position: 200px bottom; }
 }
-@keyframes loading-animation0{
-	0%{background-size:200px 0px;};
-	100%{background-size:200px 0px;};
+// 波のアニメーション。背景の位置を横方向に移動して波を表現。
+
+@keyframes loading-animation0 {
+    0% { background-size: 200px 0px; }
+    100% { background-size: 200px 0px; }
 }
-@keyframes loading-animation1{
-	0%{background-size:200px 0px;};
-	100%{background-size:200px 130px;};
+// 背景サイズを固定（アニメーションなしのステップ0）。
+
+@keyframes loading-animation1 {
+    0% { background-size: 200px 0px; }
+    100% { background-size: 200px 130px; }
 }
-@keyframes loading-animation2{
-	0%{background-size:200px 130px;};
-	50%{background-size:200px 130px;};
-	100%{background-size:200px 130px;};
+// 背景サイズを0から130pxに広げるアニメーション。
+
+@keyframes loading-animation2 {
+    0% { background-size: 200px 130px; }
+    50% { background-size: 200px 130px; }
+    100% { background-size: 200px 130px; }
 }
-@keyframes loading-animation3{
-	0%{background-size:200px 130px;};
-	50%{background-size:200px 300px;};
-	100%{background-size:200px 300px;};
+// 背景サイズを130pxで固定するステップ（見た目には変化なし）。
+
+@keyframes loading-animation3 {
+    0% { background-size: 200px 130px; }
+    50% { background-size: 200px 300px; }
+    100% { background-size: 200px 500px; }
 }
+// 背景サイズを130pxから300pxまで広げるアニメーション。
+
 .water-animation {
-    width: 100%;
-    background-image: url('./Wave.png');
-    @include background-clip(text);
-    color: rgba(0, 0, 0, 0);
-    text-shadow: 0px 0px rgba(0, 0, 0, 1);
-    background-repeat: repeat-x;
-    opacity: 1;
+    width: 100%; // 要素の幅をページ全体に広げる。
+    background-image: url('./Wave.png'); // 波の背景画像を指定。
+    @include background-clip(text); // 背景をテキストクリップするためのCompassのミックスイン。
+    color: rgba(0, 0, 0, 0); // テキストの色を透明に設定。
+    text-shadow: 0px 0px rgba(0, 0, 0, 1); // テキストの影を追加。
+    background-repeat: repeat-x; // 背景画像を横方向に繰り返す。
+    opacity: 1; // 要素の不透明度を完全に表示。
 }
+
 .step-0 {
-	animation: wave-animation 2s infinite linear, loading-animation0 3s forwards;
+    animation: wave-animation 2s infinite linear, loading-animation0 3s forwards;
 }
+// ステップ0：波のアニメーションを2秒で無限ループ、サイズ固定のアニメーションを3秒間実行。
+
 .step-1 {
-	animation: wave-animation 2s infinite linear, loading-animation1 1s forwards;
+    animation: wave-animation 2s infinite linear, loading-animation1 1s forwards;
 }
+// ステップ1：波のアニメーションを継続しながら、1秒間で背景サイズを130pxに広げる。
 
 .step-2 {
-	animation: wave-animation 2s infinite linear, loading-animation3 2s forwards;
+    animation: wave-animation 2s infinite linear, loading-animation3 2s forwards;
 }
+// ステップ2：波のアニメーションを継続しながら、2秒間で背景サイズを300pxに広げる。
 
 .wave {
-	padding-top:120px ;	//赤い波の位置を変える
-	padding-bottom: 10px;
-    background-image: url('./Wave.png');
-    @include background-clip(text);
-    color: rgba(0, 0, 0, 0);
-    text-shadow: 0px 0px rgba(0, 0, 0, 0.05);
-    background-repeat: repeat-x;
-    opacity: 1;
+    height: 35%; // 要素の高さを調整。
+    padding-top: 140px; // 要素の上部に余白を追加し、波の位置を調整。
+    padding-bottom: 55px; // 要素の下部に余白を追加。
+
+    background-image: url('./Wave.png'); // 波の背景画像を指定。
+    background-size: cover; // 背景画像を要素全体にフィットさせる。
+    background-position: center bottom; // 背景画像を中央下に配置。
+    @include background-clip(text); // 背景をテキストの形にクリップする。
+    color: rgba(0, 0, 0, 0); // テキストを透明化。
+    text-shadow: 0px 0px rgba(0, 0, 0, 0.05); // テキストに薄い影を追加。
+    background-repeat: repeat-x; // 背景画像を横方向に繰り返す。
+    opacity: 1; // 要素の不透明度を完全に表示。
 }
