@@ -48,6 +48,9 @@ export const Main = ({ player }) => {
   const [proIndex, setProIndex] = useState(0);
   const [arrSelectTopic,setArrSelectTopic] = useState([])
 
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);//今どっちの心拍を表示しているかの状態管理
+
+
   console.log("themes", themes);
 
   console.log("player", player);
@@ -405,6 +408,9 @@ export const Main = ({ player }) => {
               navigation={true}
               modules={[Navigation]}
               className="mySwiper"
+              onSlideChange={(swiper) => setActiveSlideIndex(swiper.activeIndex)}
+              initialSlide={activeSlideIndex}
+
             >
               <SwiperSlide>
                 <HeartBeat speed={speed1} />
