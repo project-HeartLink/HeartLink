@@ -42,8 +42,8 @@ export const Result = ({ player }) => {
   const props = location.state;
   const themes = themesArr; //locateで値を受け取る
   const [syncro,setSyncro] = useState(0); //最大シンクロ率
-  const [syncroTheme,setSyncroTheme] = useState("");
-  const [syncroKey,setSyncroKey] = useState(0);
+  const [syncroTheme,setSyncroTheme] = useState("");//最大シンクロ率のお題
+  const [syncroKey,setSyncroKey] = useState(0);//最大シンクロ率の番号
 
   console.log("player1Name", props.player1Name); //player1の名前
   console.log("player2Name", props.player2Name); //player2の名前
@@ -87,7 +87,7 @@ export const Result = ({ player }) => {
           // data.array1は心拍が入っている配列0〜3
     
           console.log("Syncronization(p1)", Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) }))
-          if(tempMaxSynclo < Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) })){
+          if(tempMaxSynclo < Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) })){ //最大シンクロ率求めてる
             tempMaxSynclo = Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) })
             tempSyncloKeyPl1 = [key]; // 新しい最大値なので配列をリセット
           }
