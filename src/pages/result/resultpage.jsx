@@ -45,7 +45,7 @@ export const Result = ({ player }) => {
   console.log("player1Name", props.player1Name); //player1の名前
   console.log("player2Name", props.player2Name); //player2の名前
   console.log("arrSelectTopic", props.arrSelectTopic); //選択したお題の配列
-  console.log("player",player)
+  console.log("player", player);
 
   //最大心拍&そのお題の情報を格納しておく
   let playerInfo = [
@@ -386,6 +386,8 @@ export const Result = ({ player }) => {
                           <Typography
                             key={index}
                             sx={{
+                              marginTop: "2vh",
+                              padding: "0 1vw 0 1vw",
                               fontSize: "1.3rem",
                             }}
                           >
@@ -438,6 +440,7 @@ export const Result = ({ player }) => {
                       sx={{
                         width: "100%",
                         margin: " 2vh auto 0 auto",
+                        paddingTop: "2vh",
                         height: "300px",
                         bgcolor: "#FFECEC",
                         borderRadius: "20px",
