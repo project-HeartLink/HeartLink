@@ -327,7 +327,12 @@ export const Result = ({ player }) => {
                 height: "300px",
               }}
             >
-              <Graph p1={graphArray[0].p1} p2={graphArray[0].p2} />
+              <Graph
+                p1={graphArray[0].p1}
+                p2={graphArray[0].p2}
+                p1name={props.player1Name}
+                p2name={props.player2Name}
+              />
             </Box>
           </Box>
           <Box
@@ -456,6 +461,8 @@ export const Result = ({ player }) => {
                         <Graph
                           p1={graphArray[index].p1}
                           p2={graphArray[index].p2}
+                          p1name={props.player1Name}
+                          p2name={props.player2Name}
                         />
                       </Box>
                     </Box>
