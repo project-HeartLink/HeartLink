@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-export const Graph = ({ p1, p2 }) => {
+export const Graph = ({ p1, p2, p1name, p2name }) => {
   const processGraphArray = (p1, p2) => {
     // gragharrayからp1とp2を取り出す
     const hb1 = p1;
@@ -68,7 +68,7 @@ export const Graph = ({ p1, p2 }) => {
     labels: labels1.length > labels2.length ? labels1 : labels2,
     datasets: [
       {
-        label: "player1",
+        label: p1name,
         data: data1,
         fill: false,
         borderColor: "rgb(255, 182, 193)",
@@ -76,7 +76,7 @@ export const Graph = ({ p1, p2 }) => {
         tension: 0.1,
       },
       {
-        label: "player2",
+        label: p2name,
         data: data2,
         fill: false,
         borderColor: "rgb(173, 216, 230)",
