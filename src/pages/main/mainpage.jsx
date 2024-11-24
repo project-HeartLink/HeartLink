@@ -50,8 +50,7 @@ export const Main = ({ player }) => {
   const [finishButton, setFinishButton] = useState(false);
   const [nextButton, setNextButton] = useState(false);
 
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);//今どっちの心拍を表示しているかの状態管理
-
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0); //今どっちの心拍を表示しているかの状態管理
 
   console.log("themes", themes);
 
@@ -85,8 +84,6 @@ export const Main = ({ player }) => {
       setArrSelectTopic(data.topicId);
       console.log("data.index", data.index);
 
-      console.log("🚀 ~ onMessage ~ player1Name:", typeof data.player1);
-
       setPlayr1Name(data.player1);
       setPlayr2Name(data.player2);
       setProIndex(data.index);
@@ -96,10 +93,6 @@ export const Main = ({ player }) => {
       setHeartBeatP1(data.heartRate1);
 
       setHeartBeatP2(data.heartRate2);
-
-      console.log("🚀 ~ onMessage ~ heartBeatP2:", player1arrHeartBeat.theme2);
-
-      console.log("🚀 ~ onMessage ~ player2Name:", player2Name);
 
       setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
       console.log("topicId", data.topicId);
@@ -138,25 +131,8 @@ export const Main = ({ player }) => {
     [heartBeatP1] || [heartBeatP2]
   ); // heartBeatP1を監視
 
-  console.log("1回目");
-
-  console.log("hearBeatP1", player1arrHeartBeat.theme0);
-  console.log("hearBeatP1", player1arrHeartBeat.theme1);
-  console.log("hearBeatP1", player1arrHeartBeat.theme2);
-  console.log("hearBeatP1", player1arrHeartBeat.theme3);
-
-  console.log("hearBeatP2", player2arrHeartBeat.theme0);
-  console.log("hearBeatP2", player2arrHeartBeat.theme1);
-  console.log("hearBeatP2", player2arrHeartBeat.theme2);
-  console.log("hearBeatP2", player2arrHeartBeat.theme3);
-
-  console.log("🚀 ~ topicId.map ~ topicId:", topicId);
-  console.log("proindex", proIndex);
-  console.log("index", index);
-  console.log("arrSelectTopic", arrSelectTopic);
-
   useEffect(() => {
-    setNextButton(!nextButton)
+    setNextButton(!nextButton);
     if (proIndex != 0) {
       topicId.map((id) => {
         console.log("id", id);
@@ -169,8 +145,8 @@ export const Main = ({ player }) => {
           setarrThemes(themes[id].topic);
         }
       });
-      if(proIndex == 3){
-        setFinishButton(!finishButton)
+      if (proIndex == 3) {
+        setFinishButton(!finishButton);
       }
     }
   }, [proIndex]);
@@ -188,7 +164,7 @@ export const Main = ({ player }) => {
   };
 
   const FinishTheme = () => {
-    setNextButton(!nextButton)
+    setNextButton(!nextButton);
     if (proIndex == topicId.length - 1) {
       setIsDone(true);
       setIndex(index);
@@ -196,9 +172,6 @@ export const Main = ({ player }) => {
     } else {
       setIndex(index + 1);
     }
-
-    console.log("proIndex", proIndex);
-    console.log("topicId", topicId);
 
     console.log("heartBeatP1", heartBeatP1);
 
@@ -402,33 +375,35 @@ export const Main = ({ player }) => {
           <Typography
             variant="h1"
             sx={{
-              fontSize: "8vw",
-              mt: "20%",
+              fontSize: "2rem",
+              mt: "15vh",
             }}
           >
             計測中
           </Typography>
           <Box
             sx={{
-              mt: "10%",
+              m: "3vh auto 0 auto",
               overflow: "hidden",
               position: "relative",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              width: "90vw",
+              maxWidth: "450px",
             }}
           >
             <Swiper
               navigation={true}
               modules={[Navigation]}
               className="mySwiper"
-              onSlideChange={(swiper) => setActiveSlideIndex(swiper.activeIndex)}
+              onSlideChange={(swiper) =>
+                setActiveSlideIndex(swiper.activeIndex)
+              }
               initialSlide={activeSlideIndex}
-
             >
               <SwiperSlide>
                 <HeartBeat speed={speed1} />
-
                 <Box
                   sx={{
                     position: "absolute",
@@ -441,7 +416,7 @@ export const Main = ({ player }) => {
                   <Typography
                     variant="h2"
                     sx={{
-                      fontSize: "7vw",
+                      fontSize: "2rem",
                     }}
                   >
                     {player1Name}
@@ -449,8 +424,7 @@ export const Main = ({ player }) => {
                   <Typography
                     variant="h2"
                     sx={{
-                      mt: "0vh",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                     }}
                   >
                     {heartBeatP1}
@@ -471,7 +445,7 @@ export const Main = ({ player }) => {
                   <Typography
                     variant="h2"
                     sx={{
-                      fontSize: "7vw",
+                      fontSize: "2rem",
                     }}
                   >
                     {player2Name}
@@ -480,7 +454,7 @@ export const Main = ({ player }) => {
                     variant="h2"
                     sx={{
                       mt: "0vh",
-                      fontSize: "3rem",
+                      fontSize: "2rem",
                     }}
                   >
                     {heartBeatP2}
@@ -491,9 +465,8 @@ export const Main = ({ player }) => {
           </Box>
           <Box
             sx={{
-              minWidth: 0,
               overflow: "hidden",
-              m: "0 auto 0 5vw",
+              m: "0 auto 5vh 3vw",
               position: "relative",
               display: "flex",
               justifyContent: "center",
@@ -503,8 +476,9 @@ export const Main = ({ player }) => {
             <img
               src={talkThemeBox}
               style={{
-                width: "100%",
+                width: "75vw",
                 height: "auto",
+                maxWidth: "400px",
               }}
             />
             <Box
@@ -520,8 +494,9 @@ export const Main = ({ player }) => {
               <Typography
                 variant="body1"
                 sx={{
-                  fontSize: "7vw",
-                  width: "70vw",
+                  fontSize: "1.3rem",
+                  width: "60vw",
+                  maxWidth: "300px",
                 }}
               >
                 {arrThemes}
@@ -536,17 +511,17 @@ export const Main = ({ player }) => {
               whileTap={{ scale: 0.8 }}
               onClick={FinishTheme}
               sx={{
-                fontSize: "1.8rem",
+                fontSize: "1.6rem",
                 fontWeight: "bold",
                 color: "white",
                 backgroundColor: "#ffdbdb",
-                marginTop: "7vh",
+                margin: "2vh auto 0 auto",
                 border: "10px solid white",
                 borderRadius: "15px",
                 padding: "2px 30px 2px 30px",
               }}
             >
-              {finishButton ? '完了' : '次のお題へ'}
+              {finishButton ? "完了" : "次のお題へ"}
             </Button>
           )}
         </Box>
