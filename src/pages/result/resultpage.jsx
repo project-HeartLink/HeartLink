@@ -41,6 +41,9 @@ export const Result = ({ player }) => {
   const location = useLocation();
   const props = location.state;
   const themes = themesArr; //locateで値を受け取る
+  const [syncro,setSyncro] = useState(0); //最大シンクロ率
+  const [syncroTheme,setSyncroTheme] = useState("");//最大シンクロ率のお題
+  const [syncroKey,setSyncroKey] = useState(0);//最大シンクロ率の番号
 
   console.log("player1Name", props.player1Name); //player1の名前
   console.log("player2Name", props.player2Name); //player2の名前
@@ -73,11 +76,21 @@ export const Result = ({ player }) => {
         let tempmaxKeyPl1 = []; // 仮の最大のkey番号
         let tempMaxPl2 = 0; //仮の最大心拍
         let tempmaxKeyPl2 = []; // 仮の最大のkey番号
+        let tempMaxSynclo = 0;//仮の最大シンクロ率
+        let tempSyncloKeyPl1 = []; // 仮の最大のkey番号
 
         // プレイヤー1のデータ解析
         for (const key in data.array1) {
           // data.array1は心拍が入っている配列0〜3
-          console.log("data.arr", parseInt(data.array1[key]));
+    
+          console.log("Syncronization(p1)", Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) }))
+          if(tempMaxSynclo < Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) })){ //最大シンクロ率求めてる
+            tempMaxSynclo = Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) })
+            tempSyncloKeyPl1 = [key]; // 新しい最大値なので配列をリセット
+          }
+          else if(tempMaxSynclo == Syncronization({ heartRate1: data.array1[key].map(Number), heartRate2: data.array2[key].map(Number) })){
+            tempmaxKeyPl1.push(key);
+          }
 
           setArrHeartBeatP1(() => ({
             theme1: {
@@ -130,6 +143,8 @@ export const Result = ({ player }) => {
               // 最大値と同じ場合はテーマを追加
               tempmaxKeyPl1.push(key);
             }
+
+            
           });
         }
 
@@ -171,18 +186,24 @@ export const Result = ({ player }) => {
 
         setArrMaxThemePl1(newArrP1);
         setArrMaxThemePl2(newArrP2);
-
         setMaxPlayer1(tempMaxPl1);
         setmaxKeyPl1(Array.from(new Set(tempmaxKeyPl1))); // 配列をセット
         setMaxPlayer2(tempMaxPl2);
         setmaxKeyPl2(Array.from(new Set(tempmaxKeyPl2))); // 配列をセット
+        setSyncro(tempMaxSynclo)
+        setSyncroTheme(themes[props.arrSelectTopic[tempSyncloKeyPl1]].topic)
+        setSyncroKey(parseInt(tempSyncloKeyPl1))
       });
   };
+
+  console.log("syncro",syncro)
+  console.log("setSyncroTheme",syncroTheme)
 
   console.log("p1", arrHeartBeatP1.theme1);
   console.log("p1", arrHeartBeatP1.theme2);
   console.log("p1", arrHeartBeatP1.theme3);
   console.log("p1", arrHeartBeatP1.theme4);
+  console.log("setSyncroKey",syncroKey)
 
   console.log("arrmaxthemepl1", arrMaxThemePl1);
 
@@ -213,7 +234,7 @@ export const Result = ({ player }) => {
       p2: arrHeartBeatP2.theme4.heart,
     },
   ];
-  let syncroMeter = 100; //シンクロ率
+
   const socketRef = useRef();
   console.log("player", player);
   const resetSubmit = () => {
@@ -302,7 +323,7 @@ export const Result = ({ player }) => {
                   fontSize: "3rem",
                 }}
               >
-                {syncroMeter}
+                {syncro}
               </Typography>
             </Box>
             <Typography
@@ -327,12 +348,8 @@ export const Result = ({ player }) => {
                 height: "300px",
               }}
             >
-              <Graph
-                p1={graphArray[0].p1}
-                p2={graphArray[0].p2}
-                p1name={props.player1Name}
-                p2name={props.player2Name}
-              />
+              <Box>{syncroTheme}</Box>
+              <Graph p1={graphArray[syncroKey].p1} p2={graphArray[syncroKey].p2} />
             </Box>
           </Box>
           <Box
@@ -490,6 +507,9 @@ export const Result = ({ player }) => {
         >
           タイトルへ
         </Button>
+
+          {/* <Syncronization heartRate1={heartRate1} heartRate2={heartRate2} /> */}
+        
       </Container>
     </>
   );

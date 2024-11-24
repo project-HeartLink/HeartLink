@@ -46,7 +46,9 @@ export const Main = ({ player }) => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
   const [proIndex, setProIndex] = useState(0);
-  const [arrSelectTopic,setArrSelectTopic] = useState([])
+  const [arrSelectTopic, setArrSelectTopic] = useState([]);
+  const [finishButton, setFinishButton] = useState(false);
+  const [nextButton, setNextButton] = useState(false);
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);//今どっちの心拍を表示しているかの状態管理
 
@@ -151,9 +153,10 @@ export const Main = ({ player }) => {
   console.log("🚀 ~ topicId.map ~ topicId:", topicId);
   console.log("proindex", proIndex);
   console.log("index", index);
-  console.log("arrSelectTopic",arrSelectTopic)
+  console.log("arrSelectTopic", arrSelectTopic);
 
   useEffect(() => {
+    setNextButton(!nextButton)
     if (proIndex != 0) {
       topicId.map((id) => {
         console.log("id", id);
@@ -166,6 +169,9 @@ export const Main = ({ player }) => {
           setarrThemes(themes[id].topic);
         }
       });
+      if(proIndex == 3){
+        setFinishButton(!finishButton)
+      }
     }
   }, [proIndex]);
   const SpeedChanger1 = (heartRate) => {
@@ -182,6 +188,7 @@ export const Main = ({ player }) => {
   };
 
   const FinishTheme = () => {
+    setNextButton(!nextButton)
     if (proIndex == topicId.length - 1) {
       setIsDone(true);
       setIndex(index);
@@ -222,7 +229,10 @@ export const Main = ({ player }) => {
     const dataTopicArray = {
       player: player,
       index: index,
-      array: player == "1" ? player1arrHeartBeat[`theme${index}`] : player2arrHeartBeat[`theme${index}`],
+      array:
+        player == "1"
+          ? player1arrHeartBeat[`theme${index}`]
+          : player2arrHeartBeat[`theme${index}`],
     };
 
     fetch("https://hartlink-api.onrender.com/topicArray", {
@@ -269,7 +279,11 @@ export const Main = ({ player }) => {
       console.log("useEffect called");
       const timer = setTimeout(() => {
         navigate("/result", {
-          state: { player1Name: player1Name, player2Name: player2Name ,arrSelectTopic:arrSelectTopic},
+          state: {
+            player1Name: player1Name,
+            player2Name: player2Name,
+            arrSelectTopic: arrSelectTopic,
+          },
         });
       }, 5 * 1000);
       return () => {
@@ -515,24 +529,26 @@ export const Main = ({ player }) => {
               {/* ))} */}
             </Box>
           </Box>
-          <Button
-            component={motion.button}
-            whileHover={{ scale: 1.0 }}
-            whileTap={{ scale: 0.8 }}
-            onClick={FinishTheme}
-            sx={{
-              fontSize: "1.8rem",
-              fontWeight: "bold",
-              color: "white",
-              backgroundColor: "#ffdbdb",
-              marginTop: "7vh",
-              border: "10px solid white",
-              borderRadius: "15px",
-              padding: "2px 30px 2px 30px",
-            }}
-          >
-            次のお題へ
-          </Button>
+          {nextButton && (
+            <Button
+              component={motion.button}
+              whileHover={{ scale: 1.0 }}
+              whileTap={{ scale: 0.8 }}
+              onClick={FinishTheme}
+              sx={{
+                fontSize: "1.8rem",
+                fontWeight: "bold",
+                color: "white",
+                backgroundColor: "#ffdbdb",
+                marginTop: "7vh",
+                border: "10px solid white",
+                borderRadius: "15px",
+                padding: "2px 30px 2px 30px",
+              }}
+            >
+              {finishButton ? '完了' : '次のお題へ'}
+            </Button>
+          )}
         </Box>
       </>
     );
