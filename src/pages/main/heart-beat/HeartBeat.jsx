@@ -22,7 +22,15 @@ function HeartBeat({ speed }) {
           MozAnimationDuration: `${animationDuration}s`,
         }}
       >
-        <img src={Heart} alt="Heart" width="65%" />
+        <img
+          src={Heart}
+          alt="Heart"
+          width="60%"
+          height="auto"
+          style={{
+            maxWidth: "300px",
+          }}
+        />
       </Box>
     </>
   );
