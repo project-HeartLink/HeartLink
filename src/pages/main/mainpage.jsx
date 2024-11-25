@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Box, Typography, Button } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import talkThemeBox from "../../assets/talkThemeBox.png";
 import "./mainpage.scss";
 import mainpageFukidashi from "../../assets/mainpage_fukidashi.png";
@@ -129,7 +129,7 @@ export const Main = ({ player }) => {
         }));
       }
     },
-    [heartBeatP1] || [heartBeatP2]
+    [heartBeatP1 , heartBeatP2]
   ); // heartBeatP1を監視
 
   const endSend = () => {

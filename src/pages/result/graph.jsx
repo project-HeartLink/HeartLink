@@ -53,12 +53,24 @@ export const Graph = ({ p1, p2, p1name, p2name }) => {
     const filteredHb1 = str2intFilter(hb1);
     const filteredHb2 = str2intFilter(hb2);
 
-    const labels1 = Array.from({ length: filteredHb1.length }, (_, i) => i + 1);
-    const labels2 = Array.from({ length: filteredHb2.length }, (_, i) => i + 1);
+    const adjustArraysToShortest = (array1, array2) => {
+      console.log("heartRate1の要素数: ", array1.length);
+      console.log("heartRate2の要素数: ", array2.length);
+      const minLength = Math.min(array1.length, array2.length);
+      return [array1.slice(0, minLength), array2.slice(0, minLength)];
+    };
+
+      // 配列を短い方に揃える
+  const [hr1, hr2] = adjustArraysToShortest(filteredHb1, filteredHb2);
+
+  
+
+    const labels1 = Array.from({ length: hr1.length }, (_, i) => i + 1);
+    const labels2 = Array.from({ length: hr2.length }, (_, i) => i + 1);
 
     return {
-      formattedHb1: filteredHb1,
-      formattedHb2: filteredHb2,
+      formattedHb1: hr1,
+      formattedHb2: hr2,
       labels1,
       labels2,
     };

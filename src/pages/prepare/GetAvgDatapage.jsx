@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
 export const GetAvgData = () => {
@@ -15,7 +15,6 @@ export const GetAvgData = () => {
 
   const [message, setMessage] = React.useState();
   const socketRef = React.useRef();
-  const [heartBeat, setHeartBeat] = useState([]);
   const location = useLocation(); //location.stateでhistory.pushの引数で渡したstateを取り出すことができる
   
 

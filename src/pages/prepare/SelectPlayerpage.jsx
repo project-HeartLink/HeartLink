@@ -9,7 +9,6 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { themesArr } from "../main/themesArr";
 
 export const SelectPlayer = ({ player, setPlayer ,name}) => {
   const [open, setOpen] = useState(false);
@@ -17,7 +16,6 @@ export const SelectPlayer = ({ player, setPlayer ,name}) => {
   const [connectValue, setConnectValue] = useState("");
   const [showText, setShowText] = useState("");
   const navigate = useNavigate();
-  const themes = themesArr;
   //const startTime = performance.now(); //開始時間の取得
   const status = "ok";
 
