@@ -86,8 +86,9 @@ export const Main = ({ player }) => {
 
       setPlayr1Name(data.player1);
       setPlayr2Name(data.player2);
-      setProIndex(data.index);
-
+      if (data.index < 4) {
+        setProIndex(data.index);
+      }
       console.log("player1arrHeartBeat", player1arrHeartBeat);
 
       setHeartBeatP1(data.heartRate1);
@@ -131,6 +132,16 @@ export const Main = ({ player }) => {
     [heartBeatP1] || [heartBeatP2]
   ); // heartBeatP1を監視
 
+  const endSend = () => {
+    fetch("https://hartlink-api.onrender.com/end", { method: "GET" })
+      .then((res) => res.json()) //json方式でデータを受け取る
+      .then((data) => {
+        {
+          console.log(data);
+        }
+      });
+  };
+
   useEffect(() => {
     setNextButton(!nextButton);
     if (proIndex != 0) {
@@ -171,6 +182,10 @@ export const Main = ({ player }) => {
       console.log("イコール");
     } else {
       setIndex(index + 1);
+    }
+
+    if (finishButton) {
+      endSend();
     }
 
     console.log("heartBeatP1", heartBeatP1);
@@ -426,9 +441,7 @@ export const Main = ({ player }) => {
                     sx={{
                       fontSize: "2rem",
                     }}
-                  >
-                    {heartBeatP1}
-                  </Typography>
+                  ></Typography>
                 </Box>
               </SwiperSlide>
               <SwiperSlide>
@@ -456,9 +469,7 @@ export const Main = ({ player }) => {
                       mt: "0vh",
                       fontSize: "2rem",
                     }}
-                  >
-                    {heartBeatP2}
-                  </Typography>
+                  ></Typography>
                 </Box>
               </SwiperSlide>
             </Swiper>
