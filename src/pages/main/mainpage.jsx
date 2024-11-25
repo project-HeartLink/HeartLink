@@ -426,9 +426,7 @@ export const Main = ({ player }) => {
                     sx={{
                       fontSize: "2rem",
                     }}
-                  >
-                    {heartBeatP1}
-                  </Typography>
+                  ></Typography>
                 </Box>
               </SwiperSlide>
               <SwiperSlide>
@@ -456,9 +454,7 @@ export const Main = ({ player }) => {
                       mt: "0vh",
                       fontSize: "2rem",
                     }}
-                  >
-                    {heartBeatP2}
-                  </Typography>
+                  ></Typography>
                 </Box>
               </SwiperSlide>
             </Swiper>
