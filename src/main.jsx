@@ -19,7 +19,7 @@ const theme = createTheme({
       fontWeight: "bold",
     },
     h2: {
-      fontFamily: "LXGW WenKai Mono TC",
+      fontFamily: "Kaisei Decol, curive",
       color: "white",
     },
   },
