@@ -16,6 +16,7 @@ import { themesArr } from "./themesArr";
 import PropTypes from "prop-types";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
+import { getMethod, postMethod, websocketMethod } from "../../response/ResponseMethod";
 
 export const Main = ({ player }) => {
   const themes = themesArr; //locateで値を受け取る
@@ -57,110 +58,6 @@ export const Main = ({ player }) => {
   console.log("player", player);
   console.log(`typeofPlayer: ${typeof player}`);
 
-  console.log("heartBeatP1", heartBeatP1);
-
-  // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
-  useEffect(() => {
-    // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
-    const websocket = new ReconnectingWebSocket(
-      "wss://hartlink-api.onrender.com/ws"
-    );
-    socketRef.current = websocket;
-
-    websocket.onopen = () => {
-      //そのページを開いた瞬間に心拍取得するようにした
-      // WebSocket接続が確立されたらメッセージを送信
-      socketRef.current?.send("0.0");
-    };
-
-    // #2.メッセージ受信時のイベントハンドラを設定
-    const onMessage = (event) => {
-      // JSON文字列をJavaScriptオブジェクトに変換
-      const data = destr(event.data);
-
-      console.log("event.data:", event.data);
-
-      console.log("topicId", data.topicId);
-      setArrSelectTopic(data.topicId);
-      console.log("data.index", data.index);
-
-      setPlayr1Name(data.player1);
-      setPlayr2Name(data.player2);
-      if (data.index < 4) {
-        setProIndex(data.index);
-      }
-      console.log("player1arrHeartBeat", player1arrHeartBeat);
-
-      setHeartBeatP1(data.heartRate1);
-
-      setHeartBeatP2(data.heartRate2);
-
-      setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
-      console.log("topicId", data.topicId);
-
-      if (data.index == 0) {
-        //mainpageに遷移した直後にお題を写るように
-        setarrThemes(themes[data.topicId[0]].topic);
-      }
-
-      SpeedChanger1(data.heartRate1);
-      SpeedChanger2(data.heartRate2);
-    };
-
-    websocket.addEventListener("message", onMessage);
-
-    // #3.useEffectのクリーンアップの中で、WebSocketのクローズ処理を実行
-    return () => {
-      websocket.close();
-      websocket.removeEventListener("message", onMessage);
-    };
-  }, []);
-
-  useEffect(
-    () => {
-      if (heartBeatP1 > 0) {
-        setplayer1arrHeartBeat((prev) => ({
-          ...prev,
-          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1],
-        }));
-        setplayer2arrHeartBeat((prev) => ({
-          ...prev,
-          [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP2],
-        }));
-      }
-    },
-    [heartBeatP1 , heartBeatP2]
-  ); // heartBeatP1を監視
-
-  const endSend = () => {
-    fetch("https://hartlink-api.onrender.com/end", { method: "GET" })
-      .then((res) => res.json()) //json方式でデータを受け取る
-      .then((data) => {
-        {
-          console.log(data);
-        }
-      });
-  };
-
-  useEffect(() => {
-    setNextButton(!nextButton);
-    if (proIndex != 0) {
-      topicId.map((id) => {
-        console.log("id", id);
-        console.log("themes[index].id", themes[id]);
-        console.log("proindex", topicId[proIndex]);
-        console.log("themes[id].id", themes[id].id);
-        if (topicId[proIndex] === themes[id].id) {
-          //今の処理が同じだったら
-          console.log("setarrThemes(themes.topicId)", themes[id].topic);
-          setarrThemes(themes[id].topic);
-        }
-      });
-      if (proIndex == 3) {
-        setFinishButton(!finishButton);
-      }
-    }
-  }, [proIndex]);
   const SpeedChanger1 = (heartRate) => {
     console.log("player1arrHeartBeat", heartRate);
     if (heartRate < 70) setSpeed1(1.5);
@@ -174,12 +71,76 @@ export const Main = ({ player }) => {
     else if (heartRate >= 110) setSpeed2(0.5);
   };
 
+  const data = websocketMethod(); //websocket通信をして、現在のデータを取り出す
+  console.log("websocket", data);
+  console.log("index", data.index);
+  console.log("topicId", data.topicId);
+
+  useEffect(() => {
+    setArrSelectTopic(data.topicId);
+
+    setPlayr1Name(data.player1);
+    setPlayr2Name(data.player2);
+    if (data.index < 4) {
+      setProIndex(data.index);
+    }
+
+    setHeartBeatP1(data.heartRate1);
+    setHeartBeatP2(data.heartRate2);
+
+    setTopicId(data.topicId); //setTopicIdに入れることでws以外の処理で使えるようにした
+
+    if (data.index == 0) {
+      //mainpageに遷移した直後にお題を写るように
+      setarrThemes(themes[data.topicId[0]].topic);
+    }
+
+    SpeedChanger1(data.heartRate1);
+    SpeedChanger2(data.heartRate2);
+  }, [data]);
+
+  console.log("data.index", data.index);
+
+  console.log("player1arrHeartBeat", player1arrHeartBeat);
+
+  //お題ごとに心拍を格納
+  useEffect(() => {
+    if (heartBeatP1 > 0) {
+      setplayer1arrHeartBeat((prev) => ({
+        ...prev,
+        [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP1],
+      }));
+      setplayer2arrHeartBeat((prev) => ({
+        ...prev,
+        [`theme${proIndex}`]: [...prev[`theme${proIndex}`], heartBeatP2],
+      }));
+    }
+  }, [heartBeatP1, heartBeatP2]); // heartBeatP1を監視
+
+  const endSend = async() => {
+    await getMethod("https://hartlink-api.onrender.com/end")  //"end"を送る
+  };
+
+  useEffect(() => {
+    setNextButton(!nextButton);
+    if (proIndex != 0) {
+      topicId.map((id) => {
+        if (topicId[proIndex] === themes[id].id) {
+          //今の処理が同じだったら
+          setarrThemes(themes[id].topic);
+        }
+      });
+      if (proIndex == 3) {
+        setFinishButton(!finishButton);
+      }
+    }
+  }, [proIndex]);
+
   const FinishTheme = () => {
     setNextButton(!nextButton);
     if (proIndex == topicId.length - 1) {
       setIsDone(true);
       setIndex(index);
-      console.log("イコール");
     } else {
       setIndex(index + 1);
     }
@@ -190,30 +151,13 @@ export const Main = ({ player }) => {
 
     console.log("heartBeatP1", heartBeatP1);
 
-    const data = {
+    const sendData = {
       index: index,
       player: player,
     };
-    console.log(`player: ${player}, index: ${index}`);
-    console.log(`data : ${typeof index}`);
-    fetch("https://hartlink-api.onrender.com/indexTopicId", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json()) //json方式でデータを受け取る
-      .then((data) => {
-        console.log("data:", data);
 
-        console.log("(data.index)", data.index);
-      })
-
-      .catch((err) => console.error("Error fetching data:", err));
-    console.log("array", player1arrHeartBeat[`theme${proIndex}`]);
-    console.log("index", index);
-    console.log("player", player);
+    postMethod("https://hartlink-api.onrender.com/indexTopicId",sendData);  //送る
+    
     const dataTopicArray = {
       player: player,
       index: index,
@@ -223,47 +167,22 @@ export const Main = ({ player }) => {
           : player2arrHeartBeat[`theme${index}`],
     };
 
-    fetch("https://hartlink-api.onrender.com/topicArray", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataTopicArray),
-    })
-      .then((res) => res.json()) //json方式でデータを受け取る
-      .then((dataTopicArray) => {
-        console.log("data:", dataTopicArray);
-      })
-
-      .catch((err) => console.error("Error fetching dataTopicArray:", err));
+    postMethod("https://hartlink-api.onrender.com/topicArray",dataTopicArray);  //送る
 
     console.log("array", player1arrHeartBeat.theme0);
   };
 
   const FinishMeasuring = () => {
-    console.log("動いたよ");
-    fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
-      .then((res) => res.json()) //json方式でデータを受け取る
-      .then((data) => {
-        {
-          console.log(data);
-        }
-      })
-
-      .catch((err) => console.error("Error fetching data:", err));
 
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
-      fetch("https://hartlink-api.onrender.com/getTopicArray", {
-        method: "GET",
-      })
-        .then((res) => res.json()) //json方式でデータを受け取る
-        .then((data) => {
-          console.log("data:", data);
-        })
 
-        .catch((err) => console.error("Error fetching data:", err));
-
+      const dataGet = async() => {
+        const data = await getMethod("https://hartlink-api.onrender.com/end")  //"end"を送る
+        console.log("dataGet",data)
+      }
+      
+      dataGet()
       console.log("useEffect called");
       const timer = setTimeout(() => {
         navigate("/result", {
