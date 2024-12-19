@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import "./Connectpage.scss";
 import { Box, Typography, Modal } from "@mui/material";
 import HeartWave from "./heart-wave/HeartWave";
+import { getMethod } from "../../response/ResponseMethod";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
@@ -19,43 +20,33 @@ export const Connect = () => {
     CatchError();
     setOpen(false);
   };
-  const CatchError = (err) => {
-    console.log("エラー:", err);
+  const CatchError = async(err) => {
+    const data = await getMethod("https://hartlink-api.onrender.com/reset")
 
-    fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data", data);
-        navigate("/");
-      });
+    console.log("data",data)
+    navigate("/");
+
   };
 
   useEffect(() => {
-    const handleSubmit = () => {
-      console.log("動いたよ");
-      fetch("https://hartlink-api.onrender.com/connect", { method: "GET" })
-        .then((res) => res.json()) //json方式でデータを受け取る
-        .then((data) => {
-          if (data.connect == "2") {
-            setDataConnect(data.connect);
-            console.log("data.connect:", data.connect);
-            setIsReady(true);
-            setTimeout(() => navigate("/SelectPlayer"), 3 * 1000);
-          } else if (data.connect == "1") {
-            setDataConnect(data.connect);
-            console.log("data.connect:", data.connect);
-          } else if (data.connect == "0") {
-            setDataConnect(data.connect);
-            console.log("data.connect", data);
-          }
-        })
+    const handleSubmit = async() => {
 
-        .catch((err) => CatchError(err));
+        const data = await getMethod("https://hartlink-api.onrender.com/connect")
+
+        if (data.connect == "2") {
+                setDataConnect(data.connect);
+                setIsReady(true);
+                setTimeout(() => navigate("/SelectPlayer"), 3 * 1000);
+              } else if (data.connect == "1") {
+                setDataConnect(data.connect);
+              } else if (data.connect == "0") {
+                setDataConnect(data.connect);
+              }
+               
     };
     const timeoutId = setTimeout(() => {
       //20秒以上経ったら、アラート出るようにした
       if (dataConnect != "2") {
-        console.log("dataConnect", dataConnect);
         handleOpen();
       }
     }, 40 * 1000); //本番は40秒くらいあればいいと思うため変更
@@ -64,7 +55,6 @@ export const Connect = () => {
 
     //clearIntervalを入れることで、２回される処理を回避
     return () => {
-      console.log("クリーンアップ: インターバルとタイムアウトの解除");
       clearInterval(intervalId);
       clearTimeout(timeoutId);
     };
