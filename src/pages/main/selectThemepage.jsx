@@ -6,6 +6,7 @@ import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { themesArr } from "./themesArr";
 import PropTypes from "prop-types";
+import { postMethod } from "../../response/ResponseMethod";
 
 export const SelectTheme = ({ player }) => {
   const themes = themesArr;
@@ -37,7 +38,7 @@ export const SelectTheme = ({ player }) => {
   const selectPlayer = player == 1 ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
 
 
-  const ClickYes = (id) => {
+  const ClickYes = async(id) => {
     console.log("theme", themes);
     console.log("theme", typeof themes);
     console.log("indexplayer", indexplayer);
@@ -50,63 +51,25 @@ export const SelectTheme = ({ player }) => {
       navigate("/main", { state: themes });
     }
   
-    const data = { player: player, id: id, index: indexplayer };
-  
-    console.log("ただいま、メールを送信してます", data);
-    console.log("id", id);
-    const url = "https://hartlink-api.onrender.com/topicId";
-  
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("ネットワーク応答が正常ではありません");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data);
-        setIndexplayer((indexplayer) => indexplayer + 2);
-        console.log("index", indexplayer);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    const sendData = { player: player, id: id, index: indexplayer };
+
+    const data = await postMethod("https://hartlink-api.onrender.com/topicId",sendData)
+    setIndexplayer((indexplayer) => indexplayer + 2);
+    console.log("index", indexplayer);
+    console.log("data",data)
+
     RandomSend(id);
   };
   
-  const RandomSend = (excludedId) => {
+  const RandomSend = async(excludedId) => {
     const randomId = getRandomId(player, themes, excludedId);
     setIndexplayer((indexplayer) => indexplayer + 2);
-    const data = { player: player, id: randomId, index: indexplayer + 2 };
-    console.log("ただいま、メールを送信してます", data);
-    const url = "https://hartlink-api.onrender.com/topicId";
-  
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("ネットワーク応答が正常ではありません");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Success:", data);
-        console.log("index", indexplayer);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    const sendData = { player: player, id: randomId, index: indexplayer + 2 };
+
+
+    const topicId = await postMethod("https://hartlink-api.onrender.com/topicId",sendData)
+    console.log("Success:", topicId);
+    console.log("index", indexplayer);
   };
   
   const getRandomId = (player, themes, excludedId) => {
