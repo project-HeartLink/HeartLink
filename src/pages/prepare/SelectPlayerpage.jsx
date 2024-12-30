@@ -27,19 +27,12 @@ export const SelectPlayer = ({ player, setPlayer, name }) => {
     setShowText(true);
   };
 
-
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     if (player) {
       //promise
-      
-        const data = await getMethod("https://hartlink-api.onrender.com/ok"); //受け取る
-
-        if (data.status === "ok") { //帰ってきた値がokだったら
-          setConnectValue(player); //playar番号をセット
-          navigate("/selectTheme");
-          sendinfo();
-        }
-
+      setConnectValue(player); //playar番号をセット
+      navigate("/selectTheme");
+      sendinfo();
     } else {
       setShowText(false);
     }
@@ -48,8 +41,7 @@ export const SelectPlayer = ({ player, setPlayer, name }) => {
   const sendinfo = () => {
     const sendData = { player: player, name: name };
     if (player) {
-        postMethod("https://hartlink-api.onrender.com/sendname",sendData);  //送る
-
+      postMethod("https://hartlink-api.onrender.com/sendname", sendData); //送る
     } else {
       setShowText(false);
     }
