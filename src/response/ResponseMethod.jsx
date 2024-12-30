@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import destr from "destr";
 
-export const getMethod = (link) => {
+export const GetMethod = (link) => {
   return fetch(link, { method: "GET" })
     .then((res) => res.json()) //json方式でデータを受け取る
     .then((data) => {
@@ -13,7 +13,7 @@ export const getMethod = (link) => {
     .catch((err) => console.error("Error fetching data:", err));
 };
 
-export const postMethod = (link, data) => {
+export const PostMethod = (link, data) => {
   return fetch(link, {
     method: "POST",
     headers: {
@@ -30,7 +30,7 @@ export const postMethod = (link, data) => {
     .catch((err) => console.error("Error fetching data:", err));
 };
 
-export const websocketMethod = () => {
+export const WebsocketMethod = () => {
   const [message, setMessage] = useState({}); // WebSocket メッセージを保持
   const socketRef = useRef();
   useEffect(() => {
