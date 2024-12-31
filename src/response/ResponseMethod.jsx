@@ -48,8 +48,6 @@ export const WebsocketMethod = () => {
       const data = destr(event.data);
       console.log("event.data:", event.data);
       setMessage(data); // メッセージを状態に保存
-
-      
     };
     websocket.addEventListener("message", onMessage);
 
@@ -60,6 +58,5 @@ export const WebsocketMethod = () => {
     };
   }, []);
 
-  return message
+  return message;
 };
-

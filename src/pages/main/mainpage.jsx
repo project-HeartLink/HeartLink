@@ -16,7 +16,11 @@ import { themesArr } from "./themesArr";
 import PropTypes from "prop-types";
 import HeartAnimation from "./HeartAnimation";
 import HeartBeat from "./heart-beat/HeartBeat";
-import { getMethod, postMethod, websocketMethod } from "../../response/ResponseMethod";
+import {
+  GetMethod,
+  PostMethod,
+  WebsocketMethod,
+} from "../../response/ResponseMethod";
 
 export const Main = ({ player }) => {
   const themes = themesArr; //locateで値を受け取る
@@ -71,7 +75,7 @@ export const Main = ({ player }) => {
     else if (heartRate >= 110) setSpeed2(0.5);
   };
 
-  const data = websocketMethod(); //websocket通信をして、現在のデータを取り出す
+  const data = WebsocketMethod(); //websocket通信をして、現在のデータを取り出す
   console.log("websocket", data);
   console.log("index", data.index);
   console.log("topicId", data.topicId);
@@ -117,8 +121,8 @@ export const Main = ({ player }) => {
     }
   }, [heartBeatP1, heartBeatP2]); // heartBeatP1を監視
 
-  const endSend = async() => {
-    await getMethod("https://hartlink-api.onrender.com/end")  //"end"を送る
+  const endSend = async () => {
+    await GetMethod("https://hartlink-api.onrender.com/end"); //"end"を送る
   };
 
   useEffect(() => {
@@ -156,8 +160,8 @@ export const Main = ({ player }) => {
       player: player,
     };
 
-    postMethod("https://hartlink-api.onrender.com/indexTopicId",sendData);  //送る
-    
+    PostMethod("https://hartlink-api.onrender.com/indexTopicId", sendData); //送る
+
     const dataTopicArray = {
       player: player,
       index: index,
@@ -167,22 +171,20 @@ export const Main = ({ player }) => {
           : player2arrHeartBeat[`theme${index}`],
     };
 
-    postMethod("https://hartlink-api.onrender.com/topicArray",dataTopicArray);  //送る
+    PostMethod("https://hartlink-api.onrender.com/topicArray", dataTopicArray); //送る
 
     console.log("array", player1arrHeartBeat.theme0);
   };
 
   const FinishMeasuring = () => {
-
     //5秒後にリザルト画面に飛ばす
     useEffect(() => {
+      const dataGet = async () => {
+        const data = await GetMethod("https://hartlink-api.onrender.com/end"); //"end"を送る
+        console.log("dataGet", data);
+      };
 
-      const dataGet = async() => {
-        const data = await getMethod("https://hartlink-api.onrender.com/end")  //"end"を送る
-        console.log("dataGet",data)
-      }
-      
-      dataGet()
+      dataGet();
       console.log("useEffect called");
       const timer = setTimeout(() => {
         navigate("/result", {

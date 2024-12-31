@@ -6,7 +6,7 @@ import { Box, Typography, Stack, Modal } from "@mui/material";
 import HeartImg from "../../assets/kkrn_icon_heart_3.png";
 import { themesArr } from "./themesArr";
 import PropTypes from "prop-types";
-import { postMethod } from "../../response/ResponseMethod";
+import { PostMethod } from "../../response/ResponseMethod";
 
 export const SelectTheme = ({ player }) => {
   const themes = themesArr;
@@ -16,7 +16,6 @@ export const SelectTheme = ({ player }) => {
   const [SelectedId, setSelectedId] = useState(); //選択したid
   const [indexplayer, setIndexplayer] = useState(player === "1" ? 0 : 1);
 
-  
   console.log("プレイヤーだよ", indexplayer);
 
   const handleOpen = (theme) => {
@@ -37,59 +36,62 @@ export const SelectTheme = ({ player }) => {
 
   const selectPlayer = player == 1 ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
 
-
-  const ClickYes = async(id) => {
+  const ClickYes = async (id) => {
     console.log("theme", themes);
     console.log("theme", typeof themes);
     console.log("indexplayer", indexplayer);
     console.log("id", id);
-  
+
     if (indexplayer == 0 || indexplayer == 1) {
       navigate("/main", { state: themes });
     }
     if (indexplayer == 2 || indexplayer == 3) {
       navigate("/main", { state: themes });
     }
-  
+
     const sendData = { player: player, id: id, index: indexplayer };
 
-    const data = await postMethod("https://hartlink-api.onrender.com/topicId",sendData)
+    const data = await PostMethod(
+      "https://hartlink-api.onrender.com/topicId",
+      sendData
+    );
     setIndexplayer((indexplayer) => indexplayer + 2);
     console.log("index", indexplayer);
-    console.log("data",data)
+    console.log("data", data);
 
     RandomSend(id);
   };
-  
-  const RandomSend = async(excludedId) => {
+
+  const RandomSend = async (excludedId) => {
     const randomId = getRandomId(player, themes, excludedId);
     setIndexplayer((indexplayer) => indexplayer + 2);
     const sendData = { player: player, id: randomId, index: indexplayer + 2 };
 
-
-    const topicId = await postMethod("https://hartlink-api.onrender.com/topicId",sendData)
+    const topicId = await PostMethod(
+      "https://hartlink-api.onrender.com/topicId",
+      sendData
+    );
     console.log("Success:", topicId);
     console.log("index", indexplayer);
   };
-  
+
   const getRandomId = (player, themes, excludedId) => {
     // 対象のIDリストを取得 (偶数または奇数)かつ除外IDを除く
     const validIds = themes
       .map((theme) => theme.id)
       .filter(
         (id) =>
-          (player === "1" ? id % 2 === 0 : id % 2 !== 0) &&
-          id !== excludedId
+          (player === "1" ? id % 2 === 0 : id % 2 !== 0) && id !== excludedId
       );
-  
+
     console.log("候補ID (除外済み):", validIds);
-  
+
     // 候補IDが存在しない場合はnullを返す
     if (validIds.length === 0) {
       console.warn("有効なIDがありません");
       return null;
     }
-  
+
     // ランダムに1つのIDを選択
     const randomIndex = Math.floor(Math.random() * validIds.length);
     return validIds[randomIndex];

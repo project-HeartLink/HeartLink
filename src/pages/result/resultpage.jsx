@@ -14,7 +14,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
 import { themesArr } from "../main/themesArr";
-import { getMethod } from "../../response/ResponseMethod";
+import { GetMethod } from "../../response/ResponseMethod";
 import { Calculation } from "./calculation";
 
 export const Result = ({ player }) => {
@@ -49,16 +49,13 @@ export const Result = ({ player }) => {
   console.log("arrSelectTopic", props.arrSelectTopic); //選択したお題の配列
   console.log("player", player);
 
-
-
   const CatchArray = async () => {
-    const data = await getMethod(
+    const data = await GetMethod(
       "https://hartlink-api.onrender.com/getTopicArray"
     );
 
     const beat1 = Calculation(data.array1, data.array2, props.arrSelectTopic);
     const beat2 = Calculation(data.array2, data.array1, props.arrSelectTopic);
-
 
     //Calculationから引用してきたデータを保存
     const {
@@ -130,19 +127,19 @@ export const Result = ({ player }) => {
     }));
   };
 
-    //最大心拍&そのお題の情報を格納しておく
-    let playerInfo = [
-      {
-        name: props.player1Name,
-        theme: arrMaxThemePl1,
-        bestHR: maxPlayer1,
-      },
-      {
-        name: props.player2Name,
-        theme: arrMaxThemePl2,
-        bestHR: maxPlayer2,
-      },
-    ];
+  //最大心拍&そのお題の情報を格納しておく
+  let playerInfo = [
+    {
+      name: props.player1Name,
+      theme: arrMaxThemePl1,
+      bestHR: maxPlayer1,
+    },
+    {
+      name: props.player2Name,
+      theme: arrMaxThemePl2,
+      bestHR: maxPlayer2,
+    },
+  ];
 
   useEffect(() => {
     CatchArray();
@@ -175,10 +172,10 @@ export const Result = ({ player }) => {
   console.log("graphArray[syncroKey].p1", graphArray[syncroKey].p1);
 
   console.log("player", player);
-  const resetSubmit = async() => {
+  const resetSubmit = async () => {
     console.log(player);
     if (player) {
-      const data = await getMethod("https://hartlink-api.onrender.com/reset")
+      const data = await GetMethod("https://hartlink-api.onrender.com/reset");
       console.log("data:", data);
       navigate("/");
     }

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import "./Connectpage.scss";
 import { Box, Typography, Modal } from "@mui/material";
 import HeartWave from "./heart-wave/HeartWave";
-import { getMethod } from "../../response/ResponseMethod";
+import { GetMethod } from "../../response/ResponseMethod";
 
 export const Connect = () => {
   const [isReady, setIsReady] = useState(false);
@@ -20,29 +20,26 @@ export const Connect = () => {
     CatchError();
     setOpen(false);
   };
-  const CatchError = async(err) => {
-    const data = await getMethod("https://hartlink-api.onrender.com/reset")
+  const CatchError = async (err) => {
+    const data = await GetMethod("https://hartlink-api.onrender.com/reset");
 
-    console.log("data",data)
+    console.log("data", data);
     navigate("/");
-
   };
 
   useEffect(() => {
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
+      const data = await GetMethod("https://hartlink-api.onrender.com/connect");
 
-        const data = await getMethod("https://hartlink-api.onrender.com/connect")
-
-        if (data.connect == "2") {
-                setDataConnect(data.connect);
-                setIsReady(true);
-                setTimeout(() => navigate("/SelectPlayer"), 3 * 1000);
-              } else if (data.connect == "1") {
-                setDataConnect(data.connect);
-              } else if (data.connect == "0") {
-                setDataConnect(data.connect);
-              }
-               
+      if (data.connect == "2") {
+        setDataConnect(data.connect);
+        setIsReady(true);
+        setTimeout(() => navigate("/SelectPlayer"), 3 * 1000);
+      } else if (data.connect == "1") {
+        setDataConnect(data.connect);
+      } else if (data.connect == "0") {
+        setDataConnect(data.connect);
+      }
     };
     const timeoutId = setTimeout(() => {
       //20秒以上経ったら、アラート出るようにした

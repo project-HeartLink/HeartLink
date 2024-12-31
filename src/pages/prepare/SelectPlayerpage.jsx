@@ -9,7 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { getMethod, postMethod } from "../../response/ResponseMethod";
+import { GetMethod, PostMethod } from "../../response/ResponseMethod";
 
 export const SelectPlayer = ({ player, setPlayer, name }) => {
   const [open, setOpen] = useState(false);
@@ -41,7 +41,7 @@ export const SelectPlayer = ({ player, setPlayer, name }) => {
   const sendinfo = () => {
     const sendData = { player: player, name: name };
     if (player) {
-      postMethod("https://hartlink-api.onrender.com/sendname", sendData); //送る
+      PostMethod("https://hartlink-api.onrender.com/sendname", sendData); //送る
     } else {
       setShowText(false);
     }
