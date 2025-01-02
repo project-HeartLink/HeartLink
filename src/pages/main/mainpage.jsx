@@ -62,14 +62,14 @@ export const Main = ({ player }) => {
   console.log("player", player);
   console.log(`typeofPlayer: ${typeof player}`);
 
-  const SpeedChanger1 = (heartRate) => {
+  const speedChanger1 = (heartRate) => {
     console.log("player1arrHeartBeat", heartRate);
     if (heartRate < 70) setSpeed1(1.5);
     else if (heartRate >= 70 && heartRate < 110) setSpeed1(1);
     else if (heartRate >= 110) setSpeed1(0.5);
   };
 
-  const SpeedChanger2 = (heartRate) => {
+  const speedChanger2 = (heartRate) => {
     if (heartRate < 70) setSpeed2(1.5);
     else if (heartRate >= 70 && heartRate < 110) setSpeed2(1);
     else if (heartRate >= 110) setSpeed2(0.5);
@@ -99,8 +99,8 @@ export const Main = ({ player }) => {
       setarrThemes(themes[data.topicId[0]].topic);
     }
 
-    SpeedChanger1(data.heartRate1);
-    SpeedChanger2(data.heartRate2);
+    speedChanger1(data.heartRate1);
+    speedChanger2(data.heartRate2);
   }, [data]);
 
   console.log("data.index", data.index);
@@ -140,7 +140,7 @@ export const Main = ({ player }) => {
     }
   }, [proIndex]);
 
-  const FinishTheme = () => {
+  const finishTheme = () => {
     setNextButton(!nextButton);
     if (proIndex == topicId.length - 1) {
       setIsDone(true);
@@ -441,7 +441,7 @@ export const Main = ({ player }) => {
               component={motion.button}
               whileHover={{ scale: 1.0 }}
               whileTap={{ scale: 0.8 }}
-              onClick={FinishTheme}
+              onClick={finishTheme}
               sx={{
                 fontSize: "1.6rem",
                 fontWeight: "bold",

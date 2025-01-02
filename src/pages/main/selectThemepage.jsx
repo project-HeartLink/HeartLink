@@ -36,7 +36,7 @@ export const SelectTheme = ({ player }) => {
 
   const selectPlayer = player == 1 ? eventSelect : oddSelect; //playerが１か２の時でselectPlayerに入れる値を変える
 
-  const ClickYes = async (id) => {
+  const clickYes = async (id) => {
     console.log("theme", themes);
     console.log("theme", typeof themes);
     console.log("indexplayer", indexplayer);
@@ -59,10 +59,10 @@ export const SelectTheme = ({ player }) => {
     console.log("index", indexplayer);
     console.log("data", data);
 
-    RandomSend(id);
+    randomSend(id);
   };
 
-  const RandomSend = async (excludedId) => {
+  const randomSend = async (excludedId) => {
     const randomId = getRandomId(player, themes, excludedId);
     setIndexplayer((indexplayer) => indexplayer + 2);
     const sendData = { player: player, id: randomId, index: indexplayer + 2 };
@@ -235,7 +235,7 @@ export const SelectTheme = ({ player }) => {
               whileTap={{
                 scale: 0.8,
               }}
-              onClick={() => ClickYes(SelectedId)}
+              onClick={() => clickYes(SelectedId)}
               variant="p"
               sx={{
                 fontSize: "1.5rem",

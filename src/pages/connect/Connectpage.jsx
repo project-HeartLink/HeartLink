@@ -17,10 +17,10 @@ export const Connect = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    CatchError();
+    catchError();
     setOpen(false);
   };
-  const CatchError = async (err) => {
+  const catchError = async (err) => {
     const data = await GetMethod("https://hartlink-api.onrender.com/reset");
 
     console.log("data", data);
