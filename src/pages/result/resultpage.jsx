@@ -14,7 +14,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Pagination, Navigation } from "swiper/modules";
 import { themesArr } from "../main/themesArr";
-import Syncronization from "./SynchronizationRate";
+import { GetMethod } from "../../response/ResponseMethod";
+import { Calculation } from "./calculation";
 
 export const Result = ({ player }) => {
   const navigate = useNavigate();
@@ -34,8 +35,6 @@ export const Result = ({ player }) => {
   });
   const [maxPlayer1, setMaxPlayer1] = useState(0); //最大の心拍
   const [maxPlayer2, setMaxPlayer2] = useState(0); //最大の心拍
-  const [maxKeyPl1, setmaxKeyPl1] = useState([]); //最大の心拍の位置
-  const [maxKeyPl2, setmaxKeyPl2] = useState([]); //最大の心拍の位置
   const [arrMaxThemePl1, setArrMaxThemePl1] = useState([]); //pl1の最大の時のお題の名前
   const [arrMaxThemePl2, setArrMaxThemePl2] = useState([]); //pl2最大の時のお題の名前
   const location = useLocation();
@@ -49,6 +48,84 @@ export const Result = ({ player }) => {
   console.log("player2Name", props.player2Name); //player2の名前
   console.log("arrSelectTopic", props.arrSelectTopic); //選択したお題の配列
   console.log("player", player);
+
+  const CatchArray = async () => {
+    const data = await GetMethod(
+      "https://hartlink-api.onrender.com/getTopicArray"
+    );
+
+    const beat1 = Calculation(data.array1, data.array2, props.arrSelectTopic);
+    const beat2 = Calculation(data.array2, data.array1, props.arrSelectTopic);
+
+    //Calculationから引用してきたデータを保存
+    const {
+      beatmax: beatmax1,
+      keymax: keymax1,
+      maxArrSelectTopic: arrtopic1,
+      syncromax: syncromax,
+      syncrotheme: syncrotheme,
+      keymaxSyncro: keymaxSyncro,
+    } = beat1;
+    const {
+      beatmax: beatmax2,
+      keymax: keymax2,
+      maxArrSelectTopic: arrtopic2,
+    } = beat2; // 別名を使う
+
+    console.log("beat", beatmax1);
+    console.log("beatmax2", beatmax2);
+    console.log("keymax1", keymax1);
+    console.log("keymax2", keymax2);
+    console.log("syncromax", syncromax);
+
+    setMaxPlayer1(beatmax1);
+    setMaxPlayer2(beatmax2);
+    setArrMaxThemePl1(arrtopic1);
+    setArrMaxThemePl2(arrtopic2);
+    setSyncro(syncromax);
+    setSyncroTheme(syncrotheme.topic);
+    setSyncroKey(keymaxSyncro);
+
+    //心拍とお題を格納
+    setArrHeartBeatP1(() => ({
+      theme1: {
+        //選択したテーマの番号
+        heart: data.array1[0].map(Number),
+        topic: themes[props.arrSelectTopic[0]].topic,
+      },
+      theme2: {
+        heart: data.array1[1].map(Number),
+        topic: themes[props.arrSelectTopic[1]].topic,
+      },
+      theme3: {
+        heart: data.array1[2].map(Number),
+        topic: themes[props.arrSelectTopic[2]].topic,
+      },
+      theme4: {
+        heart: data.array1[3].map(Number),
+        topic: themes[props.arrSelectTopic[3]].topic,
+      },
+    }));
+
+    setArrHeartBeatP2((prev) => ({
+      theme1: {
+        heart: data.array2[0].map(Number),
+        topic: themes[props.arrSelectTopic[0]].topic,
+      },
+      theme2: {
+        heart: data.array2[1].map(Number),
+        topic: themes[props.arrSelectTopic[1]].topic,
+      },
+      theme3: {
+        heart: data.array2[2].map(Number),
+        topic: themes[props.arrSelectTopic[2]].topic,
+      },
+      theme4: {
+        heart: data.array2[3].map(Number),
+        topic: themes[props.arrSelectTopic[3]].topic,
+      },
+    }));
+  };
 
   //最大心拍&そのお題の情報を格納しておく
   let playerInfo = [
@@ -64,173 +141,11 @@ export const Result = ({ player }) => {
     },
   ];
 
-  //お題ごとの結果を表示する時の情報を格納しておく
-
-  const CatchArray = () => {
-    fetch("https://hartlink-api.onrender.com/getTopicArray", { method: "GET" }) //心拍の配列を獲得
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data", data);
-
-        let tempMaxPl1 = 0; //仮の最大心拍
-        let tempmaxKeyPl1 = []; // 仮の最大のkey番号
-        let tempMaxPl2 = 0; //仮の最大心拍
-        let tempmaxKeyPl2 = []; // 仮の最大のkey番号
-        let tempMaxSynclo = 0; //仮の最大シンクロ率
-        let tempSyncloKeyPl1 = []; // 仮の最大のkey番号
-
-        // プレイヤー1のデータ解析
-        for (const key in data.array1) {
-          // data.array1は心拍が入っている配列0〜3
-
-          console.log(
-            "Syncronization(p1)",
-            Syncronization({
-              heartRate1: data.array1[key].map(Number),
-              heartRate2: data.array2[key].map(Number),
-            })
-          );
-          if (
-            tempMaxSynclo <
-            Syncronization({
-              heartRate1: data.array1[key].map(Number),
-              heartRate2: data.array2[key].map(Number),
-            })
-          ) {
-            //最大シンクロ率求めてる
-            tempMaxSynclo = Syncronization({
-              heartRate1: data.array1[key].map(Number),
-              heartRate2: data.array2[key].map(Number),
-            });
-            tempSyncloKeyPl1 = [key]; // 新しい最大値なので配列をリセット
-          } else if (
-            tempMaxSynclo ==
-            Syncronization({
-              heartRate1: data.array1[key].map(Number),
-              heartRate2: data.array2[key].map(Number),
-            })
-          ) {
-            tempmaxKeyPl1.push(key);
-          }
-
-          setArrHeartBeatP1(() => ({
-            theme1: {
-              //選択したテーマの番号
-              heart: data.array1[0].map(Number),
-              topic: themes[props.arrSelectTopic[0]].topic,
-            },
-            theme2: {
-              heart: data.array1[1].map(Number),
-              topic: themes[props.arrSelectTopic[1]].topic,
-            },
-            theme3: {
-              heart: data.array1[2].map(Number),
-              topic: themes[props.arrSelectTopic[2]].topic,
-            },
-            theme4: {
-              heart: data.array1[3].map(Number),
-              topic: themes[props.arrSelectTopic[3]].topic,
-            },
-          }));
-
-          setArrHeartBeatP2((prev) => ({
-            theme1: {
-              heart: data.array2[0].map(Number),
-              topic: themes[props.arrSelectTopic[0]].topic,
-            },
-            theme2: {
-              heart: data.array2[1].map(Number),
-              topic: themes[props.arrSelectTopic[1]].topic,
-            },
-            theme3: {
-              heart: data.array2[2].map(Number),
-              topic: themes[props.arrSelectTopic[2]].topic,
-            },
-            theme4: {
-              heart: data.array2[3].map(Number),
-              topic: themes[props.arrSelectTopic[3]].topic,
-            },
-          }));
-
-          data.array1[key].map((index) => {
-            //data.array1[key]→心拍が入っている配列0〜3の中から一番高くなった０−３の番号を取ってきた
-            const value = parseInt(index);
-
-            if (value > tempMaxPl1) {
-              // 最大値を更新
-              tempMaxPl1 = value;
-              tempmaxKeyPl1 = [key]; // 新しい最大値なので配列をリセット
-            } else if (value === tempMaxPl1) {
-              // 最大値と同じ場合はテーマを追加
-              tempmaxKeyPl1.push(key);
-            }
-          });
-        }
-
-        // プレイヤー2のデータ解析
-        for (const key in data.array2) {
-          //player2の心拍の配列
-          data.array2[key].map((index) => {
-            const value = parseInt(index);
-            if (value > tempMaxPl2) {
-              tempMaxPl2 = value;
-              tempmaxKeyPl2 = [key];
-            } else if (value === tempMaxPl2) {
-              tempmaxKeyPl2.push(key);
-            }
-          });
-        }
-
-        console.log(
-          "Player 1 Max HR:",
-          tempMaxPl1,
-          "Themes:",
-          Array.from(new Set(tempmaxKeyPl1)) //同じ数字を避けた
-        );
-        console.log(
-          "Player 2 Max HR:",
-          tempMaxPl2,
-          "Themes:",
-          Array.from(new Set(tempmaxKeyPl2))
-        );
-
-        // 状態を一括更新
-
-        const newArrP1 = Array.from(new Set(tempmaxKeyPl1)).map(
-          (id) => themes[props.arrSelectTopic[id]].topic
-        );
-        const newArrP2 = Array.from(new Set(tempmaxKeyPl2)).map(
-          (id) => themes[props.arrSelectTopic[id]].topic
-        );
-
-        setArrMaxThemePl1(newArrP1);
-        setArrMaxThemePl2(newArrP2);
-        setMaxPlayer1(tempMaxPl1);
-        setmaxKeyPl1(Array.from(new Set(tempmaxKeyPl1))); // 配列をセット
-        setMaxPlayer2(tempMaxPl2);
-        setmaxKeyPl2(Array.from(new Set(tempmaxKeyPl2))); // 配列をセット
-        setSyncro(tempMaxSynclo);
-        setSyncroTheme(themes[props.arrSelectTopic[tempSyncloKeyPl1]].topic);
-        setSyncroKey(parseInt(tempSyncloKeyPl1));
-      });
-  };
-
-  console.log("syncro", syncro);
-  console.log("setSyncroTheme", syncroTheme);
-
-  console.log("p1", arrHeartBeatP1.theme1);
-  console.log("p1", arrHeartBeatP1.theme2);
-  console.log("p1", arrHeartBeatP1.theme3);
-  console.log("p1", arrHeartBeatP1.theme4);
-  console.log("setSyncroKey", syncroKey);
-
-  console.log("arrmaxthemepl1", arrMaxThemePl1);
-
-  console.log("max", maxPlayer2);
   useEffect(() => {
     CatchArray();
   }, []);
 
+  //グラフに入れるテーマと心拍を格納
   let graphArray = [
     {
       theme: arrHeartBeatP1.theme1.topic,
@@ -254,18 +169,15 @@ export const Result = ({ player }) => {
     },
   ];
 
-  const socketRef = useRef();
+  console.log("graphArray[syncroKey].p1", graphArray[syncroKey].p1);
+
   console.log("player", player);
-  const resetSubmit = () => {
+  const resetSubmit = async () => {
     console.log(player);
     if (player) {
-      fetch("https://hartlink-api.onrender.com/reset", { method: "GET" })
-        .then((res) => res.json()) //json方式でデータを受け取る
-        .then((data) => {
-          console.log("data:", data);
-          navigate("/");
-        })
-        .catch((err) => console.error("Error fetching data:", err));
+      const data = await GetMethod("https://hartlink-api.onrender.com/reset");
+      console.log("data:", data);
+      navigate("/");
     }
   };
 

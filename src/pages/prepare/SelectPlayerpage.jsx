@@ -9,15 +9,14 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { GetMethod, PostMethod } from "../../response/ResponseMethod";
 
-export const SelectPlayer = ({ player, setPlayer ,name}) => {
+export const SelectPlayer = ({ player, setPlayer, name }) => {
   const [open, setOpen] = useState(false);
 
-  const [connectValue, setConnectValue] = useState("");
+  const [connectValue, setConnectValue] = useState(""); //選んだplayar番号をセット
   const [showText, setShowText] = useState("");
   const navigate = useNavigate();
-  //const startTime = performance.now(); //開始時間の取得
-  const status = "ok";
 
   const handleOpen = () => {
     setOpen(!open);
@@ -28,48 +27,21 @@ export const SelectPlayer = ({ player, setPlayer ,name}) => {
     setShowText(true);
   };
 
-  let p1 = "1";
-  let p2 = "2";
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (player) {
-      fetch("https://hartlink-api.onrender.com/ok", { method: "GET" })
-        .then((res) => res.json()) //json方式でデータを受け取る
-        .then((data) => {
-          console.log("data:", data);
-
-          if (data.status === status) {
-            setConnectValue(player); //playar番号をセット
-            console.log("playar:", player);
-            //navigate("/main" ,{ state: themes }); 
-            navigate("/selectTheme");//エラー吐いてたからパス変えた。変更してpullリク送ること
-            sendinfo();
-          }
-        })
-
-        .catch((err) => console.error("Error fetching data:", err));
+      //promise
+      setConnectValue(player); //playar番号をセット
+      navigate("/selectTheme");
+      sendinfo();
     } else {
       setShowText(false);
     }
   };
 
   const sendinfo = () => {
-    console.log(`name: ${name}`);
-    const data = { player: player, name: name };
+    const sendData = { player: player, name: name };
     if (player) {
-      fetch("https://hartlink-api.onrender.com/sendname", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json()) //json方式でデータを受け取る
-        .then((data) => {
-          console.log("data:", data);
-        })
-
-        .catch((err) => console.error("Error fetching data:", err));
+      PostMethod("https://hartlink-api.onrender.com/sendname", sendData); //送る
     } else {
       setShowText(false);
     }
@@ -115,8 +87,8 @@ export const SelectPlayer = ({ player, setPlayer ,name}) => {
                 sx={{
                   alignItems: "center",
                 }}
-                onClick={() => handleSelectplayer(p1)}
-                selected={player === p1}
+                onClick={() => handleSelectplayer("1")}
+                selected={player === "1"}
               >
                 <ListItemText
                   primary={"player1"}
@@ -128,8 +100,8 @@ export const SelectPlayer = ({ player, setPlayer ,name}) => {
               </ListItemButton>
               <ListItemButton
                 sx={{ alignItems: "center" }}
-                onClick={() => handleSelectplayer(p2)}
-                selected={player === p2}
+                onClick={() => handleSelectplayer("2")}
+                selected={player === "2"}
               >
                 <ListItemText
                   primary={"player2"}
